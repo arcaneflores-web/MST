@@ -6,7 +6,7 @@ import {
   ChevronRight,
   Images,
 } from 'lucide-react';
-import { COMPANY_INFO, HERO_METRICS } from '../data/companyData';
+import { HERO_METRICS } from '../data/companyData';
 import type { ProjectItem } from '../types/construction';
 import {
   buildFeaturedPhotoSlides,
@@ -58,12 +58,8 @@ export function HeroSection({
         {/* 2-Column Hero Split: Concise Intro Left + Large Fixed 16:9 Featured Photo Showcase Right */}
         <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
           <div className="flex flex-col justify-center lg:col-span-5">
-            <p className="text-sm font-medium text-blue-700">
-              {COMPANY_INFO.serviceRegion} · General Engineering &amp; Design-Build
-            </p>
-
             <h1
-              className="mt-3 font-bold tracking-tight text-slate-950 leading-[1.08]"
+              className="font-bold tracking-tight text-slate-950 leading-[1.08]"
               style={{
                 fontSize: 'clamp(2.05rem, 3.4vw, 3.1rem)',
                 textWrap: 'balance',

@@ -16,41 +16,36 @@ import { TeamSection } from './TeamSection';
 interface PageHeaderProps {
   eyebrow: string;
   title: string;
-  description: string;
   onNavigateHome: () => void;
 }
 
 function PageHeader({
   eyebrow,
   title,
-  description,
   onNavigateHome,
 }: PageHeaderProps) {
   return (
-    <div className="border-b-2 border-blue-700 bg-slate-900 py-7 text-white lg:py-9">
-      <div className="mx-auto max-w-[1200px] px-6">
-        <div className="flex items-center gap-2 text-xs text-slate-300">
-          <button
-            type="button"
-            onClick={onNavigateHome}
-            className="font-medium hover:text-white hover:underline"
-          >
-            Home
-          </button>
-          <span aria-hidden="true">/</span>
-          <span className="font-semibold text-blue-400">{eyebrow}</span>
-        </div>
+    <div className="border-b-2 border-blue-700 bg-slate-900 py-3.5 text-white lg:py-4">
+      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-6">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2 text-[11px] text-slate-300">
+            <button
+              type="button"
+              onClick={onNavigateHome}
+              className="font-medium hover:text-white hover:underline"
+            >
+              Home
+            </button>
+            <span aria-hidden="true">/</span>
+            <span className="font-semibold text-blue-400">{eyebrow}</span>
+          </div>
 
-        <div className="mt-2.5 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <h1
-            className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
+            className="text-lg font-bold tracking-tight text-white sm:text-xl"
             style={{ textWrap: 'balance' }}
           >
             {title}
           </h1>
-          <p className="max-w-xl text-sm leading-relaxed text-slate-300">
-            {description}
-          </p>
         </div>
       </div>
     </div>
@@ -69,7 +64,6 @@ export function AboutUsPage({
       <PageHeader
         eyebrow="About Us"
         title="About MST Construction OPC"
-        description="Corporate background, mission and vision, 7-step delivery process, and verified PCAB, SEC, PRC, and DOLE credentials."
         onNavigateHome={() => onNavigate('home')}
       />
       <AboutProcessSection mode="full" />
@@ -90,7 +84,6 @@ export function ServicesPage({
       <PageHeader
         eyebrow="Services"
         title="Construction, Engineering & Design-Build Services"
-        description="Turnkey building works, structural steel industrial facilities, civil infrastructure, MEPFS coordination, architectural consultancy, and fit-outs."
         onNavigateHome={() => onNavigate('home')}
       />
       <ServicesSection
@@ -115,7 +108,6 @@ export function ProjectsPage({
       <PageHeader
         eyebrow="Projects"
         title="Project Portfolio"
-        description="Completed developments and active ongoing construction sites across Pampanga and Central Luzon filtered by sector or completion status."
         onNavigateHome={() => onNavigate('home')}
       />
       <PortfolioSection
@@ -141,7 +133,6 @@ export function TeamPage({
       <PageHeader
         eyebrow="Our Team"
         title="Management, Engineers & Technical Personnel"
-        description="PRC-licensed civil engineers, design architects, MEPFS specialists, quantity surveyors, and DOLE-accredited safety officers."
         onNavigateHome={() => onNavigate('home')}
       />
       <TeamSection members={members} onSelectMember={onSelectMember} />
@@ -161,7 +152,6 @@ export function ContactPage({
       <PageHeader
         eyebrow="Contact Us"
         title="Contact MST Construction OPC"
-        description="Reach our San Fernando headquarters for ocular site inspections, Bill of Quantities proposals, or design-build consultations."
         onNavigateHome={() => onNavigate('home')}
       />
       <InquirySection onSubmitInquiry={onSubmitInquiry} />
