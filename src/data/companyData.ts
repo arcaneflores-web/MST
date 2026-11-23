@@ -24,6 +24,26 @@ export const COMPANY_INFO = {
   officeHours: 'Monday – Saturday, 8:00 AM – 5:00 PM',
   serviceRegion: 'San Fernando, Pampanga & Central Luzon',
   officePhotoPath: '/assets/aistudio/image_aa12ed6e.png',
+  socialLinks: [
+    {
+      label: 'Facebook Page',
+      href: 'https://www.facebook.com/search/top?q=MST%20Construction%20OPC',
+    },
+    {
+      label: 'LinkedIn Profile',
+      href: 'https://www.linkedin.com/search/results/all/?keywords=MST%20Construction%20OPC',
+    },
+    {
+      label: 'Email Estimating Desk',
+      href: 'mailto:mstconstructionopc@gmail.com',
+    },
+  ],
+};
+
+export const ADMIN_ACCESS_CONFIG = {
+  email: 'admin@mstconstruction.ph',
+  passcode: 'MST-Admin2026!',
+  portalTitle: 'MST Construction OPC — Internal Operations Portal',
 };
 
 export const HERO_METRICS = [
@@ -46,6 +66,33 @@ export const HERO_METRICS = [
     value: '48 hrs',
     label: 'Initial Estimate Turnaround',
     detail: 'Site assessment & BOQ scoping',
+  },
+];
+
+export const WHY_CHOOSE_MST = [
+  {
+    pillar: 'Engineering Expertise',
+    metric: 'PRC-Sealed Oversight',
+    summary:
+      'Licensed civil engineers, structural designers, and architects directly supervise structural computations, rebar placement, and slab tolerances.',
+  },
+  {
+    pillar: 'Materials & Build Quality',
+    metric: 'ASTM / NSCP 2015 Tested',
+    summary:
+      'Mandatory concrete cylinder break tests, mill-certified deformed rebar, and documented pre-pour MEPFS coordination eliminate costly rework.',
+  },
+  {
+    pillar: 'Zero-Incident Site Safety',
+    metric: 'DOLE COSH Governed',
+    summary:
+      'Accredited Safety Officers enforce RA 11058 scaffolding checks, PPE compliance, and daily toolbox briefings on every active job site.',
+  },
+  {
+    pillar: 'Transparent Project Management',
+    metric: 'Itemized BOQ & S-Curve',
+    summary:
+      'Line-by-line cost breakdowns, weekly progress photo logs, and milestone-based billings protect client capital from hidden markups.',
   },
 ];
 
@@ -370,6 +417,7 @@ export const PROJECTS: ProjectItem[] = [
     ],
     outcomeMetric: '100% pass rate on Phase 1 structural and electrical inspection',
     schematic: 'medical-clinic',
+    featured: true,
   },
   {
     id: 'angeles-modern-residence',
@@ -432,6 +480,7 @@ export const CREDENTIALS: CredentialItem[] = [
     title: 'PCAB Licensed General Contractor',
     issuingBody: 'Philippine Contractors Accreditation Board',
     classification: 'General Building & General Engineering',
+    documentReference: 'PCAB Registry · General Contracting',
     description:
       'Authorized to execute vertical building structures, site development, and civil infrastructure across public and private sectors.',
   },
@@ -441,6 +490,7 @@ export const CREDENTIALS: CredentialItem[] = [
     title: 'SEC Registered One Person Corporation',
     issuingBody: 'Securities and Exchange Commission (Philippines)',
     classification: 'Corporate Registry & Compliance',
+    documentReference: 'SEC OPC Certificate · Pampanga LGU Permit',
     description:
       'Duly incorporated corporate engineering and construction entity headquartered in San Fernando, Pampanga with full BIR and LGU permits.',
   },
@@ -450,6 +500,7 @@ export const CREDENTIALS: CredentialItem[] = [
     title: 'PRC Licensed Engineering & Architecture Team',
     issuingBody: 'Professional Regulation Commission',
     classification: 'CE · Arch · REE · RMP Signatories',
+    documentReference: 'Active PRC Board Signatory Roster',
     description:
       'All structural computations, architectural plans, and MEPFS drawings are signed, sealed, and supervised by PRC-licensed professionals.',
   },
@@ -459,6 +510,7 @@ export const CREDENTIALS: CredentialItem[] = [
     title: 'DOLE Safety & Health Program Compliance',
     issuingBody: 'Department of Labor and Employment (RA 11058)',
     classification: 'BOSH & COSH Certified Site Supervision',
+    documentReference: 'DOLE Region III COSH Accreditation',
     description:
       'Every active project site deploys accredited Safety Officers, mandatory PPE protocols, and daily toolbox safety briefings.',
   },

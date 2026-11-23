@@ -1,60 +1,47 @@
 import { ArrowUpRight } from 'lucide-react';
-import { TEAM_MEMBERS } from '../data/companyData';
 import type { TeamMember } from '../types/construction';
+import { SectionHeaderBar } from './SectionDivider';
 
 interface TeamSectionProps {
+  members: TeamMember[];
   onSelectMember: (member: TeamMember) => void;
 }
 
-export function TeamSection({ onSelectMember }: TeamSectionProps) {
+export function TeamSection({ members, onSelectMember }: TeamSectionProps) {
   return (
     <section
       id="team"
-      className="scroll-mt-16 border-b border-slate-200 bg-slate-50 py-16 lg:py-24"
+      className="scroll-mt-16 border-b-2 border-slate-200 bg-slate-100/70 py-10 lg:py-12"
     >
       <div className="mx-auto max-w-[1200px] px-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
-            <p className="text-sm font-medium text-blue-700">
-              Engineering Leadership &amp; Technical Team
-            </p>
-            <h2
-              className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl"
-              style={{ textWrap: 'balance' }}
-            >
-              Licensed Professionals Overseeing Every Job Site
-            </h2>
-          </div>
-          <p className="max-w-md text-sm leading-relaxed text-slate-600">
-            Select any team profile to inspect PRC licensing credentials, educational
-            background, and delivered projects.
-          </p>
-        </div>
+        <SectionHeaderBar
+          sectionNumber="01"
+          eyebrow="Engineering Leadership & Technical Team"
+          title="Licensed Professionals Overseeing Every Job Site"
+          description="Select any team profile to inspect PRC licensing credentials, educational background, and delivered projects."
+        />
 
-        {/* 3-in-a-row desktop grid */}
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {TEAM_MEMBERS.map((member) => (
+        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {members.map((member) => (
             <article
               key={member.id}
-              className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 transition-colors duration-150 hover:border-slate-400"
+              className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 transition-colors duration-150 hover:border-slate-400"
             >
               <div>
-                <div className="flex items-center gap-4">
-                  {/* Consistent 64px monogram block with clean architectural framing */}
+                <div className="flex items-center gap-3.5">
                   <div
-                    className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-900 font-display text-lg font-bold tracking-tight text-white"
+                    className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-900 font-display text-base font-bold tracking-tight text-white"
                     aria-hidden="true"
                   >
                     {member.initials}
                   </div>
                   <div className="min-w-0">
                     <h3 className="text-base font-bold text-slate-950">{member.name}</h3>
-                    <p className="mt-0.5 text-sm font-medium text-blue-700">{member.role}</p>
+                    <p className="mt-0.5 text-xs font-medium text-blue-700">{member.role}</p>
                   </div>
                 </div>
 
-                {/* Unboxed metadata with typographic separator */}
-                <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+                <div className="mt-3.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
                   <span>{member.discipline}</span>
                   <span aria-hidden="true">·</span>
                   <span className="font-mono tabular-nums">
@@ -62,14 +49,14 @@ export function TeamSection({ onSelectMember }: TeamSectionProps) {
                   </span>
                 </div>
 
-                <p className="mt-2 font-mono text-xs text-slate-700 tabular-nums">
+                <p className="mt-1.5 font-mono text-xs text-slate-700 tabular-nums">
                   {member.licenseLabel}
                 </p>
 
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">{member.bio}</p>
+                <p className="mt-2.5 text-sm leading-relaxed text-slate-600">{member.bio}</p>
               </div>
 
-              <div className="mt-5 border-t border-slate-100 pt-4">
+              <div className="mt-4 border-t border-slate-100 pt-3.5">
                 <button
                   type="button"
                   onClick={() => onSelectMember(member)}

@@ -31,6 +31,7 @@ const DEFAULT_PROJECT_FORM: ProjectFormInput = {
   schematic: 'commercial-hub',
   highlightsText: '',
   deliverablesText: '',
+  featured: false,
 };
 
 const SCHEMATIC_BY_CATEGORY: Record<ProjectCategory, VisualSchematicType> = {
@@ -66,6 +67,7 @@ export function ProjectFormModal({
         schematic: editingProject.schematic,
         highlightsText: editingProject.engineeringHighlights.join('\n'),
         deliverablesText: editingProject.deliverables.join('\n'),
+        featured: Boolean(editingProject.featured),
       });
     } else {
       setFormState(DEFAULT_PROJECT_FORM);
@@ -84,10 +86,10 @@ export function ProjectFormModal({
 
   if (!open) return null;
 
-  const handleChange = (field: keyof ProjectFormInput, value: string) => {
+  const handleChange = (field: keyof ProjectFormInput, value: string | boolean) => {
     setFormState((prev) => {
       const next = { ...prev, [field]: value };
-      if (field === 'category' && !editingProject) {
+      if (field === 'category' && !editingProject && typeof value === 'string') {
         next.schematic = SCHEMATIC_BY_CATEGORY[value as ProjectCategory];
       }
       return next;
@@ -441,6 +443,19 @@ export function ProjectFormModal({
                 placeholder="Design-Build Construction&#10;MEPFS Installation"
                 className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-950 focus:border-blue-700 focus:outline-none"
               />
+            </div>
+
+            <div className="sm:col-span-2 pt-1">
+              <label className="flex items-center gap-2.5 text-xs font-medium text-slate-800 cursor-pointer">
+                <input
+                  id="proj-featured"
+                  type="checkbox"
+                  checked={Boolean(formState.featured)}
+                  onChange={(e) => handleChange('featured', e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-blue-700 focus:ring-blue-700"
+                />
+                <span>Feature this project on the public Homepage preview</span>
+              </label>
             </div>
           </div>
           </div>

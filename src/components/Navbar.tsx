@@ -1,60 +1,74 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import type { PublicPage } from '../types/construction';
+import { getPathnameForPage } from '../utils/inquiryLogic';
 import { BrandMark } from './ArchitecturalVisuals';
 
 interface NavbarProps {
+  currentPage: PublicPage;
+  onNavigate: (page: PublicPage) => void;
   onRequestQuote: () => void;
 }
 
-const NAV_LINKS = [
-  { href: '#about', label: 'About' },
-  { href: '#services', label: 'Services' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#team', label: 'Team' },
-  { href: '#inquiry', label: 'Inquiry' },
+const NAV_ITEMS: Array<{ page: PublicPage; label: string }> = [
+  { page: 'home', label: 'Home' },
+  { page: 'about', label: 'About Us' },
+  { page: 'services', label: 'Services' },
+  { page: 'projects', label: 'Projects' },
+  { page: 'team', label: 'Our Team' },
+  { page: 'contact', label: 'Contact Us' },
 ];
 
-export function Navbar({ onRequestQuote }: NavbarProps) {
+export function Navbar({ currentPage, onNavigate, onRequestQuote }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleMobileNavClick = () => {
+  const handleNavClick = (page: PublicPage) => {
     setMobileMenuOpen(false);
+    onNavigate(page);
   };
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-8 px-6 py-3.5">
+      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-6 px-6 py-3.5 lg:gap-8">
         {/* Zone 1: Single-line Brand Wordmark */}
         <a
-          href="#top"
+          href={getPathnameForPage('home')}
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavClick('home');
+          }}
           className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
         >
           <BrandMark className="h-7 w-7 shrink-0" />
           <span>MST Construction OPC</span>
         </a>
 
-        {/* Zone 2: 5 concise single-line nav links */}
+        {/* Zone 2: Clean single-line public page links */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600"
+          className="hidden md:flex items-center gap-5 lg:gap-7 text-sm font-medium text-slate-600"
         >
-          {NAV_LINKS.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              onClick={
-                item.href === '#inquiry'
-                  ? (e) => {
-                      e.preventDefault();
-                      onRequestQuote();
-                    }
-                  : undefined
-              }
-              className="whitespace-nowrap shrink-0 py-1 text-slate-600 transition-colors duration-150 hover:text-slate-950 hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
-            >
-              {item.label}
-            </a>
-          ))}
+          {NAV_ITEMS.map((item) => {
+            const isActive = currentPage === item.page;
+            return (
+              <a
+                key={item.page}
+                href={getPathnameForPage(item.page)}
+                aria-current={isActive ? 'page' : undefined}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.page);
+                }}
+                className={`whitespace-nowrap shrink-0 py-1 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700 ${
+                  isActive
+                    ? 'font-semibold text-blue-700 underline underline-offset-8 decoration-2'
+                    : 'text-slate-600 hover:text-slate-950 hover:underline hover:underline-offset-4'
+                }`}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Zone 3: 1 primary action + mobile drawer button */}
@@ -64,7 +78,7 @@ export function Navbar({ onRequestQuote }: NavbarProps) {
             onClick={onRequestQuote}
             className="hidden sm:inline-flex items-center justify-center rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white transition-colors duration-150 hover:bg-blue-800 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
           >
-            Request Quote
+            Request a Quote
           </button>
 
           <button
@@ -85,23 +99,28 @@ export function Navbar({ onRequestQuote }: NavbarProps) {
           aria-label="Mobile Navigation"
           className="border-t border-slate-200 bg-white px-6 py-4 md:hidden"
         >
-          <div className="flex flex-col gap-3">
-            {NAV_LINKS.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={(e) => {
-                  handleMobileNavClick();
-                  if (item.href === '#inquiry') {
+          <div className="flex flex-col gap-2">
+            {NAV_ITEMS.map((item) => {
+              const isActive = currentPage === item.page;
+              return (
+                <a
+                  key={item.page}
+                  href={getPathnameForPage(item.page)}
+                  aria-current={isActive ? 'page' : undefined}
+                  onClick={(e) => {
                     e.preventDefault();
-                    onRequestQuote();
-                  }
-                }}
-                className="py-2 text-base font-medium text-slate-800 hover:text-blue-700"
-              >
-                {item.label}
-              </a>
-            ))}
+                    handleNavClick(item.page);
+                  }}
+                  className={`rounded-md px-3 py-2 text-base font-medium ${
+                    isActive
+                      ? 'bg-blue-50 font-semibold text-blue-700'
+                      : 'text-slate-800 hover:bg-slate-50 hover:text-blue-700'
+                  }`}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
             <button
               type="button"
               onClick={() => {
@@ -110,7 +129,7 @@ export function Navbar({ onRequestQuote }: NavbarProps) {
               }}
               className="mt-2 w-full rounded-md bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-800"
             >
-              Request Quote
+              Request a Quote
             </button>
           </div>
         </nav>

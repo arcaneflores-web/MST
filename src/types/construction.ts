@@ -1,4 +1,25 @@
-export type ProjectCategory = 'Commercial' | 'Residential' | 'Industrial' | 'Infrastructure';
+export type PublicPage =
+  | 'home'
+  | 'about'
+  | 'services'
+  | 'projects'
+  | 'team'
+  | 'contact';
+
+export type AppPage = PublicPage | 'admin';
+
+export type AdminTab =
+  | 'overview'
+  | 'projects'
+  | 'inquiries'
+  | 'team'
+  | 'credentials';
+
+export type ProjectCategory =
+  | 'Commercial'
+  | 'Residential'
+  | 'Industrial'
+  | 'Infrastructure';
 export type ProjectStatus = 'Completed' | 'Ongoing';
 export type VisualSchematicType =
   | 'commercial-hub'
@@ -41,6 +62,7 @@ export interface ProjectFormInput {
   schematic: VisualSchematicType;
   highlightsText: string;
   deliverablesText: string;
+  featured?: boolean;
 }
 
 export interface ProjectValidationErrors {
@@ -78,6 +100,28 @@ export interface TeamMember {
   notableProjects: string[];
 }
 
+export interface TeamFormInput {
+  name: string;
+  initials: string;
+  role: string;
+  discipline: string;
+  licenseLabel: string;
+  experienceYears: string;
+  education: string;
+  bio: string;
+  specializationsText: string;
+  notableProjectsText: string;
+}
+
+export interface TeamValidationErrors {
+  name?: string;
+  role?: string;
+  discipline?: string;
+  licenseLabel?: string;
+  experienceYears?: string;
+  bio?: string;
+}
+
 export interface CredentialItem {
   id: string;
   code: string;
@@ -85,6 +129,24 @@ export interface CredentialItem {
   issuingBody: string;
   classification: string;
   description: string;
+  documentReference?: string;
+}
+
+export interface CredentialFormInput {
+  code: string;
+  title: string;
+  issuingBody: string;
+  classification: string;
+  description: string;
+  documentReference: string;
+}
+
+export interface CredentialValidationErrors {
+  code?: string;
+  title?: string;
+  issuingBody?: string;
+  classification?: string;
+  description?: string;
 }
 
 export interface ProcessStep {
@@ -104,7 +166,10 @@ export interface TestimonialItem {
   outcomeSummary: string;
 }
 
-export type PreferredContactMethod = 'Email' | 'Mobile Call / SMS' | 'Viber / WhatsApp';
+export type PreferredContactMethod =
+  | 'Email'
+  | 'Mobile Call / SMS'
+  | 'Viber / WhatsApp';
 
 export interface InquiryFormInput {
   fullName: string;
@@ -112,7 +177,10 @@ export interface InquiryFormInput {
   email: string;
   phone: string;
   preferredContact: PreferredContactMethod;
-  projectCategory: ProjectCategory | 'Renovation / Fit-Out' | 'Engineering Consultancy';
+  projectCategory:
+    | ProjectCategory
+    | 'Renovation / Fit-Out'
+    | 'Engineering Consultancy';
   location: string;
   estimatedFloorArea: string;
   estimatedBudget: string;
@@ -131,11 +199,30 @@ export interface InquiryValidationErrors {
   privacyConsent?: string;
 }
 
-export type InquiryWorkflowStatus = 'New' | 'Under Review' | 'Quotation Sent';
+export type InquiryWorkflowStatus =
+  | 'New'
+  | 'In Progress'
+  | 'Under Review'
+  | 'Quotation Sent'
+  | 'Closed';
 
 export interface SubmittedInquiry extends InquiryFormInput {
   id: string;
   referenceCode: string;
   submittedAt: string;
   workflowStatus: InquiryWorkflowStatus;
+  adminNotes?: string;
+}
+
+export interface AdminOverviewStats {
+  totalProjects: number;
+  ongoingProjects: number;
+  completedProjects: number;
+  featuredProjects: number;
+  totalInquiries: number;
+  newInquiries: number;
+  activeInquiries: number;
+  quotedInquiries: number;
+  teamCount: number;
+  credentialsCount: number;
 }
