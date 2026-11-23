@@ -38,13 +38,12 @@ export function HeroSection({
                 textWrap: 'balance',
               }}
             >
-              Disciplined Engineering for Commercial &amp; Civil Structures.
+              Building Excellence. Creating Lasting Foundations.
             </h1>
 
             <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
-              MST Construction OPC delivers turnkey commercial buildings, industrial steel
-              warehouses, custom residences, and heavy civil infrastructure across Pampanga
-              with transparent costing and licensed engineering supervision.
+              Delivering construction and engineering solutions through thoughtful planning,
+              technical expertise, and quality execution across Pampanga and Central Luzon.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-5">

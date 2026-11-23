@@ -27,6 +27,31 @@ export interface ProjectItem {
   featured?: boolean;
 }
 
+export interface ProjectFormInput {
+  title: string;
+  category: ProjectCategory;
+  status: ProjectStatus;
+  location: string;
+  year: string;
+  clientSector: string;
+  floorArea: string;
+  duration: string;
+  summary: string;
+  outcomeMetric: string;
+  schematic: VisualSchematicType;
+  highlightsText: string;
+  deliverablesText: string;
+}
+
+export interface ProjectValidationErrors {
+  title?: string;
+  location?: string;
+  year?: string;
+  floorArea?: string;
+  duration?: string;
+  summary?: string;
+}
+
 export interface ServiceItem {
   index: string;
   id: string;
@@ -62,16 +87,39 @@ export interface CredentialItem {
   description: string;
 }
 
+export interface ProcessStep {
+  step: string;
+  title: string;
+  description: string;
+  deliverable: string;
+}
+
+export interface TestimonialItem {
+  id: string;
+  quote: string;
+  clientName: string;
+  role: string;
+  organization: string;
+  projectTitle: string;
+  outcomeSummary: string;
+}
+
+export type PreferredContactMethod = 'Email' | 'Mobile Call / SMS' | 'Viber / WhatsApp';
+
 export interface InquiryFormInput {
   fullName: string;
   companyName: string;
   email: string;
   phone: string;
+  preferredContact: PreferredContactMethod;
   projectCategory: ProjectCategory | 'Renovation / Fit-Out' | 'Engineering Consultancy';
   location: string;
+  estimatedFloorArea: string;
   estimatedBudget: string;
   targetStart: string;
+  readinessStatus: string;
   projectScope: string;
+  privacyConsent: boolean;
 }
 
 export interface InquiryValidationErrors {
@@ -80,6 +128,7 @@ export interface InquiryValidationErrors {
   phone?: string;
   location?: string;
   projectScope?: string;
+  privacyConsent?: string;
 }
 
 export type InquiryWorkflowStatus = 'New' | 'Under Review' | 'Quotation Sent';

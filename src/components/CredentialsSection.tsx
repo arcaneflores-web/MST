@@ -87,6 +87,17 @@ export function CredentialsSection() {
                 </div>
               </div>
             </dl>
+
+            <div className="mt-5">
+              <a
+                href={COMPANY_INFO.mapsDirectionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-blue-400 underline underline-offset-4 hover:text-blue-300"
+              >
+                Get Directions to San Fernando Office
+              </a>
+            </div>
           </div>
 
           {/* Right: 4 Credentials & Compliance Pillars */}

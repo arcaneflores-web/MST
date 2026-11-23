@@ -3,6 +3,7 @@ import { CheckCircle2, ClipboardList, Send, X } from 'lucide-react';
 import type {
   InquiryFormInput,
   InquiryValidationErrors,
+  PreferredContactMethod,
   SubmittedInquiry,
 } from '../types/construction';
 import { validateInquiryForm } from '../utils/inquiryLogic';
@@ -21,11 +22,15 @@ const DEFAULT_FORM_STATE: InquiryFormInput = {
   companyName: '',
   email: '',
   phone: '',
+  preferredContact: 'Email',
   projectCategory: 'Commercial',
   location: '',
+  estimatedFloorArea: '',
   estimatedBudget: 'PHP 5M – 15M',
   targetStart: 'Within 1–3 Months',
+  readinessStatus: 'Titled Lot Ready',
   projectScope: '',
+  privacyConsent: false,
 };
 
 export function InquiryModal({
@@ -60,7 +65,7 @@ export function InquiryModal({
 
   if (!open) return null;
 
-  const handleChange = (field: keyof InquiryFormInput, value: string) => {
+  const handleChange = (field: keyof InquiryFormInput, value: string | boolean) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
     if (field in errors) {
       setErrors((prev) => {
@@ -161,9 +166,9 @@ export function InquiryModal({
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs text-slate-500">Estimated Budget Band</dt>
+                  <dt className="text-xs text-slate-500">Preferred Contact &amp; Budget</dt>
                   <dd className="mt-1 font-mono text-slate-900 tabular-nums">
-                    {submittedReceipt.estimatedBudget}
+                    {submittedReceipt.preferredContact} · {submittedReceipt.estimatedBudget}
                   </dd>
                 </div>
               </dl>
@@ -330,6 +335,31 @@ export function InquiryModal({
                   )}
                 </div>
 
+                {/* Preferred Contact Method */}
+                <div>
+                  <label
+                    htmlFor="inquiry-preferredContact"
+                    className="block text-xs font-semibold text-slate-800"
+                  >
+                    Preferred Contact Method
+                  </label>
+                  <select
+                    id="inquiry-preferredContact"
+                    value={formState.preferredContact}
+                    onChange={(e) =>
+                      handleChange(
+                        'preferredContact',
+                        e.target.value as PreferredContactMethod
+                      )
+                    }
+                    className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-950 focus:border-blue-700 focus:outline-none"
+                  >
+                    <option value="Email">Email</option>
+                    <option value="Mobile Call / SMS">Mobile Call / SMS</option>
+                    <option value="Viber / WhatsApp">Viber / WhatsApp</option>
+                  </select>
+                </div>
+
                 {/* Project Category */}
                 <div>
                   <label
@@ -387,6 +417,24 @@ export function InquiryModal({
                   )}
                 </div>
 
+                {/* Estimated Floor Area */}
+                <div>
+                  <label
+                    htmlFor="inquiry-floorArea"
+                    className="block text-xs font-semibold text-slate-800"
+                  >
+                    Estimated Floor Area (Optional)
+                  </label>
+                  <input
+                    id="inquiry-floorArea"
+                    type="text"
+                    value={formState.estimatedFloorArea}
+                    onChange={(e) => handleChange('estimatedFloorArea', e.target.value)}
+                    placeholder="e.g., 1,200 sqm"
+                    className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-950 placeholder:text-slate-400 focus:border-blue-700 focus:outline-none"
+                  />
+                </div>
+
                 {/* Estimated Budget */}
                 <div>
                   <label
@@ -432,6 +480,33 @@ export function InquiryModal({
                   </select>
                 </div>
 
+                {/* Readiness Status */}
+                <div className="sm:col-span-2">
+                  <label
+                    htmlFor="inquiry-readiness"
+                    className="block text-xs font-semibold text-slate-800"
+                  >
+                    Project Readiness
+                  </label>
+                  <select
+                    id="inquiry-readiness"
+                    value={formState.readinessStatus}
+                    onChange={(e) => handleChange('readinessStatus', e.target.value)}
+                    className="mt-1.5 w-full rounded-md border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-950 focus:border-blue-700 focus:outline-none"
+                  >
+                    <option value="Titled Lot Ready">Titled Lot Ready (Need Design &amp; Build)</option>
+                    <option value="Architectural Plans Available">
+                      Architectural / Structural Plans Available (Need Construction Bid)
+                    </option>
+                    <option value="Existing Building for Fit-Out / Retrofit">
+                      Existing Structure for Fit-Out or Retrofit
+                    </option>
+                    <option value="Feasibility / Budgeting Stage">
+                      Feasibility &amp; Budgeting Stage
+                    </option>
+                  </select>
+                </div>
+
                 {/* Project Scope Description */}
                 <div className="sm:col-span-2">
                   <label
@@ -459,6 +534,29 @@ export function InquiryModal({
                   {errors.projectScope && (
                     <p id="error-scope" className="mt-1.5 text-xs font-medium text-red-700">
                       {errors.projectScope}
+                    </p>
+                  )}
+                </div>
+
+                {/* Privacy Consent */}
+                <div className="sm:col-span-2">
+                  <label className="flex items-start gap-2.5 text-xs text-slate-700 cursor-pointer">
+                    <input
+                      id="inquiry-privacyConsent"
+                      type="checkbox"
+                      checked={formState.privacyConsent}
+                      onChange={(e) => handleChange('privacyConsent', e.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-700 focus:ring-blue-700"
+                    />
+                    <span>
+                      I consent to MST Construction OPC processing my submitted contact and
+                      project details strictly for engineering evaluation and quotation
+                      preparation. *
+                    </span>
+                  </label>
+                  {errors.privacyConsent && (
+                    <p className="mt-1.5 text-xs font-medium text-red-700">
+                      {errors.privacyConsent}
                     </p>
                   )}
                 </div>

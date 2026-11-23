@@ -1,0 +1,1091 @@
+# MST CONSTRUCTION OPC
+## Website Development & System Implementation Plan
+
+**Project Direction:** Premium Corporate Website with Integrated Business Management System  
+**Frontend:** React 19, TypeScript, Vite, Tailwind CSS  
+**Backend:** Supabase  
+**Database:** PostgreSQL (Supabase)  
+**Authentication:** Supabase Auth  
+**File Storage:** Supabase Storage  
+**Initial Deployment:** Local Development  
+**Design Direction:** Premium Minimalist Architecture / Corporate
+
+---
+
+# 1. PROJECT OVERVIEW
+
+The goal is to transform the existing MST Construction OPC website into a professional, premium engineering and construction company platform.
+
+Rather than functioning as a basic corporate landing page, the website will serve three primary purposes:
+
+1. **Corporate Branding and Credibility** – Establish MST Construction OPC as a professional engineering and construction company through a modern, visually compelling website.
+2. **Client Acquisition and Inquiry Management** – Provide potential clients with an accessible platform to explore services, view completed projects, and submit construction inquiries and quotation requests.
+3. **Business Administration and Management** – Provide authorized MST personnel with an administrative dashboard to manage inquiries, projects, portfolio content, company information, and other website records.
+
+The system will initially focus on the public corporate website and administrative dashboard. A dedicated client portal may be introduced in a future development phase.
+
+## 1.1 Existing Project Foundation
+
+The existing React project already provides several working components and functionalities that should be preserved and improved rather than rebuilt unnecessarily.
+
+| Existing Component | Current Functionality |
+|---|---|
+| Hero Section | Company introduction and primary highlights |
+| Services Section | Construction and engineering service listings |
+| Portfolio Section | Project listings and category filtering |
+| Credentials Section | Company credentials and qualifications |
+| Team Section | Engineering team profiles |
+| Inquiry Section | Project inquiry and quotation requests |
+| Inquiry Modal | Inquiry form and validation |
+| Project Modal | Individual project information |
+| Team Modal | Team member details |
+| Footer | Contact information and navigation |
+
+### Existing functionality assessment
+
+| Functionality | Assessment |
+|---|---|
+| Service listings | Existing |
+| Project filtering | Existing |
+| Project detail modals | Existing |
+| Team profiles | Existing |
+| Inquiry validation | Existing |
+| Inquiry reference generation | Existing |
+| Inquiry status updates | Local implementation |
+| Inquiry persistence | Browser localStorage |
+| Centralized database | Not implemented |
+| Admin authentication | Not implemented |
+| Email notifications | Not implemented |
+| Secure admin dashboard | Not implemented |
+
+**Development principle:** Preserve existing working components, improve their presentation, and integrate new functionality without unnecessarily disrupting the current application.
+
+---
+
+# 2. DESIGN DIRECTION AND VISUAL IDENTITY
+
+The website will follow a premium minimalist design inspired by modern architecture studios and established engineering firms.
+
+The overall appearance should communicate professionalism, reliability, technical expertise, and construction excellence.
+
+## 2.1 Proposed Design System
+
+| Element | Recommendation |
+|---|---|
+| Primary Color | Midnight Navy (#111827) |
+| Secondary Color | Warm Ivory (#F8F7F4) |
+| Accent Color | Champagne Gold (#B69A6A) |
+| Main Text | Charcoal (#242424) |
+| Supporting Text | Concrete Gray (#858585) |
+| Heading Typography | Plus Jakarta Sans |
+| Body Typography | Inter |
+| Layout | Spacious, clean, architectural |
+| Animations | Subtle transitions and scroll reveals |
+| Photography | High-quality architectural and construction images |
+
+### Design Guidelines
+
+- Use large architectural photographs and professional project images.
+- Maintain consistent spacing and typography.
+- Use minimal but meaningful animations.
+- Avoid excessive gradients, glowing effects, and unnecessary decorative elements.
+- Maintain a clean navigation structure.
+- Ensure all pages are responsive across desktop, tablet, and mobile devices.
+- Use consistent buttons, forms, cards, modals, and interactive elements.
+
+## 2.2 Homepage Hero Section
+
+**Suggested headline:**
+
+# Building Excellence. Creating Lasting Foundations.
+
+Delivering construction and engineering solutions through thoughtful planning, technical expertise, and quality execution.
+
+Primary actions:
+- Explore Our Projects
+- Request a Consultation
+
+The hero section should feature a high-quality architectural or construction photograph with readable typography and a prominent call-to-action.
+
+---
+
+# 3. PUBLIC WEBSITE STRUCTURE
+
+The public-facing website will consist of the following primary pages and sections.
+
+## 3.1 Home
+
+The homepage will serve as the primary introduction to MST Construction OPC.
+
+### Recommended Sections
+
+1. Hero Banner
+2. Company Introduction
+3. Construction Services
+4. Featured Projects
+5. Why Choose MST
+6. Construction Process
+7. Company Credentials
+8. Client Testimonials
+9. Contact and Inquiry Call-to-Action
+10. Footer
+
+### Required Improvements
+
+- Replace or supplement the existing blueprint canvas with professional architectural photography.
+- Feature three to four verified company achievements.
+- Highlight the company's main construction services.
+- Showcase selected completed and ongoing projects.
+- Include a prominent quotation request button.
+- Introduce the company's capabilities and differentiators.
+
+## 3.2 About MST
+
+Create a dedicated About Us page explaining the company's identity, background, and professional capabilities.
+
+### Subsections
+
+- Company Overview
+- Company Background and History
+- Mission and Vision
+- Core Values
+- Construction Philosophy
+- Areas of Operation
+- What Makes MST Different
+- Company Credentials
+
+Use the existing company information as the foundation. Any missing company details should be confirmed with MST before publication.
+
+## 3.3 Services
+
+Retain the six existing service categories.
+
+| Existing Service | Description |
+|---|---|
+| General Building & Design-Build | Commercial and residential construction |
+| Civil & Site Development Works | Infrastructure and site development |
+| Structural Steel & Industrial Facilities | Industrial construction |
+| MEPFS Engineering & Coordination | Mechanical, electrical, plumbing, fire protection, and related engineering coordination |
+| Architectural Planning & Structural Consultancy | Architectural planning and engineering consultancy |
+| Commercial Fit-Out & Structural Retrofitting | Renovation, interior fit-out, and building improvement |
+
+Each service should have:
+
+- Service overview
+- Scope of work
+- Capabilities
+- Relevant project photographs
+- Typical project process
+- Applicable standards, where verified
+- Request a Consultation button
+
+## 3.4 Projects and Portfolio
+
+The project portfolio should be one of the strongest sections of the website.
+
+The existing portfolio functionality should be retained and improved.
+
+### Existing Features to Preserve
+
+- Project search
+- Category filtering
+- Completed and ongoing project filtering
+- Project detail modal
+- Similar-project inquiry action
+
+### Additional Features
+
+- Actual construction photographs
+- Before-and-after galleries
+- Construction progress photographs
+- Project location
+- Project completion year
+- Project category
+- Project scope
+- Project specifications
+- Engineering highlights
+
+### Individual Project Details Page
+
+Suggested route:
+
+`/projects/:slug`
+
+Each project page should contain:
+
+1. Project Title
+2. Project Location
+3. Project Year
+4. Project Category
+5. Completion Status
+6. Project Overview
+7. Scope of Work
+8. Project Specifications
+9. Construction Gallery
+10. Engineering Highlights
+11. Related Projects
+12. Request a Similar Project
+
+Project details and photographs must be based on actual, authorized company records.
+
+## 3.5 Credentials and Certifications
+
+Display verified company credentials and professional qualifications.
+
+### Features
+
+- Certificate and license gallery
+- Credential name and issuing organization
+- Registration or reference number, where authorized
+- Issue date
+- Expiration date, where applicable
+- Supporting certificate image or document
+
+Only verified and authorized credentials should be published.
+
+## 3.6 Engineering Team
+
+Improve the existing Team Section by introducing:
+
+- Professional profile photographs
+- Full name
+- Official designation
+- Professional background
+- Area of specialization
+- Relevant qualifications
+- Short biography
+
+All employee information and photographs must be approved for publication.
+
+## 3.7 Construction Process
+
+Create a dedicated section explaining how MST manages a construction project.
+
+### Seven-Step Construction Process
+
+1. **Initial Consultation** – Understand client requirements, objectives, and project expectations.
+2. **Site Inspection** – Evaluate the project location and site conditions.
+3. **Planning and Engineering** – Prepare the necessary plans, designs, and technical documentation.
+4. **Cost Estimation and BOQ** – Prepare the proposed Bill of Quantities and project quotation.
+5. **Construction Execution** – Implement the approved construction scope.
+6. **Quality Assurance and Inspection** – Conduct inspections and document project progress.
+7. **Project Turnover** – Complete project handover, documentation, and client coordination.
+
+## 3.8 Client Testimonials
+
+Create a section showcasing genuine feedback from previous clients.
+
+### Information to Display
+
+- Client name or organization
+- Associated project
+- Testimonial
+- Optional project photograph
+
+Testimonials must be authentic and published with appropriate permission.
+
+## 3.9 Contact Us
+
+Provide a dedicated contact page containing:
+
+- Company address
+- Contact numbers
+- Official email address
+- Business hours
+- Social media links
+- Embedded Google Map
+- Get Directions link
+- Project inquiry form
+
+The office location should be confirmed before publishing the map and address.
+
+---
+
+# 4. PROJECT INQUIRY AND QUOTATION SYSTEM
+
+The existing inquiry form will be upgraded into a centralized project inquiry management system.
+
+The current browser localStorage implementation should be replaced with Supabase database storage.
+
+## 4.1 Inquiry Form Fields
+
+### Client Information
+
+- Full Name
+- Company Name (optional)
+- Email Address
+- Contact Number
+- Preferred Contact Method
+
+### Project Information
+
+- Project Category
+- Project Location
+- Estimated Project Budget
+- Estimated Floor Area (optional)
+- Target Construction Date
+- Property Ownership or Project Readiness (optional)
+- Project Description / Scope of Work
+
+### Attachments
+
+- Architectural Plans
+- Reference Images
+- Other Supporting Documents
+
+### Consent
+
+- Privacy Policy acknowledgment
+- Consent to the processing of submitted personal information
+
+## 4.2 Inquiry Submission Workflow
+
+1. Visitor completes the inquiry form.
+2. Frontend validates the submitted information.
+3. Backend validates and processes the submission.
+4. Supabase stores the inquiry.
+5. System generates a unique inquiry reference number.
+6. Email notification is sent to designated MST personnel.
+7. Visitor receives a submission confirmation.
+8. Authorized administrators review the inquiry.
+9. Administrator updates the inquiry status.
+10. MST personnel coordinate with the prospective client.
+
+## 4.3 Inquiry Status Management
+
+| Status | Description |
+|---|---|
+| New | Newly submitted inquiry |
+| Under Review | Inquiry is being evaluated |
+| Site Inspection | Site inspection is scheduled |
+| Quotation Preparation | Preparing BOQ and project estimate |
+| Quotation Sent | Proposal has been sent to the client |
+| Negotiation | Discussion or revision of the proposal |
+| Approved | Client accepted the proposal |
+| Declined | Client declined the proposal |
+| Completed | Inquiry has resulted in a completed project |
+
+Each status update should record:
+
+- Previous status
+- New status
+- Updated by
+- Date and time
+- Optional administrative remarks
+
+## 4.4 Inquiry Reference Tracking
+
+Every submitted inquiry must have a unique reference number.
+
+Example:
+
+`MST-INQ-2026-00001`
+
+The reference number should be generated securely by the backend.
+
+For the initial release, the client can receive this reference through the confirmation email.
+
+A public inquiry tracking page may be introduced later using a secure reference-based access mechanism. It must not expose internal notes or other clients' information.
+
+---
+
+# 5. ADMINISTRATIVE DASHBOARD
+
+The administrative dashboard will be a separate, authenticated area for authorized MST personnel.
+
+Suggested base route:
+
+`/admin`
+
+## 5.1 Admin Route Structure
+
+```text
+/admin/login
+/admin/dashboard
+/admin/inquiries
+/admin/inquiries/:id
+/admin/projects
+/admin/projects/create
+/admin/projects/:id/edit
+/admin/services
+/admin/team
+/admin/credentials
+/admin/testimonials
+/admin/reports
+/admin/users
+/admin/audit-logs
+/admin/settings
+```
+
+## 5.2 Dashboard Overview
+
+The dashboard should provide a summary of the company's website activity and project inquiries.
+
+### Dashboard Statistics
+
+- Total Inquiries
+- New Inquiries
+- Pending Inquiries
+- Active Projects
+- Completed Projects
+- Quotations Sent
+- Approved Projects
+
+### Dashboard Components
+
+- Inquiry statistics
+- Inquiry status distribution
+- Monthly inquiry trends
+- Recent inquiry submissions
+- Recent project updates
+- Recent administrative activity
+- Quick action shortcuts
+
+All statistics must be calculated from actual database records.
+
+## 5.3 Inquiry Management
+
+Administrators should be able to:
+
+- View all submitted inquiries.
+- Search inquiries.
+- Filter by status.
+- Filter by project category.
+- Filter by submission date.
+- View complete inquiry information.
+- View uploaded attachments.
+- Assign inquiries to staff.
+- Update inquiry status.
+- Add internal notes.
+- Record follow-up dates.
+- Archive or close inquiries.
+- Export inquiry records.
+
+Internal notes must never be exposed to public website visitors.
+
+## 5.4 Project Management
+
+Authorized personnel should be able to:
+
+- Create projects.
+- Edit project information.
+- Update project descriptions.
+- Set project categories.
+- Set completion status.
+- Update project locations.
+- Add project specifications.
+- Upload project photographs.
+- Manage project galleries.
+- Publish and unpublish projects.
+- Mark projects as featured.
+
+## 5.5 Portfolio Management
+
+Provide a dedicated interface for managing public project content.
+
+Features:
+
+- Upload project images.
+- Add image descriptions and captions.
+- Organize images into galleries.
+- Set thumbnail images.
+- Reorder photographs.
+- Add alternative text.
+- Manage featured project displays.
+- Remove or archive outdated images.
+
+## 5.6 Service Management
+
+Administrators should be able to:
+
+- Add new services.
+- Edit service descriptions.
+- Update service photographs.
+- Modify service categories.
+- Reorder service listings.
+- Publish or unpublish services.
+
+## 5.7 Team Management
+
+Administrators should be able to:
+
+- Add team members.
+- Edit employee profiles.
+- Upload profile photographs.
+- Update designations.
+- Update biographies.
+- Manage qualifications.
+- Publish or hide team profiles.
+
+## 5.8 Credentials Management
+
+Features:
+
+- Add company credentials.
+- Upload certificate files.
+- Edit credential information.
+- Update issue and expiration dates.
+- Set publication visibility.
+- Archive expired or outdated records.
+
+## 5.9 Testimonials Management
+
+Features:
+
+- Add testimonials.
+- Edit testimonial details.
+- Associate testimonials with projects.
+- Upload supporting photographs.
+- Approve or reject submissions.
+- Publish or unpublish testimonials.
+
+## 5.10 Reports and Analytics
+
+The dashboard should support:
+
+- Inquiry volume reports
+- Inquiry status reports
+- Monthly inquiry summaries
+- Project category summaries
+- Quotation activity
+- Inquiry conversion statistics
+- CSV export
+
+Financial reporting should only be introduced when actual financial records and appropriate access controls are available.
+
+## 5.11 User Management
+
+Administrators should be able to:
+
+- Create authorized accounts.
+- Assign user roles.
+- Activate or deactivate accounts.
+- Update user permissions.
+- View account activity.
+
+User creation and role assignment must be protected by backend authorization.
+
+## 5.12 Audit Logs
+
+Record important administrative activities, including:
+
+- Login events
+- Inquiry status changes
+- Project creation and editing
+- File uploads and deletion
+- User and permission changes
+- Website content modifications
+
+Audit logs should record the actor, action, affected record, and timestamp.
+
+## 5.13 System Settings
+
+Provide administrative settings for:
+
+- Company contact information
+- Official email addresses
+- Business hours
+- Social media links
+- Website branding
+- Notification preferences
+- Inquiry configuration
+
+---
+
+# 6. USER ROLES AND ACCESS CONTROL
+
+The administrative dashboard should implement role-based access control.
+
+| Role | Permissions |
+|---|---|
+| Super Admin | Full system access, user management, configuration |
+| Administrator | Manage inquiries, projects, website content, and reports |
+| Staff | Access assigned inquiries and authorized records |
+
+### Access Control Requirements
+
+- Only authenticated users can access administrative pages.
+- Users can only perform actions allowed by their assigned role.
+- Administrative permissions must be checked on the backend.
+- Unauthorized users must not be able to access restricted database records.
+- Sensitive administrative actions must be recorded in audit logs.
+
+Hiding frontend buttons is not sufficient security. Supabase Row Level Security and appropriate backend authorization must enforce permissions.
+
+---
+
+# 7. SUPABASE BACKEND AND DATABASE ARCHITECTURE
+
+Supabase will serve as the backend platform.
+
+### Technology Stack
+
+| Component | Technology |
+|---|---|
+| Frontend | React 19 |
+| Programming Language | TypeScript |
+| Build Tool | Vite |
+| Styling | Tailwind CSS 4 |
+| Backend Platform | Supabase |
+| Database | PostgreSQL |
+| Authentication | Supabase Auth |
+| File Storage | Supabase Storage |
+| Server-side Logic | Supabase Edge Functions |
+| Development Environment | Local Machine |
+
+## 7.1 Database Tables
+
+The following database structure is recommended.
+
+| Table | Purpose |
+|---|---|
+| `profiles` | User profiles and assigned roles |
+| `inquiries` | Project inquiry submissions |
+| `inquiry_notes` | Internal inquiry notes |
+| `inquiry_status_history` | Inquiry status records |
+| `projects` | Company construction projects |
+| `project_images` | Project photographs and galleries |
+| `project_updates` | Project progress records |
+| `services` | Company service information |
+| `team_members` | Engineering team profiles |
+| `credentials` | Company certifications and licenses |
+| `testimonials` | Approved client testimonials |
+| `notifications` | System notifications |
+| `audit_logs` | Administrative activity records |
+
+## 7.2 Storage Buckets
+
+Suggested Supabase Storage buckets:
+
+| Bucket | Access |
+|---|---|
+| `project-images` | Public approved portfolio images |
+| `team-photos` | Public approved team photographs |
+| `credentials` | Private by default |
+| `inquiry-attachments` | Private |
+| `project-documents` | Private |
+
+Private files should only be accessible to authorized users through appropriate access policies or temporary signed URLs.
+
+## 7.3 Database Requirements
+
+- Use primary keys and foreign key relationships.
+- Add appropriate indexes for frequently searched fields.
+- Generate unique inquiry reference numbers.
+- Use timestamps for record creation and updates.
+- Maintain inquiry status history.
+- Validate important fields.
+- Use database constraints where appropriate.
+- Implement Row Level Security on all exposed tables.
+- Restrict administrative functions to authorized users.
+
+## 7.4 Backend Security
+
+- Use Supabase Authentication.
+- Implement Row Level Security policies.
+- Protect administrative routes.
+- Never expose the Supabase service-role key in frontend code.
+- Validate uploaded file types and sizes.
+- Restrict private document access.
+- Implement spam protection and submission rate limiting.
+- Protect administrative operations with server-side authorization.
+- Maintain database backups and recovery procedures.
+
+---
+
+# 8. EMAIL NOTIFICATIONS AND AUTOMATION
+
+The system should provide automated email notifications for important inquiry activities.
+
+### Client Notifications
+
+- Inquiry submission confirmation
+- Inquiry status updates
+- Quotation notification
+- Additional information requests
+
+### MST Notifications
+
+- New inquiry received
+- New quotation request
+- Follow-up reminder
+- Important inquiry status changes
+
+Email notifications should be processed through a trusted email provider using Supabase Edge Functions or another secure server-side service.
+
+Email credentials must never be placed in frontend environment variables.
+
+---
+
+# 9. FUTURE CLIENT PORTAL
+
+The client portal will not be included in the initial release.
+
+It may be developed after the public website and admin dashboard are stable.
+
+Suggested future routes:
+
+```text
+/client/login
+/client/dashboard
+/client/projects
+/client/projects/:id
+/client/documents
+/client/notifications
+/client/profile
+```
+
+### Planned Features
+
+- Client account access
+- Assigned project overview
+- Construction progress tracking
+- Project milestone updates
+- Construction photographs
+- Approved quotations
+- Document downloads
+- Project announcements
+- Client notifications
+
+Clients must only be able to access their own assigned projects and authorized documents.
+
+---
+
+# 10. ADDITIONAL FUTURE FEATURES
+
+The following modules may be considered after the initial system has been completed.
+
+| Feature | Purpose |
+|---|---|
+| BOQ Generator | Prepare itemized construction estimates |
+| PDF Quotation Generator | Generate formal project quotations |
+| Construction Progress Tracker | Monitor project milestones |
+| Site Inspection Records | Document site inspections and findings |
+| Document Management | Organize project-related documents |
+| Business Analytics | Analyze inquiry and project performance |
+| Advanced Notifications | Automate administrative reminders |
+
+These modules should be developed independently so they do not unnecessarily complicate the initial release.
+
+---
+
+# 11. TECHNICAL PROJECT STRUCTURE
+
+The existing project should gradually adopt a modular folder structure.
+
+```text
+MST/
+│
+├── public/
+│   ├── assets/
+│   ├── images/
+│   └── favicon/
+│
+├── src/
+│   ├── assets/
+│   │
+│   ├── components/
+│   │   ├── common/
+│   │   ├── layout/
+│   │   ├── home/
+│   │   ├── services/
+│   │   ├── projects/
+│   │   └── forms/
+│   │
+│   ├── pages/
+│   │   ├── public/
+│   │   └── admin/
+│   │
+│   ├── features/
+│   │   ├── inquiries/
+│   │   ├── projects/
+│   │   ├── services/
+│   │   ├── team/
+│   │   ├── credentials/
+│   │   ├── testimonials/
+│   │   ├── users/
+│   │   └── reports/
+│   │
+│   ├── services/
+│   │   ├── supabase/
+│   │   ├── email/
+│   │   └── storage/
+│   │
+│   ├── hooks/
+│   ├── routes/
+│   ├── types/
+│   ├── utils/
+│   └── App.tsx
+│
+├── supabase/
+│   ├── migrations/
+│   ├── functions/
+│   └── seed.sql
+│
+├── .env.example
+├── package.json
+└── vite.config.ts
+```
+
+The folder structure is a target architecture. Existing components should be migrated incrementally rather than moved all at once.
+
+---
+
+# 12. DEVELOPMENT ROADMAP
+
+Development will follow a phased implementation approach.
+
+## Phase 1 — Existing Website Improvement
+
+**Priority: Critical**
+
+Tasks:
+- Audit existing components.
+- Preserve working functionality.
+- Establish the premium design system.
+- Redesign the homepage.
+- Improve the navigation and footer.
+- Improve services presentation.
+- Improve project portfolio presentation.
+- Add About MST.
+- Add the Construction Process section.
+- Improve mobile responsiveness.
+
+**Deliverable:** Improved premium corporate website.
+
+## Phase 2 — Public Website Completion
+
+**Priority: High**
+
+Tasks:
+- Complete all public website pages.
+- Improve project detail pages.
+- Add project image galleries.
+- Improve credentials and team sections.
+- Add client testimonials.
+- Add contact information and Google Maps.
+- Improve inquiry form fields.
+- Add privacy notice and consent.
+
+**Deliverable:** Complete public-facing corporate website.
+
+## Phase 3 — Supabase Integration
+
+**Priority: Critical**
+
+Tasks:
+- Create Supabase project.
+- Configure environment variables.
+- Create PostgreSQL database tables.
+- Configure relationships and indexes.
+- Implement Row Level Security.
+- Integrate inquiry submission.
+- Implement unique inquiry references.
+- Configure private file uploads.
+- Add server-side validation.
+
+**Deliverable:** Centralized inquiry management backend.
+
+## Phase 4 — Admin Authentication and Dashboard
+
+**Priority: Critical**
+
+Tasks:
+- Implement Supabase Auth.
+- Create admin login page.
+- Implement role-based access control.
+- Create protected administrative routes.
+- Build dashboard statistics.
+- Develop inquiry management.
+- Develop project management.
+- Develop portfolio management.
+- Develop team and credentials management.
+- Develop user management.
+- Implement audit logs.
+
+**Deliverable:** Functional administrative dashboard.
+
+## Phase 5 — Notifications and Reports
+
+**Priority: High**
+
+Tasks:
+- Integrate email service.
+- Implement inquiry confirmation emails.
+- Implement administrator notifications.
+- Implement inquiry status notifications.
+- Add CSV reports.
+- Add inquiry analytics.
+- Add dashboard activity history.
+
+**Deliverable:** Automated inquiry and reporting system.
+
+## Phase 6 — Testing and Quality Assurance
+
+**Priority: Critical**
+
+Tasks:
+- Functional testing
+- Form validation testing
+- Authentication testing
+- Role and permission testing
+- Database security testing
+- File upload testing
+- Responsive design testing
+- Cross-browser testing
+- Performance testing
+- Error handling
+- Backup and recovery testing
+
+**Deliverable:** Tested and stable local application ready for deployment preparation.
+
+## Phase 7 — Future Development
+
+Tasks:
+- Client portal
+- Construction progress tracking
+- BOQ and quotation generation
+- Site inspection management
+- Advanced document management
+- Additional business analytics
+
+**Deliverable:** Expanded construction business management platform.
+
+---
+
+# 13. LOCAL DEVELOPMENT AND ENVIRONMENT CONFIGURATION
+
+The project will initially run on a local development environment.
+
+### Initial Setup
+
+1. Install Node.js and npm.
+2. Open the existing MST project in Visual Studio Code.
+3. Install project dependencies.
+4. Create and configure the Supabase project.
+5. Configure the database schema.
+6. Configure environment variables.
+7. Run the application locally.
+8. Test inquiry submissions and database operations.
+
+### Environment Variables
+
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_publishable_key
+```
+
+Only public client-side Supabase credentials should be exposed in the frontend. Secret keys must remain server-side.
+
+### Local Development Command
+
+```bash
+npm install
+npm run dev
+```
+
+The application will be accessible through the configured local Vite development address.
+
+---
+
+# 14. QUALITY ASSURANCE AND LAUNCH REQUIREMENTS
+
+Before considering the system ready for deployment, the following requirements must be satisfied.
+
+### Website Quality
+
+- All public pages load correctly.
+- Navigation works across all screen sizes.
+- Project filters and detail pages work.
+- Images load correctly and are optimized.
+- Forms display appropriate validation messages.
+- Loading, success, and error states are implemented.
+- Page metadata and SEO information are configured.
+
+### Inquiry System
+
+- Inquiries are stored in Supabase.
+- Duplicate or invalid submissions are handled appropriately.
+- Inquiry reference numbers are unique.
+- Attachments are validated.
+- Email notifications are delivered.
+- Inquiry statuses can be updated by authorized users.
+
+### Administrative Security
+
+- Admin pages require authentication.
+- Role-based permissions are enforced by the backend.
+- Unauthorized database operations are rejected.
+- Private documents are protected.
+- Administrative activities are logged.
+- User management is restricted to authorized administrators.
+
+### Technical Quality
+
+- TypeScript checks pass.
+- Production build completes successfully.
+- Existing functionality is regression-tested.
+- No critical browser console errors remain.
+- Database migrations are documented.
+- Environment secrets are protected.
+- Backup and recovery procedures are established.
+
+---
+
+# 15. FINAL PROJECT SCOPE
+
+The initial implementation will focus on the following deliverables.
+
+| Module | Initial Release |
+|---|---|
+| Premium Corporate Website | Included |
+| Home and About Pages | Included |
+| Services | Included |
+| Project Portfolio | Included |
+| Project Detail Pages | Included |
+| Company Credentials | Included |
+| Engineering Team | Included |
+| Construction Process | Included |
+| Client Testimonials | Included |
+| Contact and Google Maps | Included |
+| Project Inquiry Form | Included |
+| Supabase Database | Included |
+| Supabase Authentication | Included |
+| Admin Dashboard | Included |
+| Inquiry Management | Included |
+| Project Management | Included |
+| Portfolio Management | Included |
+| Team Management | Included |
+| Credentials Management | Included |
+| Testimonials Management | Included |
+| Email Notifications | Included |
+| Reports and Analytics | Included |
+| Client Portal | Future Phase |
+| BOQ and Quotation Generator | Future Phase |
+| Advanced Construction Management | Future Phase |
+
+---
+
+# 16. PROJECT SUCCESS OBJECTIVES
+
+The completed MST Construction OPC platform should achieve the following:
+
+1. Establish a professional and premium online presence.
+2. Present company services and construction capabilities clearly.
+3. Showcase actual completed and ongoing projects.
+4. Improve communication with potential clients.
+5. Centralize inquiry and quotation request records.
+6. Reduce manual handling of incoming inquiries.
+7. Provide authorized personnel with an efficient management interface.
+8. Maintain secure and organized company information.
+9. Support future expansion into client and construction management services.
+
+## FINAL VISION
+
+**MST Construction OPC — Building Excellence. Creating Lasting Foundations.**
+
+The objective is to create a premium corporate website supported by a centralized inquiry management and administrative system.
+
+The public website will establish the company's professional identity and attract potential clients, while the administrative dashboard will provide the internal tools needed to manage inquiries, projects, and website content.
+
+The platform will be developed incrementally using the existing React project, Supabase backend services, and a modular architecture that allows additional construction management features to be introduced in the future.

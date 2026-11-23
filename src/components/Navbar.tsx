@@ -7,9 +7,9 @@ interface NavbarProps {
 }
 
 const NAV_LINKS = [
+  { href: '#about', label: 'About' },
   { href: '#services', label: 'Services' },
   { href: '#projects', label: 'Projects' },
-  { href: '#credentials', label: 'Credentials' },
   { href: '#team', label: 'Team' },
   { href: '#inquiry', label: 'Inquiry' },
 ];

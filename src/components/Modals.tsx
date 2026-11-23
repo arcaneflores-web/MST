@@ -12,12 +12,14 @@ interface ProjectModalProps {
   project: ProjectItem | null;
   onClose: () => void;
   onRequestSimilar: (projectTitle: string) => void;
+  onEditProject: (project: ProjectItem) => void;
 }
 
 export function ProjectModal({
   project,
   onClose,
   onRequestSimilar,
+  onEditProject,
 }: ProjectModalProps) {
   useEffect(() => {
     if (!project) return;
@@ -124,24 +126,37 @@ export function ProjectModal({
             {project.outcomeMetric}
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
-            >
-              Close
-            </button>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
             <button
               type="button"
               onClick={() => {
-                onRequestSimilar(project.title);
                 onClose();
+                onEditProject(project);
               }}
-              className="rounded-md bg-blue-700 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-800"
+              className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-100"
             >
-              Inquire About Similar Build
+              Update Project Details
             </button>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onRequestSimilar(project.title);
+                  onClose();
+                }}
+                className="rounded-md bg-blue-700 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-800"
+              >
+                Inquire About Similar Build
+              </button>
+            </div>
           </div>
         </div>
       </div>

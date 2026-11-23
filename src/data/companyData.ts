@@ -1,9 +1,11 @@
 import type {
   CredentialItem,
+  ProcessStep,
   ProjectItem,
   ServiceItem,
   SubmittedInquiry,
   TeamMember,
+  TestimonialItem,
 } from '../types/construction';
 
 export const COMPANY_INFO = {
@@ -14,6 +16,8 @@ export const COMPANY_INFO = {
   addressLine2: 'City of San Fernando, Pampanga 2000',
   fullAddress:
     '2nd Floor, JG Building, Dela Paz Norte, City of San Fernando, Pampanga 2000',
+  mapsDirectionsUrl:
+    'https://www.google.com/maps/search/?api=1&query=JG+Building+Dela+Paz+Norte+City+of+San+Fernando+Pampanga+2000',
   email: 'mstconstructionopc@gmail.com',
   mobilePhone: '+63 919 099 1178',
   landlinePhone: '045-402-1468',
@@ -42,6 +46,124 @@ export const HERO_METRICS = [
     value: '48 hrs',
     label: 'Initial Estimate Turnaround',
     detail: 'Site assessment & BOQ scoping',
+  },
+];
+
+export const ABOUT_MST = {
+  eyebrow: 'About MST Construction OPC',
+  headline: 'Engineering-Led Construction Built on Clear Accountability',
+  overview:
+    'Headquartered in Dela Paz Norte, City of San Fernando, Pampanga, MST Construction OPC is a SEC-registered One Person Corporation delivering commercial buildings, industrial warehouses, custom residences, and civil infrastructure across Central Luzon.',
+  mission:
+    'To execute structurally sound, cost-transparent, and code-compliant engineering works that safeguard client capital and stand resilient through decades of service.',
+  vision:
+    'To be Central Luzon’s most trusted design-build partner for commercial developers, logistics operators, healthcare providers, and residential property owners.',
+  differentiators: [
+    {
+      title: 'Direct Principal Oversight',
+      detail:
+        'Every contracted build is directly supervised by licensed civil engineers and architects from initial soil verification to final occupancy handover.',
+    },
+    {
+      title: 'Itemized BOQ Transparency',
+      detail:
+        'Clients receive line-by-line unit cost breakdowns, material specifications, and milestone-linked progress billings with zero hidden markups.',
+    },
+    {
+      title: 'Pampanga Site & Flood Engineering',
+      detail:
+        'Foundations, finished floor elevations, and stormwater drainage systems are engineered specifically for Central Luzon subsoils and monsoon runoff.',
+    },
+    {
+      title: 'Documented QA/QC & Site Safety',
+      detail:
+        'Third-party concrete cylinder breaks, rebar tensile certifications, and DOLE COSH safety protocols are maintained on every active job site.',
+    },
+  ],
+};
+
+export const CONSTRUCTION_PROCESS: ProcessStep[] = [
+  {
+    step: '01',
+    title: 'Initial Consultation',
+    description:
+      'Align on building purpose, target floor area, budget parameters, and project timeline.',
+    deliverable: 'Project brief & preliminary feasibility notes',
+  },
+  {
+    step: '02',
+    title: 'Site Inspection',
+    description:
+      'On-site ocular evaluation of lot boundaries, elevation datum, utility access, and soil conditions.',
+    deliverable: 'Ocular site assessment & technical checklist',
+  },
+  {
+    step: '03',
+    title: 'Planning & Engineering',
+    description:
+      'Architectural space planning, STAAD structural analysis, and coordinated MEPFS layouts.',
+    deliverable: 'Signed & sealed engineering drawings',
+  },
+  {
+    step: '04',
+    title: 'Cost Estimation & BOQ',
+    description:
+      'Preparation of a transparent Bill of Quantities (BOQ), material schedule, and S-curve timeline.',
+    deliverable: 'Formal quotation & contract schedule',
+  },
+  {
+    step: '05',
+    title: 'Construction Execution',
+    description:
+      'Mobilization, earthworks, structural framing, masonry, MEPFS installation, and architectural finishes.',
+    deliverable: 'Weekly progress & photo documentation',
+  },
+  {
+    step: '06',
+    title: 'Quality Assurance & Inspection',
+    description:
+      'Concrete slump & cylinder compression testing, rebar audits, hydrostatic pressure tests, and safety checks.',
+    deliverable: 'QA/QC test logs & punch-list clearance',
+  },
+  {
+    step: '07',
+    title: 'Project Turnover',
+    description:
+      'Final joint walkthrough, as-built drawings, occupancy documentation, and workmanship warranty handover.',
+    deliverable: 'Certificate of turnover & as-built package',
+  },
+];
+
+export const TESTIMONIALS: TestimonialItem[] = [
+  {
+    id: 'test-1',
+    quote:
+      'MST Construction OPC delivered our three-storey commercial arcade in San Fernando 14 days ahead of schedule. Their itemized BOQ kept our financing drawdowns predictable with zero surprise change orders.',
+    clientName: 'Rafael S. Henson',
+    role: 'Managing Director',
+    organization: 'Henson Commercial Holdings Inc.',
+    projectTitle: 'McArthur Highway Commercial & Office Arcade',
+    outcomeSummary: 'Handed over 14 days ahead of contract schedule',
+  },
+  {
+    id: 'test-2',
+    quote:
+      'From sub-base compaction to the 28-meter clear-span steel trusses, Engr. Tadeo’s team maintained strict slab tolerances for our racking forklifts and passed third-party core testing on the first round.',
+    clientName: 'Lourdes G. Evangelista',
+    role: 'VP for Supply Chain Operations',
+    organization: 'Central Luzon Cold-Chain Logistics Corp.',
+    projectTitle: 'Mexico Logistics & Cold-Chain Distribution Hub',
+    outcomeSummary: '3,450 sqm facility completed in 8 months under budget',
+  },
+  {
+    id: 'test-3',
+    quote:
+      'Our branch fit-out required pouring an internal vault and installing acoustic boardrooms without disrupting ground-floor retail tenants. MST executed the after-hours phasing cleanly in 12 weeks.',
+    clientName: 'Atty. Enrique M. Laxamana',
+    role: 'Head of Facilities & Expansion',
+    organization: 'Pampanga Regional Cooperative Bank',
+    projectTitle: 'Central Luzon Financial Branch & Corporate Fit-Out',
+    outcomeSummary: 'Completed in 84 calendar days with zero tenant downtime',
   },
 ];
 
@@ -473,12 +595,16 @@ export const INITIAL_INQUIRIES: SubmittedInquiry[] = [
     companyName: 'Pampanga Prime Holdings Inc.',
     email: 'gpascual@pampangaprime.ph',
     phone: '+63 918 442 9012',
+    preferredContact: 'Email',
     projectCategory: 'Commercial',
     location: 'Dolores, City of San Fernando, Pampanga',
+    estimatedFloorArea: '1,400 sqm',
     estimatedBudget: 'PHP 15M – 30M',
     targetStart: 'Q1 2027',
+    readinessStatus: 'Architectural Plans Available',
     projectScope:
       'Three-storey mixed-use commercial building with ground-floor retail parking and office suites (approx. 1,400 sqm floor area).',
+    privacyConsent: true,
     submittedAt: '2026-11-18T09:30:00.000Z',
     workflowStatus: 'Under Review',
   },
