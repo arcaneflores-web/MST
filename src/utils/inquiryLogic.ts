@@ -195,6 +195,19 @@ export function updateProjectStatus(
   );
 }
 
+export function isValidTeamPhotoUrl(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return true;
+  if (trimmed.startsWith('data:image/')) return true;
+  if (trimmed.startsWith('/')) return true;
+  try {
+    const parsed = new URL(trimmed);
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
+
 export function validateTeamForm(input: TeamFormInput): {
   isValid: boolean;
   errors: TeamValidationErrors;
@@ -202,6 +215,9 @@ export function validateTeamForm(input: TeamFormInput): {
   const errors: TeamValidationErrors = {};
   if (input.name.trim().length < 3) {
     errors.name = 'Enter full name and professional title (at least 3 characters).';
+  }
+  if (!isValidTeamPhotoUrl(input.photoUrl)) {
+    errors.photoUrl = 'Upload a valid image file or provide an http(s) image URL.';
   }
   if (input.role.trim().length < 3) {
     errors.role = 'Specify company role or designation.';
@@ -244,11 +260,13 @@ export function createTeamMember(
   const initials = input.initials.trim()
     ? input.initials.trim().slice(0, 3).toUpperCase()
     : deriveInitials(trimmedName);
+  const trimmedPhotoUrl = input.photoUrl.trim();
 
   return {
     id: existingMember?.id ?? `team-${Date.now()}`,
     name: trimmedName,
     initials,
+    photoUrl: trimmedPhotoUrl || undefined,
     role: input.role.trim(),
     discipline: input.discipline.trim(),
     licenseLabel: input.licenseLabel.trim(),

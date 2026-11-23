@@ -195,6 +195,7 @@ test('validateTeamForm and createTeamMember validate and normalize staff profile
   const invalid = validateTeamForm({
     name: 'A',
     initials: '',
+    photoUrl: 'javascript:alert(1)',
     role: 'CE',
     discipline: 'Civil',
     licenseLabel: '01',
@@ -206,11 +207,13 @@ test('validateTeamForm and createTeamMember validate and normalize staff profile
   });
   assert.equal(invalid.isValid, false);
   assert.ok(invalid.errors.name);
+  assert.ok(invalid.errors.photoUrl);
   assert.ok(invalid.errors.bio);
 
   const member = createTeamMember({
     name: 'Engr. Carlo D. Rivera, CE',
     initials: '',
+    photoUrl: 'data:image/png;base64,iVBORw0KGgo=',
     role: 'Structural Project Engineer',
     discipline: 'Structural Design',
     licenseLabel: 'PRC Civil Engineer · #0140921',
@@ -221,8 +224,27 @@ test('validateTeamForm and createTeamMember validate and normalize staff profile
     notableProjectsText: 'Bacolor Medical Pavilion',
   });
   assert.equal(member.initials, 'CR');
+  assert.equal(member.photoUrl, 'data:image/png;base64,iVBORw0KGgo=');
   assert.equal(member.experienceYears, 7);
   assert.equal(member.specializations.length, 2);
+
+  const clearedMember = createTeamMember(
+    {
+      name: 'Engr. Carlo D. Rivera, CE',
+      initials: 'CR',
+      photoUrl: '   ',
+      role: 'Structural Project Engineer',
+      discipline: 'Structural Design',
+      licenseLabel: 'PRC Civil Engineer · #0140921',
+      experienceYears: '7',
+      education: 'B.S. Civil Engineering, HAU',
+      bio: 'Leads structural frame inspections and concrete batch quality audits across Central Luzon.',
+      specializationsText: 'Reinforced Concrete Framing',
+      notableProjectsText: 'Bacolor Medical Pavilion',
+    },
+    member
+  );
+  assert.equal(clearedMember.photoUrl, undefined);
 });
 
 test('validateCredentialForm and createCredentialItem manage regulatory records', () => {

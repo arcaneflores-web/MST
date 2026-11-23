@@ -124,8 +124,23 @@ export default function App() {
       setCurrentPage(parseRouteFromPathname(window.location.pathname));
       window.scrollTo({ top: 0, behavior: 'auto' });
     };
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === TEAM_STORAGE_KEY) {
+        setTeamMembers(loadStoredArray(TEAM_STORAGE_KEY, SEED_TEAM_MEMBERS));
+      } else if (e.key === PROJECTS_STORAGE_KEY) {
+        setProjects(loadStoredArray(PROJECTS_STORAGE_KEY, SEED_PROJECTS));
+      } else if (e.key === CREDENTIALS_STORAGE_KEY) {
+        setCredentials(loadStoredArray(CREDENTIALS_STORAGE_KEY, SEED_CREDENTIALS));
+      } else if (e.key === INQUIRIES_STORAGE_KEY) {
+        setInquiries(loadStoredInquiries());
+      }
+    };
     window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener('popstate', onPopState);
+      window.removeEventListener('storage', onStorage);
+    };
   }, []);
 
   useEffect(() => {

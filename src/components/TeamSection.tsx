@@ -1,6 +1,7 @@
 import { ArrowUpRight } from 'lucide-react';
 import type { TeamMember } from '../types/construction';
 import { SectionHeaderBar } from './SectionDivider';
+import { TeamAvatar } from './TeamAvatar';
 
 interface TeamSectionProps {
   members: TeamMember[];
@@ -29,12 +30,14 @@ export function TeamSection({ members, onSelectMember }: TeamSectionProps) {
             >
               <div>
                 <div className="flex items-center gap-3.5">
-                  <div
-                    className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-900 font-display text-base font-bold tracking-tight text-white"
-                    aria-hidden="true"
-                  >
-                    {member.initials}
-                  </div>
+                  <TeamAvatar
+                    name={member.name}
+                    initials={member.initials}
+                    photoUrl={member.photoUrl}
+                    sizeClass="h-14 w-14"
+                    textSizeClass="text-base"
+                    decorative
+                  />
                   <div className="min-w-0">
                     <h3 className="text-base font-bold text-slate-950">{member.name}</h3>
                     <p className="mt-0.5 text-xs font-medium text-blue-700">{member.role}</p>

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { X } from 'lucide-react';
 import type { ProjectItem, TeamMember } from '../types/construction';
 import { ProjectSchematic } from './ArchitecturalVisuals';
+import { TeamAvatar } from './TeamAvatar';
 
 interface ProjectModalProps {
   project: ProjectItem | null;
@@ -194,12 +195,14 @@ export function TeamModal({ member, onClose }: TeamModalProps) {
           >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div
-              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-slate-900 font-display text-lg font-bold text-white"
-              aria-hidden="true"
-            >
-              {member.initials}
-            </div>
+            <TeamAvatar
+              name={member.name}
+              initials={member.initials}
+              photoUrl={member.photoUrl}
+              sizeClass="h-16 w-16"
+              textSizeClass="text-lg"
+              decorative
+            />
             <div>
               <h3 id="team-modal-title" className="text-xl font-bold text-slate-950">
                 {member.name}

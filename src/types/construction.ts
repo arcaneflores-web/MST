@@ -90,6 +90,7 @@ export interface TeamMember {
   id: string;
   name: string;
   initials: string;
+  photoUrl?: string;
   role: string;
   discipline: string;
   licenseLabel: string;
@@ -103,6 +104,7 @@ export interface TeamMember {
 export interface TeamFormInput {
   name: string;
   initials: string;
+  photoUrl: string;
   role: string;
   discipline: string;
   licenseLabel: string;
@@ -115,6 +117,7 @@ export interface TeamFormInput {
 
 export interface TeamValidationErrors {
   name?: string;
+  photoUrl?: string;
   role?: string;
   discipline?: string;
   licenseLabel?: string;

@@ -33,6 +33,7 @@ import {
   verifyAdminCredentials,
 } from '../utils/inquiryLogic';
 import { BrandMark } from './ArchitecturalVisuals';
+import { TeamAvatar } from './TeamAvatar';
 
 interface AdminDashboardPageProps {
   isAuthenticated: boolean;
@@ -921,9 +922,14 @@ export function AdminDashboardPage({
                   >
                     <div>
                       <div className="flex items-center gap-3.5">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-900 font-display text-sm font-bold text-white">
-                          {member.initials}
-                        </div>
+                        <TeamAvatar
+                          name={member.name}
+                          initials={member.initials}
+                          photoUrl={member.photoUrl}
+                          sizeClass="h-12 w-12"
+                          textSizeClass="text-sm"
+                          decorative
+                        />
                         <div className="min-w-0">
                           <h2 className="truncate text-base font-bold text-slate-950">
                             {member.name}
