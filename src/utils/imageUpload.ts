@@ -6,8 +6,9 @@ const ACCEPTED_IMAGE_TYPES = new Set([
   'image/svg+xml',
 ]);
 
-const MAX_RAW_FILE_BYTES = 8 * 1024 * 1024;
-const TARGET_MAX_DIMENSION = 360;
+const MAX_RAW_FILE_BYTES = 10 * 1024 * 1024;
+const TEAM_AVATAR_MAX_DIMENSION = 360;
+const PROJECT_PHOTO_MAX_DIMENSION = 900;
 
 function readFileAsDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -24,7 +25,13 @@ function readFileAsDataUrl(file: File): Promise<string> {
   });
 }
 
-function resizeRasterDataUrl(dataUrl: string, mimeType: string): Promise<string> {
+function resizeRasterDataUrl(
+  dataUrl: string,
+  mimeType: string,
+  maxDimension: number,
+  jpegQuality: number,
+  forceJpeg = false
+): Promise<string> {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {
@@ -35,7 +42,7 @@ function resizeRasterDataUrl(dataUrl: string, mimeType: string): Promise<string>
       }
 
       const maxSide = Math.max(naturalWidth, naturalHeight);
-      const scale = maxSide > TARGET_MAX_DIMENSION ? TARGET_MAX_DIMENSION / maxSide : 1;
+      const scale = maxSide > maxDimension ? maxDimension / maxSide : 1;
       const targetWidth = Math.max(1, Math.round(naturalWidth * scale));
       const targetHeight = Math.max(1, Math.round(naturalHeight * scale));
 
@@ -48,12 +55,19 @@ function resizeRasterDataUrl(dataUrl: string, mimeType: string): Promise<string>
         return;
       }
 
+      const outputMime =
+        !forceJpeg && mimeType === 'image/png' ? 'image/png' : 'image/jpeg';
+
+      if (outputMime === 'image/jpeg') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, targetWidth, targetHeight);
+      }
+
       ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-      const outputMime = mimeType === 'image/png' ? 'image/png' : 'image/jpeg';
       const optimized =
         outputMime === 'image/png'
           ? canvas.toDataURL('image/png')
-          : canvas.toDataURL('image/jpeg', 0.86);
+          : canvas.toDataURL('image/jpeg', jpegQuality);
 
       resolve(optimized.length < dataUrl.length ? optimized : dataUrl);
     };
@@ -62,13 +76,18 @@ function resizeRasterDataUrl(dataUrl: string, mimeType: string): Promise<string>
   });
 }
 
-export async function processTeamPhotoUpload(file: File): Promise<string> {
+async function processImageUpload(
+  file: File,
+  maxDimension: number,
+  jpegQuality: number,
+  forceJpeg = false
+): Promise<string> {
   if (!ACCEPTED_IMAGE_TYPES.has(file.type)) {
     throw new Error('Please upload a JPG, PNG, WebP, or GIF image file.');
   }
 
   if (file.size > MAX_RAW_FILE_BYTES) {
-    throw new Error('Image file is too large. Please select a photo under 8 MB.');
+    throw new Error('Image file is too large. Please select a photo under 10 MB.');
   }
 
   const rawDataUrl = await readFileAsDataUrl(file);
@@ -76,5 +95,13 @@ export async function processTeamPhotoUpload(file: File): Promise<string> {
     return rawDataUrl;
   }
 
-  return resizeRasterDataUrl(rawDataUrl, file.type);
+  return resizeRasterDataUrl(rawDataUrl, file.type, maxDimension, jpegQuality, forceJpeg);
+}
+
+export function processTeamPhotoUpload(file: File): Promise<string> {
+  return processImageUpload(file, TEAM_AVATAR_MAX_DIMENSION, 0.86, false);
+}
+
+export function processProjectPhotoUpload(file: File): Promise<string> {
+  return processImageUpload(file, PROJECT_PHOTO_MAX_DIMENSION, 0.78, true);
 }

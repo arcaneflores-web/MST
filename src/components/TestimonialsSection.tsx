@@ -5,11 +5,11 @@ export function TestimonialsSection() {
   return (
     <section
       id="testimonials"
-      className="scroll-mt-16 border-b-2 border-slate-200 bg-slate-100/70 py-10 lg:py-12"
+      className="scroll-mt-16 border-b-2 border-slate-200 bg-white py-10 lg:py-12"
     >
       <div className="mx-auto max-w-[1200px] px-6">
         <SectionHeaderBar
-          sectionNumber="05"
+          sectionNumber="04"
           eyebrow="Client Feedback & Outcomes"
           title="Trusted by Commercial Developers & Facility Owners"
           description="Verified project delivery feedback from commercial, logistics, and institutional clients in Pampanga."

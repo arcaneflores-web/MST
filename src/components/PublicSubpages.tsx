@@ -108,7 +108,7 @@ export function ProjectsPage({
 }: {
   projects: ProjectItem[];
   onNavigate: (page: PublicPage) => void;
-  onSelectProject: (project: ProjectItem) => void;
+  onSelectProject: (project: ProjectItem, initialImageIndex?: number) => void;
 }) {
   return (
     <>

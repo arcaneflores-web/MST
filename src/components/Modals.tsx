@@ -1,21 +1,29 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { ProjectItem, TeamMember } from '../types/construction';
 import { ProjectSchematic } from './ArchitecturalVisuals';
 import { TeamAvatar } from './TeamAvatar';
 
 interface ProjectModalProps {
   project: ProjectItem | null;
+  initialImageIndex?: number;
   onClose: () => void;
   onRequestSimilar: (projectTitle: string) => void;
 }
 
 export function ProjectModal({
   project,
+  initialImageIndex = 0,
   onClose,
   onRequestSimilar,
 }: ProjectModalProps) {
+  const [activeImageIndex, setActiveImageIndex] = useState(initialImageIndex);
+
+  useEffect(() => {
+    setActiveImageIndex(initialImageIndex);
+  }, [project?.id, initialImageIndex]);
+
   useEffect(() => {
     if (!project) return;
     const onKeyDown = (e: KeyboardEvent) => {
@@ -24,6 +32,10 @@ export function ProjectModal({
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [project, onClose]);
+
+  const images = project?.images ?? [];
+  const safeIndex =
+    images.length > 0 ? Math.min(activeImageIndex, images.length - 1) : 0;
 
   return (
     <AnimatePresence>
@@ -61,7 +73,78 @@ export function ProjectModal({
           </button>
         </div>
 
-        <ProjectSchematic type={project.schematic} code={project.code} />
+        {images.length > 0 ? (
+          <div className="border-b border-slate-200 bg-slate-950">
+            <div className="relative aspect-video w-full overflow-hidden">
+              <img
+                src={images[safeIndex]}
+                alt={`${project.title} site photo ${safeIndex + 1} of ${images.length}`}
+                className="h-full w-full object-cover object-center"
+              />
+
+              {images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveImageIndex((prev) =>
+                        prev === 0 ? images.length - 1 : prev - 1
+                      )
+                    }
+                    aria-label="Previous project photo"
+                    className="absolute top-1/2 left-3 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md border border-slate-700 bg-slate-950/75 text-white transition-colors hover:bg-slate-900"
+                  >
+                    <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveImageIndex((prev) => (prev + 1) % images.length)
+                    }
+                    aria-label="Next project photo"
+                    className="absolute top-1/2 right-3 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md border border-slate-700 bg-slate-950/75 text-white transition-colors hover:bg-slate-900"
+                  >
+                    <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </>
+              )}
+
+              <div className="absolute right-3 bottom-3 rounded bg-slate-950/80 px-2.5 py-1 font-mono text-[11px] font-medium text-white tabular-nums">
+                {safeIndex + 1} / {images.length}
+              </div>
+            </div>
+
+            {images.length > 1 && (
+              <div className="grid grid-cols-5 gap-2 border-t border-slate-800 bg-slate-900 p-2.5 sm:grid-cols-10">
+                {images.map((imgUrl, idx) => {
+                  const isCurrent = idx === safeIndex;
+                  return (
+                    <button
+                      key={`${idx}-${imgUrl.slice(0, 24)}`}
+                      type="button"
+                      onClick={() => setActiveImageIndex(idx)}
+                      aria-label={`View project photo ${idx + 1}`}
+                      aria-current={isCurrent ? 'true' : undefined}
+                      className={`overflow-hidden rounded border transition-opacity ${
+                        isCurrent
+                          ? 'border-blue-400 ring-2 ring-blue-500/70 opacity-100'
+                          : 'border-slate-700 opacity-65 hover:opacity-100'
+                      }`}
+                    >
+                      <img
+                        src={imgUrl}
+                        alt={`${project.title} thumbnail ${idx + 1}`}
+                        className="h-11 w-full object-cover"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ) : (
+          <ProjectSchematic type={project.schematic} code={project.code} />
+        )}
 
         <div className="p-6 sm:p-8">
           <h3 id="project-modal-title" className="text-2xl font-bold text-slate-950">
@@ -222,12 +305,14 @@ export function TeamModal({ member, onClose }: TeamModalProps) {
         </div>
 
         <dl className="mt-6 space-y-2 border-y border-slate-200 py-4 text-sm">
-          <div className="flex justify-between gap-4">
-            <dt className="text-slate-500">Registration</dt>
-            <dd className="font-mono text-right text-slate-900 tabular-nums">
-              {member.licenseLabel}
-            </dd>
-          </div>
+          {member.licenseLabel && (
+            <div className="flex justify-between gap-4">
+              <dt className="text-slate-500">Registration</dt>
+              <dd className="font-mono text-right text-slate-900 tabular-nums">
+                {member.licenseLabel}
+              </dd>
+            </div>
+          )}
           <div className="flex justify-between gap-4">
             <dt className="text-slate-500">Practice Tenure</dt>
             <dd className="font-mono text-right text-slate-900 tabular-nums">

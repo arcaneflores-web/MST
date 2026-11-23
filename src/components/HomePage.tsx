@@ -4,7 +4,6 @@ import type { ProjectItem, PublicPage } from '../types/construction';
 import { HeroSection } from './HeroSection';
 import { AboutProcessSection } from './AboutProcessSection';
 import { ServicesSection } from './ServicesSection';
-import { PortfolioSection } from './PortfolioSection';
 import { TestimonialsSection } from './TestimonialsSection';
 import { SectionHeaderBar } from './SectionDivider';
 
@@ -13,7 +12,7 @@ interface HomePageProps {
   onNavigate: (page: PublicPage) => void;
   onRequestQuote: () => void;
   onSelectServiceForInquiry: (serviceTitle: string) => void;
-  onSelectProject: (project: ProjectItem) => void;
+  onSelectProject: (project: ProjectItem, initialImageIndex?: number) => void;
 }
 
 export function HomePage({
@@ -25,9 +24,10 @@ export function HomePage({
 }: HomePageProps) {
   return (
     <>
-      {/* 1. Hero Section */}
+      {/* 1. Hero Section with Large Auto-Switching Featured Project Photo Showcase */}
       <HeroSection
-        onRequestQuote={onRequestQuote}
+        projects={projects}
+        onSelectProject={onSelectProject}
         onExploreProjects={() => onNavigate('projects')}
       />
 
@@ -44,28 +44,20 @@ export function HomePage({
         onViewAllServices={() => onNavigate('services')}
       />
 
-      {/* 4. Featured Projects (3 selected projects) */}
-      <PortfolioSection
-        mode="preview"
-        projects={projects}
-        onSelectProject={onSelectProject}
-        onViewAllProjects={() => onNavigate('projects')}
-      />
-
-      {/* 5. Why Choose MST? */}
+      {/* 4. Why Choose MST? */}
       <section
         id="why-choose-mst"
-        className="border-b-2 border-slate-200 bg-white py-10 lg:py-12"
+        className="border-b-2 border-slate-200 bg-slate-100/70 py-10 lg:py-12"
       >
         <div className="mx-auto max-w-[1200px] px-6">
           <SectionHeaderBar
-            sectionNumber="04"
+            sectionNumber="03"
             eyebrow="Why Choose MST?"
             title="Disciplined Engineering, Safety & Cost Control on Every Site"
             description="Built around licensed technical supervision, documented quality testing, and transparent milestone execution."
           />
 
-          <div className="mt-6 grid grid-cols-1 divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-slate-50/70 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+          <div className="mt-6 grid grid-cols-1 divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
             {WHY_CHOOSE_MST.map((item) => (
               <article key={item.pillar} className="p-5">
                 <p className="font-mono text-xs font-semibold text-blue-700">
@@ -83,10 +75,10 @@ export function HomePage({
         </div>
       </section>
 
-      {/* 6. Testimonials */}
+      {/* 5. Testimonials */}
       <TestimonialsSection />
 
-      {/* 7. Call to Action */}
+      {/* 6. Call to Action */}
       <section
         id="home-cta"
         className="border-b border-slate-800 bg-slate-900 py-10 text-white lg:py-12"
@@ -94,7 +86,7 @@ export function HomePage({
         <div className="mx-auto flex max-w-[1200px] flex-col items-start justify-between gap-6 px-6 lg:flex-row lg:items-center">
           <div className="max-w-2xl">
             <p className="font-mono text-xs font-semibold text-blue-400">
-              06 · Start Your Build With Confidence
+              05 · Start Your Build With Confidence
             </p>
             <h2
               className="mt-1.5 text-2xl font-bold tracking-tight text-white sm:text-3xl"

@@ -55,13 +55,51 @@ export function getFeaturedServices(services: ServiceItem[], limit = 4): Service
   return services.slice(0, limit);
 }
 
-export function getFeaturedProjects(projects: ProjectItem[], limit = 3): ProjectItem[] {
-  const explicitlyFeatured = projects.filter((p) => p.featured);
-  if (explicitlyFeatured.length >= limit) {
-    return explicitlyFeatured.slice(0, limit);
+export interface FeaturedPhotoSlide {
+  id: string;
+  project: ProjectItem;
+  imageUrl?: string;
+  photoIndex: number;
+  totalProjectPhotos: number;
+}
+
+export function getFeaturedProjects(projects: ProjectItem[], limit?: number): ProjectItem[] {
+  const explicitlyFeatured = projects.filter((p) => Boolean(p.featured));
+  if (typeof limit === 'number') {
+    if (explicitlyFeatured.length >= limit) {
+      return explicitlyFeatured.slice(0, limit);
+    }
+    const remaining = projects.filter((p) => !p.featured);
+    return [...explicitlyFeatured, ...remaining].slice(0, limit);
   }
-  const remaining = projects.filter((p) => !p.featured);
-  return [...explicitlyFeatured, ...remaining].slice(0, limit);
+  return explicitlyFeatured.length > 0 ? explicitlyFeatured : projects.slice(0, 3);
+}
+
+export function buildFeaturedPhotoSlides(featuredProjects: ProjectItem[]): FeaturedPhotoSlide[] {
+  const slides: FeaturedPhotoSlide[] = [];
+  for (const project of featuredProjects) {
+    const imgs = project.images ?? [];
+    if (imgs.length > 0) {
+      imgs.forEach((imageUrl, idx) => {
+        slides.push({
+          id: `${project.id}-img-${idx}`,
+          project,
+          imageUrl,
+          photoIndex: idx,
+          totalProjectPhotos: imgs.length,
+        });
+      });
+    } else {
+      slides.push({
+        id: `${project.id}-schematic`,
+        project,
+        imageUrl: undefined,
+        photoIndex: 0,
+        totalProjectPhotos: 0,
+      });
+    }
+  }
+  return slides;
 }
 
 export function filterProjects(
@@ -99,14 +137,40 @@ export function filterProjects(
   });
 }
 
+export const MAX_PROJECT_IMAGES = 10;
+
+export function isValidImageUrl(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return true;
+  if (trimmed.startsWith('data:image/')) return true;
+  if (trimmed.startsWith('/')) return true;
+  try {
+    const parsed = new URL(trimmed);
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
+
+export function normalizeProjectImages(images: string[] | undefined): string[] {
+  if (!Array.isArray(images)) return [];
+  return images
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0 && isValidImageUrl(item))
+    .slice(0, MAX_PROJECT_IMAGES);
+}
+
 export function validateProjectForm(input: ProjectFormInput): {
   isValid: boolean;
   errors: ProjectValidationErrors;
 } {
   const errors: ProjectValidationErrors = {};
 
+  if (typeof input.code === 'string' && input.code.trim().length > 0 && input.code.trim().length < 2) {
+    errors.code = 'Project code must be at least 2 characters (or leave blank to auto-generate).';
+  }
   if (input.title.trim().length < 3) {
-    errors.title = 'Enter a project title (at least 3 characters).';
+    errors.title = 'Enter a project name / title (at least 3 characters).';
   }
   if (input.location.trim().length < 3) {
     errors.location = 'Specify the project location (municipality or province).';
@@ -122,6 +186,11 @@ export function validateProjectForm(input: ProjectFormInput): {
   }
   if (input.summary.trim().length < 15) {
     errors.summary = 'Provide a brief project summary (at least 15 characters).';
+  }
+  if (input.images.length > MAX_PROJECT_IMAGES) {
+    errors.images = `A maximum of ${MAX_PROJECT_IMAGES} images is allowed per project.`;
+  } else if (input.images.some((url) => !isValidImageUrl(url))) {
+    errors.images = 'One or more uploaded project images are invalid.';
   }
 
   return {
@@ -151,8 +220,11 @@ export function createProjectItem(
   };
 
   const seq = String(existingCount + 1).padStart(3, '0');
-  const code =
-    existingProject?.code ?? `MST-${categoryPrefixMap[input.category]}-${seq}`;
+  const trimmedCode = input.code?.trim();
+  const code = trimmedCode
+    ? trimmedCode.toUpperCase()
+    : (existingProject?.code ?? `MST-${categoryPrefixMap[input.category]}-${seq}`);
+  const normalizedImages = normalizeProjectImages(input.images);
 
   return {
     id: existingProject?.id ?? `proj-${Date.now()}`,
@@ -178,6 +250,7 @@ export function createProjectItem(
         ? 'Completed and turned over to client specifications'
         : 'Active construction progressing on approved schedule'),
     schematic: input.schematic,
+    images: normalizedImages.length > 0 ? normalizedImages : undefined,
     featured:
       typeof input.featured === 'boolean'
         ? input.featured
@@ -195,17 +268,20 @@ export function updateProjectStatus(
   );
 }
 
+export function renameProjectTitle(
+  projects: ProjectItem[],
+  projectId: string,
+  nextTitle: string
+): ProjectItem[] {
+  const trimmed = nextTitle.trim();
+  if (trimmed.length < 3) return projects;
+  return projects.map((project) =>
+    project.id === projectId ? { ...project, title: trimmed } : project
+  );
+}
+
 export function isValidTeamPhotoUrl(value: string): boolean {
-  const trimmed = value.trim();
-  if (!trimmed) return true;
-  if (trimmed.startsWith('data:image/')) return true;
-  if (trimmed.startsWith('/')) return true;
-  try {
-    const parsed = new URL(trimmed);
-    return parsed.protocol === 'https:' || parsed.protocol === 'http:';
-  } catch {
-    return false;
-  }
+  return isValidImageUrl(value);
 }
 
 export function validateTeamForm(input: TeamFormInput): {
@@ -225,9 +301,6 @@ export function validateTeamForm(input: TeamFormInput): {
   if (input.discipline.trim().length < 3) {
     errors.discipline = 'Specify engineering or architectural discipline.';
   }
-  if (input.licenseLabel.trim().length < 3) {
-    errors.licenseLabel = 'Enter PRC registration or accreditation label.';
-  }
   const years = Number(input.experienceYears);
   if (!Number.isFinite(years) || years < 0 || years > 65) {
     errors.experienceYears = 'Enter valid years of experience (0–65).';
@@ -239,6 +312,41 @@ export function validateTeamForm(input: TeamFormInput): {
     isValid: Object.keys(errors).length === 0,
     errors,
   };
+}
+
+export function reorderTeamMembers(
+  members: TeamMember[],
+  fromIndex: number,
+  direction: 'up' | 'down'
+): TeamMember[] {
+  const toIndex = direction === 'up' ? fromIndex - 1 : fromIndex + 1;
+  if (
+    fromIndex < 0 ||
+    fromIndex >= members.length ||
+    toIndex < 0 ||
+    toIndex >= members.length
+  ) {
+    return members;
+  }
+  const copy = [...members];
+  const [moved] = copy.splice(fromIndex, 1);
+  copy.splice(toIndex, 0, moved);
+  return copy;
+}
+
+export function reorderTeamMembersById(
+  members: TeamMember[],
+  draggedId: string,
+  targetId: string
+): TeamMember[] {
+  if (draggedId === targetId) return members;
+  const fromIndex = members.findIndex((m) => m.id === draggedId);
+  const toIndex = members.findIndex((m) => m.id === targetId);
+  if (fromIndex === -1 || toIndex === -1) return members;
+  const copy = [...members];
+  const [moved] = copy.splice(fromIndex, 1);
+  copy.splice(toIndex, 0, moved);
+  return copy;
 }
 
 function deriveInitials(name: string): string {

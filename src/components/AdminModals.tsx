@@ -287,7 +287,8 @@ export function TeamFormModal({
 
               <div>
                 <label htmlFor="team-license" className="block text-xs font-semibold text-slate-800">
-                  License / Accreditation *
+                  License / Accreditation{' '}
+                  <span className="font-normal text-slate-500">(optional)</span>
                 </label>
                 <input
                   id="team-license"

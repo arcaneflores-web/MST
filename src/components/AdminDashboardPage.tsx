@@ -1,9 +1,13 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import {
+  ArrowDown,
   ArrowLeft,
+  ArrowUp,
   Building2,
+  Check,
   ClipboardList,
   FolderKanban,
+  GripVertical,
   LayoutDashboard,
   Lock,
   LogOut,
@@ -14,6 +18,7 @@ import {
   Star,
   Trash2,
   Users,
+  X,
 } from 'lucide-react';
 import { ADMIN_ACCESS_CONFIG } from '../data/companyData';
 import type {
@@ -46,6 +51,7 @@ interface AdminDashboardPageProps {
   onNavigatePublic: (page: PublicPage) => void;
   onOpenAddProject: () => void;
   onOpenEditProject: (project: ProjectItem) => void;
+  onRenameProject: (projectId: string, nextTitle: string) => void;
   onUpdateProjectStatus: (projectId: string, status: ProjectStatus) => void;
   onToggleProjectFeatured: (projectId: string) => void;
   onDeleteProject: (projectId: string) => void;
@@ -54,6 +60,8 @@ interface AdminDashboardPageProps {
   onDeleteInquiry: (id: string) => void;
   onOpenAddTeamMember: () => void;
   onOpenEditTeamMember: (member: TeamMember) => void;
+  onMoveTeamMember: (fromIndex: number, direction: 'up' | 'down') => void;
+  onReorderTeamMembers: (draggedId: string, targetId: string) => void;
   onDeleteTeamMember: (id: string) => void;
   onOpenAddCredential: () => void;
   onOpenEditCredential: (credential: CredentialItem) => void;
@@ -91,6 +99,7 @@ export function AdminDashboardPage({
   onNavigatePublic,
   onOpenAddProject,
   onOpenEditProject,
+  onRenameProject,
   onUpdateProjectStatus,
   onToggleProjectFeatured,
   onDeleteProject,
@@ -99,6 +108,8 @@ export function AdminDashboardPage({
   onDeleteInquiry,
   onOpenAddTeamMember,
   onOpenEditTeamMember,
+  onMoveTeamMember,
+  onReorderTeamMembers,
   onDeleteTeamMember,
   onOpenAddCredential,
   onOpenEditCredential,
@@ -111,11 +122,38 @@ export function AdminDashboardPage({
 
   const [projectStatusFilter, setProjectStatusFilter] = useState<'All' | ProjectStatus>('All');
   const [projectSearch, setProjectSearch] = useState('');
+  const [renamingProjectId, setRenamingProjectId] = useState<string | null>(null);
+  const [renameDraft, setRenameDraft] = useState('');
+  const [renameError, setRenameError] = useState('');
+  const [draggedTeamId, setDraggedTeamId] = useState<string | null>(null);
+  const [dragOverTeamId, setDragOverTeamId] = useState<string | null>(null);
   const [inquiryStatusFilter, setInquiryStatusFilter] = useState<'All' | InquiryWorkflowStatus>('All');
   const [inquirySearch, setInquirySearch] = useState('');
   const [selectedInquiryId, setSelectedInquiryId] = useState<string | null>(
     inquiries[0]?.id ?? null
   );
+
+  const handleStartRename = (project: ProjectItem) => {
+    setRenamingProjectId(project.id);
+    setRenameDraft(project.title);
+    setRenameError('');
+  };
+
+  const handleCancelRename = () => {
+    setRenamingProjectId(null);
+    setRenameDraft('');
+    setRenameError('');
+  };
+
+  const handleCommitRename = (projectId: string) => {
+    const trimmed = renameDraft.trim();
+    if (trimmed.length < 3) {
+      setRenameError('Project name must be at least 3 characters.');
+      return;
+    }
+    onRenameProject(projectId, trimmed);
+    handleCancelRename();
+  };
 
   const stats = useMemo(
     () => computeAdminStats(projects, inquiries, teamMembers, credentials),
@@ -603,13 +641,86 @@ export function AdminDashboardPage({
                       filteredProjects.map((project) => (
                         <tr key={project.id} className="hover:bg-slate-50/60">
                           <td className="px-4 py-3">
-                            <p className="font-mono text-[11px] font-medium text-blue-700">
-                              {project.code}
-                            </p>
-                            <p className="font-semibold text-slate-950">{project.title}</p>
-                            <p className="font-mono text-xs text-slate-500 tabular-nums">
-                              {project.floorArea} · {project.duration}
-                            </p>
+                            <div className="flex items-start gap-3">
+                              {project.images?.[0] && (
+                                <img
+                                  src={project.images[0]}
+                                  alt={`${project.title} cover`}
+                                  className="mt-0.5 h-11 w-14 shrink-0 rounded border border-slate-200 object-cover"
+                                />
+                              )}
+                              <div className="min-w-0 flex-1">
+                                {renamingProjectId === project.id ? (
+                                  <div className="space-y-1">
+                                    <div className="flex items-center gap-1.5">
+                                      <input
+                                        type="text"
+                                        aria-label={`Edit project name for ${project.title}`}
+                                        value={renameDraft}
+                                        onChange={(e) => {
+                                          setRenameDraft(e.target.value);
+                                          if (renameError) setRenameError('');
+                                        }}
+                                        onKeyDown={(e) => {
+                                          if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleCommitRename(project.id);
+                                          } else if (e.key === 'Escape') {
+                                            e.preventDefault();
+                                            handleCancelRename();
+                                          }
+                                        }}
+                                        autoFocus
+                                        className="w-full min-w-[200px] rounded border border-blue-600 bg-white px-2.5 py-1 text-sm font-semibold text-slate-950 focus:outline-none"
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={() => handleCommitRename(project.id)}
+                                        aria-label={`Save name for ${project.title}`}
+                                        className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded bg-blue-700 text-white hover:bg-blue-800"
+                                      >
+                                        <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={handleCancelRename}
+                                        aria-label="Cancel rename"
+                                        className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded border border-slate-300 bg-white text-slate-600 hover:bg-slate-100"
+                                      >
+                                        <X className="h-3.5 w-3.5" aria-hidden="true" />
+                                      </button>
+                                    </div>
+                                    {renameError && (
+                                      <p className="text-[11px] font-medium text-red-700">
+                                        {renameError}
+                                      </p>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-1.5">
+                                    <p className="font-semibold text-slate-950">{project.title}</p>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleStartRename(project)}
+                                      aria-label={`Rename ${project.title}`}
+                                      title="Rename project"
+                                      className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded text-slate-400 transition-colors hover:bg-slate-100 hover:text-blue-700"
+                                    >
+                                      <Pencil className="h-3 w-3" aria-hidden="true" />
+                                    </button>
+                                  </div>
+                                )}
+                                <p className="mt-0.5 font-mono text-[11px] font-medium text-blue-700">
+                                  {project.code}
+                                  {project.images && project.images.length > 0
+                                    ? ` · ${project.images.length}/10 photos`
+                                    : ''}
+                                </p>
+                                <p className="font-mono text-xs text-slate-500 tabular-nums">
+                                  {project.floorArea} · {project.duration}
+                                </p>
+                              </div>
+                            </div>
                           </td>
                           <td className="px-4 py-3 text-xs text-slate-700">
                             <p className="font-semibold text-slate-900">{project.category}</p>
@@ -899,8 +1010,8 @@ export function AdminDashboardPage({
                     Team Profiles Management
                   </h1>
                   <p className="mt-1 text-sm text-slate-600">
-                    Add, update, or remove leadership, engineering, and technical staff
-                    displayed on the public Our Team page.
+                    Add, edit, drag or reorder display sequence, and manage staff displayed on
+                    the public Our Team page.
                   </p>
                 </div>
 
@@ -915,59 +1026,126 @@ export function AdminDashboardPage({
               </div>
 
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {teamMembers.map((member) => (
-                  <article
-                    key={member.id}
-                    className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5"
-                  >
-                    <div>
-                      <div className="flex items-center gap-3.5">
-                        <TeamAvatar
-                          name={member.name}
-                          initials={member.initials}
-                          photoUrl={member.photoUrl}
-                          sizeClass="h-12 w-12"
-                          textSizeClass="text-sm"
-                          decorative
-                        />
-                        <div className="min-w-0">
-                          <h2 className="truncate text-base font-bold text-slate-950">
-                            {member.name}
-                          </h2>
-                          <p className="truncate text-xs font-medium text-blue-700">
-                            {member.role}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="mt-3 font-mono text-xs text-slate-700 tabular-nums">
-                        {member.licenseLabel} · {member.experienceYears} yrs
-                      </p>
-                      <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-600">
-                        {member.bio}
-                      </p>
-                    </div>
+                {teamMembers.map((member, index) => {
+                  const isFirst = index === 0;
+                  const isLast = index === teamMembers.length - 1;
+                  const isDragOver = dragOverTeamId === member.id && draggedTeamId !== member.id;
 
-                    <div className="mt-4 flex items-center justify-end gap-2 border-t border-slate-100 pt-3">
-                      <button
-                        type="button"
-                        onClick={() => onOpenEditTeamMember(member)}
-                        aria-label={`Edit ${member.name}`}
-                        className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100"
-                      >
-                        <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
-                        <span>Edit</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onDeleteTeamMember(member.id)}
-                        aria-label={`Remove ${member.name}`}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:border-red-300 hover:text-red-700"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                      </button>
-                    </div>
-                  </article>
-                ))}
+                  return (
+                    <article
+                      key={member.id}
+                      draggable
+                      onDragStart={() => setDraggedTeamId(member.id)}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        if (dragOverTeamId !== member.id) {
+                          setDragOverTeamId(member.id);
+                        }
+                      }}
+                      onDragLeave={() => {
+                        if (dragOverTeamId === member.id) {
+                          setDragOverTeamId(null);
+                        }
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (draggedTeamId && draggedTeamId !== member.id) {
+                          onReorderTeamMembers(draggedTeamId, member.id);
+                        }
+                        setDraggedTeamId(null);
+                        setDragOverTeamId(null);
+                      }}
+                      onDragEnd={() => {
+                        setDraggedTeamId(null);
+                        setDragOverTeamId(null);
+                      }}
+                      className={`flex flex-col justify-between rounded-xl border bg-white p-5 transition-colors ${
+                        isDragOver
+                          ? 'border-blue-600 ring-2 ring-blue-200'
+                          : 'border-slate-200'
+                      }`}
+                    >
+                      <div>
+                        <div className="mb-3 flex items-center justify-between border-b border-slate-100 pb-2.5 text-xs">
+                          <span className="inline-flex items-center gap-1.5 font-mono font-semibold text-slate-600 tabular-nums">
+                            <GripVertical className="h-3.5 w-3.5 cursor-grab text-slate-400" aria-hidden="true" />
+                            <span>Order #{index + 1}</span>
+                          </span>
+
+                          <div className="inline-flex items-center gap-1">
+                            <button
+                              type="button"
+                              disabled={isFirst}
+                              onClick={() => onMoveTeamMember(index, 'up')}
+                              aria-label={`Move ${member.name} earlier`}
+                              title="Move earlier"
+                              className="inline-flex h-7 w-7 items-center justify-center rounded border border-slate-200 bg-white text-slate-700 hover:border-blue-600 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                              <ArrowUp className="h-3.5 w-3.5" aria-hidden="true" />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isLast}
+                              onClick={() => onMoveTeamMember(index, 'down')}
+                              aria-label={`Move ${member.name} later`}
+                              title="Move later"
+                              className="inline-flex h-7 w-7 items-center justify-center rounded border border-slate-200 bg-white text-slate-700 hover:border-blue-600 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                              <ArrowDown className="h-3.5 w-3.5" aria-hidden="true" />
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3.5">
+                          <TeamAvatar
+                            name={member.name}
+                            initials={member.initials}
+                            photoUrl={member.photoUrl}
+                            sizeClass="h-12 w-12"
+                            textSizeClass="text-sm"
+                            decorative
+                          />
+                          <div className="min-w-0">
+                            <h2 className="truncate text-base font-bold text-slate-950">
+                              {member.name}
+                            </h2>
+                            <p className="truncate text-xs font-medium text-blue-700">
+                              {member.role}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="mt-3 font-mono text-xs text-slate-700 tabular-nums">
+                          {member.licenseLabel
+                            ? `${member.licenseLabel} · ${member.experienceYears} yrs`
+                            : `${member.experienceYears} yrs experience`}
+                        </p>
+                        <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-600">
+                          {member.bio}
+                        </p>
+                      </div>
+
+                      <div className="mt-4 flex items-center justify-end gap-2 border-t border-slate-100 pt-3">
+                        <button
+                          type="button"
+                          onClick={() => onOpenEditTeamMember(member)}
+                          aria-label={`Edit ${member.name}`}
+                          className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                        >
+                          <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+                          <span>Edit</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => onDeleteTeamMember(member.id)}
+                          aria-label={`Remove ${member.name}`}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:border-red-300 hover:text-red-700"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })}
               </div>
             </div>
           )}

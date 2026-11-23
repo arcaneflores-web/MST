@@ -1,14 +1,165 @@
-import { useMemo, useState } from 'react';
-import { ArrowRight, ArrowUpRight, Search, X } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  Images,
+  Search,
+  X,
+} from 'lucide-react';
 import type { ProjectCategory, ProjectItem, ProjectStatus } from '../types/construction';
-import { filterProjects, getFeaturedProjects } from '../utils/inquiryLogic';
+import {
+  buildFeaturedPhotoSlides,
+  filterProjects,
+  getFeaturedProjects,
+} from '../utils/inquiryLogic';
 import { ProjectSchematic } from './ArchitecturalVisuals';
 import { SectionHeaderBar } from './SectionDivider';
+
+function ProjectCoverVisual({
+  project,
+  onOpenDetails,
+  autoCycleMs,
+}: {
+  project: ProjectItem;
+  onOpenDetails: (imageIndex: number) => void;
+  autoCycleMs?: number;
+}) {
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const images = project.images ?? [];
+  const photoCount = images.length;
+  const safePhotoIndex =
+    photoCount > 0 ? Math.min(activePhotoIndex, photoCount - 1) : 0;
+  const activeUrl = images[safePhotoIndex];
+
+  useEffect(() => {
+    if (!autoCycleMs || photoCount <= 1 || isPaused) return;
+    const timer = window.setInterval(() => {
+      setActivePhotoIndex((prev) => (prev + 1) % photoCount);
+    }, autoCycleMs);
+    return () => window.clearInterval(timer);
+  }, [autoCycleMs, photoCount, isPaused]);
+
+  if (!activeUrl) {
+    return (
+      <div className="relative overflow-hidden border-b border-slate-200">
+        <button
+          type="button"
+          onClick={() => onOpenDetails(0)}
+          aria-label={`View technical specifications for ${project.title}`}
+          className="block w-full text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600"
+        >
+          <div className="transition-transform duration-300 group-hover:scale-[1.03]">
+            <ProjectSchematic type={project.schematic} code={project.code} />
+          </div>
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/35 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+            <span className="inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-2 text-xs font-semibold text-slate-950 shadow-md">
+              <Eye className="h-3.5 w-3.5 text-blue-700" aria-hidden="true" />
+              <span>View Project Details</span>
+            </span>
+          </div>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      className="relative aspect-video w-full overflow-hidden border-b border-slate-200 bg-slate-900"
+    >
+      <button
+        type="button"
+        onClick={() => onOpenDetails(safePhotoIndex)}
+        aria-label={`View details and ${photoCount} photos for ${project.title}`}
+        className="block h-full w-full text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"
+      >
+        <img
+          src={activeUrl}
+          alt={`${project.title} site photo ${safePhotoIndex + 1} of ${photoCount}`}
+          className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.04]"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/20 to-slate-950/25 opacity-70 transition-opacity duration-200 group-hover:opacity-100" />
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-white/95 px-3.5 py-2 text-xs font-semibold text-slate-950 shadow-md">
+            <Eye className="h-3.5 w-3.5 text-blue-700" aria-hidden="true" />
+            <span>
+              View Details &amp; {photoCount} {photoCount === 1 ? 'Photo' : 'Photos'}
+            </span>
+          </span>
+        </div>
+      </button>
+
+      {photoCount > 1 && (
+        <>
+          {/* Quick photo scrub bars on hover */}
+          <div
+            aria-label={`Preview photos for ${project.title}`}
+            className="absolute inset-x-3 top-2.5 z-10 flex gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
+          >
+            {images.map((_, idx) => {
+              const isCurrent = idx === safePhotoIndex;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onMouseEnter={() => setActivePhotoIndex(idx)}
+                  onClick={() => setActivePhotoIndex(idx)}
+                  aria-label={`Preview photo ${idx + 1} of ${photoCount} for ${project.title}`}
+                  aria-pressed={isCurrent}
+                  className={`h-1.5 flex-1 rounded-sm transition-colors ${
+                    isCurrent ? 'bg-blue-400' : 'bg-white/50 hover:bg-white/85'
+                  }`}
+                />
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() =>
+              setActivePhotoIndex((prev) => (prev === 0 ? photoCount - 1 : prev - 1))
+            }
+            aria-label={`Previous preview photo for ${project.title}`}
+            className="absolute top-1/2 left-2.5 z-10 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-slate-950/75 text-white opacity-0 transition-all duration-150 hover:bg-blue-700 group-hover:opacity-100 focus-visible:opacity-100"
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActivePhotoIndex((prev) => (prev + 1) % photoCount)}
+            aria-label={`Next preview photo for ${project.title}`}
+            className="absolute top-1/2 right-2.5 z-10 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-slate-950/75 text-white opacity-0 transition-all duration-150 hover:bg-blue-700 group-hover:opacity-100 focus-visible:opacity-100"
+          >
+            <ChevronRight className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </>
+      )}
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-slate-950/75 px-3.5 py-2 font-mono text-[11px] text-slate-100 backdrop-blur-xs">
+        <span>{project.code}</span>
+        <span className="inline-flex items-center gap-1.5 text-slate-200 tabular-nums">
+          <Images className="h-3.5 w-3.5 text-blue-400" aria-hidden="true" />
+          <span>
+            {photoCount > 1
+              ? `${safePhotoIndex + 1}/${photoCount} · ${photoCount} photos`
+              : '1 photo'}
+          </span>
+        </span>
+      </div>
+    </div>
+  );
+}
 
 interface PortfolioSectionProps {
   mode?: 'preview' | 'full';
   projects: ProjectItem[];
-  onSelectProject: (project: ProjectItem) => void;
+  onSelectProject: (project: ProjectItem, initialImageIndex?: number) => void;
   onViewAllProjects?: () => void;
 }
 
@@ -33,9 +184,31 @@ export function PortfolioSection({
   const [searchQuery, setSearchQuery] = useState('');
 
   const featuredProjects = useMemo(
-    () => getFeaturedProjects(projects, 3),
+    () => getFeaturedProjects(projects),
     [projects]
   );
+
+  const featuredSlides = useMemo(
+    () => buildFeaturedPhotoSlides(featuredProjects),
+    [featuredProjects]
+  );
+
+  const [spotlightIndex, setSpotlightIndex] = useState(0);
+  const [isSpotlightPaused, setIsSpotlightPaused] = useState(false);
+
+  const safeSpotlightIndex =
+    featuredSlides.length > 0 ? spotlightIndex % featuredSlides.length : 0;
+  const activeSpotlight = featuredSlides[safeSpotlightIndex] ?? null;
+
+  useEffect(() => {
+    if (mode !== 'preview' || featuredSlides.length <= 1 || isSpotlightPaused) {
+      return;
+    }
+    const timer = window.setInterval(() => {
+      setSpotlightIndex((prev) => (prev + 1) % featuredSlides.length);
+    }, 3500);
+    return () => window.clearInterval(timer);
+  }, [mode, featuredSlides.length, isSpotlightPaused]);
 
   const filteredProjects = useMemo(
     () =>
@@ -54,6 +227,13 @@ export function PortfolioSection({
   };
 
   if (mode === 'preview') {
+    const featuredGridClass =
+      featuredProjects.length === 1
+        ? 'grid-cols-1'
+        : featuredProjects.length === 2
+          ? 'grid-cols-1 md:grid-cols-2'
+          : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+
     return (
       <section
         id="featured-projects"
@@ -62,7 +242,7 @@ export function PortfolioSection({
         <div className="mx-auto max-w-[1200px] px-6">
           <SectionHeaderBar
             sectionNumber="03"
-            eyebrow="Selected Works"
+            eyebrow={`Selected Works · ${featuredProjects.length} Featured`}
             title="Featured Completed & Ongoing Projects"
             action={
               onViewAllProjects ? (
@@ -78,49 +258,230 @@ export function PortfolioSection({
             }
           />
 
-          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {/* Auto-switching Featured Photo Showcase synced with Admin Featured projects */}
+          {activeSpotlight && (
+            <div
+              data-testid="featured-auto-switcher"
+              onMouseEnter={() => setIsSpotlightPaused(true)}
+              onMouseLeave={() => setIsSpotlightPaused(false)}
+              className="mt-6 grid grid-cols-1 overflow-hidden rounded-xl border border-slate-200 bg-white lg:grid-cols-12"
+            >
+              <div className="relative aspect-video w-full overflow-hidden bg-slate-900 lg:col-span-7">
+                {activeSpotlight.imageUrl ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onSelectProject(
+                        activeSpotlight.project,
+                        activeSpotlight.photoIndex
+                      )
+                    }
+                    aria-label={`Inspect featured project ${activeSpotlight.project.title}`}
+                    className="group relative block h-full w-full overflow-hidden text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"
+                  >
+                    <img
+                      key={activeSpotlight.id}
+                      src={activeSpotlight.imageUrl}
+                      alt={`${activeSpotlight.project.title} featured showcase`}
+                      className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-slate-950/30" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => onSelectProject(activeSpotlight.project, 0)}
+                    aria-label={`Inspect featured blueprint for ${activeSpotlight.project.title}`}
+                    className="block h-full w-full text-left"
+                  >
+                    <ProjectSchematic
+                      type={activeSpotlight.project.schematic}
+                      code={activeSpotlight.project.code}
+                    />
+                  </button>
+                )}
+
+                {featuredSlides.length > 1 && (
+                  <>
+                    <div className="absolute inset-x-4 top-3 z-10 flex gap-1.5">
+                      {featuredSlides.map((slide, idx) => {
+                        const isActive = idx === safeSpotlightIndex;
+                        return (
+                          <button
+                            key={slide.id}
+                            type="button"
+                            onClick={() => setSpotlightIndex(idx)}
+                            aria-label={`Show featured slide ${idx + 1} of ${featuredSlides.length}`}
+                            aria-current={isActive ? 'true' : undefined}
+                            className={`h-1.5 flex-1 rounded-sm transition-colors ${
+                              isActive
+                                ? 'bg-blue-400'
+                                : 'bg-white/40 hover:bg-white/75'
+                            }`}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSpotlightIndex((prev) =>
+                          prev === 0 ? featuredSlides.length - 1 : prev - 1
+                        )
+                      }
+                      aria-label="Previous featured showcase photo"
+                      className="absolute top-1/2 left-3 z-10 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-slate-950/75 text-white transition-colors hover:bg-blue-700"
+                    >
+                      <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSpotlightIndex(
+                          (prev) => (prev + 1) % featuredSlides.length
+                        )
+                      }
+                      aria-label="Next featured showcase photo"
+                      className="absolute top-1/2 right-3 z-10 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-slate-950/75 text-white transition-colors hover:bg-blue-700"
+                    >
+                      <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                    </button>
+                  </>
+                )}
+
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-slate-950/80 px-4 py-2 font-mono text-[11px] text-slate-100">
+                  <span>
+                    {activeSpotlight.project.code} · {activeSpotlight.project.status}
+                  </span>
+                  <span className="tabular-nums text-blue-300">
+                    Slide {safeSpotlightIndex + 1} / {featuredSlides.length} ·{' '}
+                    {featuredProjects.length} Featured
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-between p-6 lg:col-span-5">
+                <div>
+                  <p className="font-mono text-xs font-semibold text-blue-700">
+                    Featured Project Showcase ({featuredProjects.length} Active)
+                  </p>
+                  <h3 className="mt-1.5 text-xl font-bold tracking-tight text-slate-950">
+                    {activeSpotlight.project.title}
+                  </h3>
+                  <p className="mt-1 text-xs font-medium text-slate-500">
+                    {activeSpotlight.project.category} · {activeSpotlight.project.location}
+                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                    {activeSpotlight.project.summary}
+                  </p>
+
+                  <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 pt-3.5 text-xs">
+                    <div>
+                      <dt className="text-slate-500">Scale / Floor Area</dt>
+                      <dd className="mt-0.5 font-mono font-semibold text-slate-950 tabular-nums">
+                        {activeSpotlight.project.floorArea}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="text-slate-500">Duration</dt>
+                      <dd className="mt-0.5 font-mono font-semibold text-slate-950 tabular-nums">
+                        {activeSpotlight.project.duration}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div className="mt-5 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onSelectProject(
+                        activeSpotlight.project,
+                        activeSpotlight.photoIndex
+                      )
+                    }
+                    className="inline-flex w-full items-center justify-between rounded-md bg-blue-700 px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-blue-800"
+                  >
+                    <span>
+                      {activeSpotlight.totalProjectPhotos > 0
+                        ? `Inspect Project & ${activeSpotlight.totalProjectPhotos} Photos`
+                        : 'Inspect Technical Specifications'}
+                    </span>
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className={`mt-6 grid gap-6 ${featuredGridClass}`}>
             {featuredProjects.map((project) => (
               <article
                 key={project.id}
-                className="flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-colors duration-150 hover:border-slate-400"
+                className="group flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-blue-600 hover:shadow-lg"
               >
                 <div>
-                  <ProjectSchematic type={project.schematic} code={project.code} />
+                  <ProjectCoverVisual
+                    project={project}
+                    autoCycleMs={3500}
+                    onOpenDetails={(imageIdx) => onSelectProject(project, imageIdx)}
+                  />
 
                   <div className="p-5">
-                    <h3 className="text-base font-bold tracking-tight text-slate-950 sm:text-lg">
-                      {project.title}
+                    <h3 className="min-h-[3rem] text-base font-bold leading-snug tracking-tight text-slate-950 sm:text-lg line-clamp-2">
+                      <button
+                        type="button"
+                        onClick={() => onSelectProject(project, 0)}
+                        className="text-left transition-colors group-hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-700"
+                      >
+                        {project.title}
+                      </button>
                     </h3>
 
-                    <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
-                      <span className="font-semibold text-slate-700">{project.category}</span>
-                      <span aria-hidden="true">·</span>
+                    <div className="mt-1.5 flex items-center gap-x-2 truncate text-xs text-slate-500">
+                      <span className="font-semibold text-slate-700 shrink-0">{project.category}</span>
+                      <span aria-hidden="true" className="shrink-0">·</span>
                       <span
-                        className={
+                        className={`shrink-0 ${
                           project.status === 'Ongoing'
                             ? 'font-semibold text-blue-700'
                             : 'font-medium text-slate-600'
-                        }
+                        }`}
                       >
                         {project.status} {project.year}
                       </span>
-                      <span aria-hidden="true">·</span>
-                      <span>{project.location}</span>
+                      <span aria-hidden="true" className="shrink-0">·</span>
+                      <span className="truncate">{project.location}</span>
                     </div>
 
-                    <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
+                    <p className="mt-2.5 min-h-[4.25rem] line-clamp-3 text-sm leading-relaxed text-slate-600">
                       {project.summary}
                     </p>
                   </div>
                 </div>
 
                 <div className="border-t border-slate-100 px-5 py-3.5">
+                  <div className="mb-2.5 flex items-center justify-between text-xs text-slate-600">
+                    <span className="font-mono tabular-nums">
+                      Area: <strong className="text-slate-900">{project.floorArea}</strong>
+                    </span>
+                    <span className="font-mono tabular-nums">
+                      Duration: <strong className="text-slate-900">{project.duration}</strong>
+                    </span>
+                  </div>
+
                   <button
                     type="button"
-                    onClick={() => onSelectProject(project)}
-                    className="inline-flex w-full items-center justify-between rounded-md border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-900 transition-colors duration-150 hover:border-blue-700 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-2 focus-visible:outline-blue-700"
+                    onClick={() => onSelectProject(project, 0)}
+                    className="inline-flex w-full items-center justify-between rounded-md border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-900 transition-colors duration-150 group-hover:border-blue-700 group-hover:bg-blue-700 group-hover:text-white hover:border-blue-800 hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-blue-700"
                   >
-                    <span>Inspect Technical Specifications</span>
+                    <span>
+                      {project.images && project.images.length > 0
+                        ? `View Details & Photos (${project.images.length})`
+                        : 'Inspect Technical Specifications'}
+                    </span>
                     <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>
@@ -256,58 +617,71 @@ export function PortfolioSection({
             {filteredProjects.map((project) => (
               <article
                 key={project.id}
-                className="flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-colors duration-150 hover:border-slate-400"
+                className="group flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-blue-600 hover:shadow-lg"
               >
                 <div>
-                  <ProjectSchematic type={project.schematic} code={project.code} />
+                  <ProjectCoverVisual
+                    project={project}
+                    onOpenDetails={(imageIdx) => onSelectProject(project, imageIdx)}
+                  />
 
                   <div className="p-5">
-                    <h3 className="text-base font-bold tracking-tight text-slate-950 sm:text-lg">
-                      {project.title}
+                    <h3 className="min-h-[3rem] text-base font-bold leading-snug tracking-tight text-slate-950 sm:text-lg line-clamp-2">
+                      <button
+                        type="button"
+                        onClick={() => onSelectProject(project, 0)}
+                        className="text-left transition-colors group-hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-700"
+                      >
+                        {project.title}
+                      </button>
                     </h3>
 
-                    <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
-                      <span className="font-semibold text-slate-700">{project.category}</span>
-                      <span aria-hidden="true">·</span>
+                    <div className="mt-1.5 flex items-center gap-x-2 truncate text-xs text-slate-500">
+                      <span className="font-semibold text-slate-700 shrink-0">{project.category}</span>
+                      <span aria-hidden="true" className="shrink-0">·</span>
                       <span
-                        className={
+                        className={`shrink-0 ${
                           project.status === 'Ongoing'
                             ? 'font-semibold text-blue-700'
                             : 'font-medium text-slate-600'
-                        }
+                        }`}
                       >
                         {project.status} {project.year}
                       </span>
-                      <span aria-hidden="true">·</span>
-                      <span>{project.location}</span>
+                      <span aria-hidden="true" className="shrink-0">·</span>
+                      <span className="truncate">{project.location}</span>
                     </div>
 
-                    <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
+                    <p className="mt-2.5 min-h-[4.25rem] line-clamp-3 text-sm leading-relaxed text-slate-600">
                       {project.summary}
                     </p>
                   </div>
                 </div>
 
                 <div className="border-t border-slate-100 px-5 py-3.5">
-                  <div className="flex items-center justify-between text-xs text-slate-600">
-                    <span className="font-mono tabular-nums">
+                  <div className="flex items-center justify-between gap-2 text-xs text-slate-600">
+                    <span className="truncate font-mono tabular-nums">
                       Area: <strong className="text-slate-900">{project.floorArea}</strong>
                     </span>
-                    <span className="font-mono tabular-nums">
+                    <span className="shrink-0 font-mono tabular-nums">
                       Schedule: <strong className="text-slate-900">{project.duration}</strong>
                     </span>
                   </div>
 
-                  <p className="mt-2 text-xs font-medium text-slate-800">
+                  <p className="mt-2 truncate text-xs font-medium text-slate-800">
                     {project.outcomeMetric}
                   </p>
 
                   <button
                     type="button"
-                    onClick={() => onSelectProject(project)}
-                    className="mt-3.5 inline-flex w-full items-center justify-between rounded-md border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-900 transition-colors duration-150 hover:border-blue-700 hover:bg-blue-50 hover:text-blue-800 focus-visible:outline-2 focus-visible:outline-blue-700"
+                    onClick={() => onSelectProject(project, 0)}
+                    className="mt-3.5 inline-flex w-full items-center justify-between rounded-md border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-900 transition-colors duration-150 group-hover:border-blue-700 group-hover:bg-blue-700 group-hover:text-white hover:border-blue-800 hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-blue-700"
                   >
-                    <span>Inspect Technical Specifications</span>
+                    <span>
+                      {project.images && project.images.length > 0
+                        ? `View Details & Photos (${project.images.length})`
+                        : 'Inspect Technical Specifications'}
+                    </span>
                     <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>

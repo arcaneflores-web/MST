@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  buildFeaturedPhotoSlides,
   computeAdminStats,
   createCredentialItem,
   createProjectItem,
@@ -12,6 +13,9 @@ import {
   getFeaturedServices,
   getPathnameForPage,
   parseRouteFromPathname,
+  renameProjectTitle,
+  reorderTeamMembers,
+  reorderTeamMembersById,
   updateProjectStatus,
   validateCredentialForm,
   validateInquiryForm,
@@ -115,6 +119,7 @@ const VALID_PROJECT_INPUT: ProjectFormInput = {
   schematic: 'commercial-hub',
   highlightsText: 'Elevated ground slab\nDuctile RC moment frame',
   deliverablesText: 'Structural works\nArchitectural fit-out',
+  images: ['data:image/png;base64,iVBORw0KGgo='],
   featured: true,
 };
 
@@ -133,11 +138,28 @@ test('parseRouteFromPathname and getPathnameForPage handle all public and admin 
   assert.equal(getPathnameForPage('admin'), '/admin');
 });
 
-test('getFeaturedProjects and getFeaturedServices return bounded homepage previews', () => {
+test('getFeaturedProjects, buildFeaturedPhotoSlides, and getFeaturedServices behave accurately', () => {
   const featured = getFeaturedProjects(SAMPLE_PROJECTS, 3);
   assert.equal(featured.length, 3);
   assert.equal(featured[0].id, 'p1');
   assert.equal(featured[1].id, 'p3');
+
+  const dynamicFeatured = getFeaturedProjects(SAMPLE_PROJECTS);
+  assert.equal(dynamicFeatured.length, 2);
+  assert.deepEqual(
+    dynamicFeatured.map((p) => p.id),
+    ['p1', 'p3']
+  );
+
+  const featuredWithPhotos: ProjectItem[] = [
+    { ...SAMPLE_PROJECTS[0], images: ['data:image/jpeg;base64,A', 'data:image/jpeg;base64,B'] },
+    { ...SAMPLE_PROJECTS[2], images: ['data:image/jpeg;base64,C'] },
+  ];
+  const slides = buildFeaturedPhotoSlides(featuredWithPhotos);
+  assert.equal(slides.length, 3);
+  assert.equal(slides[0].photoIndex, 0);
+  assert.equal(slides[1].photoIndex, 1);
+  assert.equal(slides[2].project.id, 'p3');
 
   const dummyServices = Array.from({ length: 6 }, (_, i) => ({
     index: `0${i + 1}.`,
@@ -177,28 +199,64 @@ test('validateProjectForm, createProjectItem, and updateProjectStatus support ad
     title: 'A',
     year: '26',
     summary: 'Short',
+    images: Array.from({ length: 11 }, (_, idx) => `https://example.com/${idx}.jpg`),
   });
   assert.equal(invalid.isValid, false);
+  assert.ok(invalid.errors.images);
+
+  const validTen = validateProjectForm({
+    ...VALID_PROJECT_INPUT,
+    images: Array.from({ length: 10 }, (_, idx) => `https://example.com/${idx}.jpg`),
+  });
+  assert.equal(validTen.isValid, true);
 
   const created = createProjectItem(VALID_PROJECT_INPUT, SAMPLE_PROJECTS.length);
   assert.equal(created.code, 'MST-COM-004');
   assert.equal(created.featured, true);
+  assert.equal(created.images?.length, 1);
+
+  const capped = createProjectItem(
+    {
+      ...VALID_PROJECT_INPUT,
+      images: Array.from({ length: 12 }, (_, idx) => `https://example.com/${idx}.jpg`),
+    },
+    SAMPLE_PROJECTS.length
+  );
+  assert.equal(capped.images?.length, 10);
 
   const updatedList = updateProjectStatus([created, ...SAMPLE_PROJECTS], created.id, 'Completed');
   assert.equal(
     filterProjects(updatedList, { category: 'All', status: 'Completed', searchQuery: 'Guagua' }).length,
     1
   );
+
+  const renamedList = renameProjectTitle(updatedList, created.id, 'Guagua Commercial Wing');
+  assert.equal(renamedList[0].title, 'Guagua Commercial Wing');
+
+  const untouchedTooShort = renameProjectTitle(renamedList, created.id, 'AB');
+  assert.equal(untouchedTooShort[0].title, 'Guagua Commercial Wing');
+
+  const editedBoth = createProjectItem(
+    {
+      ...VALID_PROJECT_INPUT,
+      code: 'mst-com-999',
+      title: 'Updated Guagua Flagship Center',
+    },
+    SAMPLE_PROJECTS.length,
+    created
+  );
+  assert.equal(editedBoth.code, 'MST-COM-999');
+  assert.equal(editedBoth.title, 'Updated Guagua Flagship Center');
 });
 
-test('validateTeamForm and createTeamMember validate and normalize staff profiles', () => {
+test('validateTeamForm, optional license, createTeamMember, and reorderTeamMembers work cleanly', () => {
   const invalid = validateTeamForm({
     name: 'A',
     initials: '',
     photoUrl: 'javascript:alert(1)',
     role: 'CE',
     discipline: 'Civil',
-    licenseLabel: '01',
+    licenseLabel: '',
     experienceYears: '-2',
     education: '',
     bio: 'Too short',
@@ -209,6 +267,22 @@ test('validateTeamForm and createTeamMember validate and normalize staff profile
   assert.ok(invalid.errors.name);
   assert.ok(invalid.errors.photoUrl);
   assert.ok(invalid.errors.bio);
+  assert.equal(invalid.errors.licenseLabel, undefined);
+
+  const validWithoutLicense = validateTeamForm({
+    name: 'Elena G. Santos',
+    initials: '',
+    photoUrl: '',
+    role: 'Operations Coordinator',
+    discipline: 'Project Coordination',
+    licenseLabel: '   ',
+    experienceYears: '6',
+    education: 'B.S. Architecture',
+    bio: 'Coordinates permitting, procurement schedules, and client progress updates across Pampanga sites.',
+    specializationsText: 'Scheduling\nProcurement',
+    notableProjectsText: 'McArthur Highway Commercial Arcade',
+  });
+  assert.equal(validWithoutLicense.isValid, true);
 
   const member = createTeamMember({
     name: 'Engr. Carlo D. Rivera, CE',
@@ -235,7 +309,7 @@ test('validateTeamForm and createTeamMember validate and normalize staff profile
       photoUrl: '   ',
       role: 'Structural Project Engineer',
       discipline: 'Structural Design',
-      licenseLabel: 'PRC Civil Engineer · #0140921',
+      licenseLabel: '',
       experienceYears: '7',
       education: 'B.S. Civil Engineering, HAU',
       bio: 'Leads structural frame inspections and concrete batch quality audits across Central Luzon.',
@@ -245,6 +319,23 @@ test('validateTeamForm and createTeamMember validate and normalize staff profile
     member
   );
   assert.equal(clearedMember.photoUrl, undefined);
+  assert.equal(clearedMember.licenseLabel, '');
+
+  const roster = [
+    { ...member, id: 't1', name: 'Member 1' },
+    { ...member, id: 't2', name: 'Member 2' },
+    { ...member, id: 't3', name: 'Member 3' },
+  ];
+  const movedDown = reorderTeamMembers(roster, 0, 'down');
+  assert.deepEqual(
+    movedDown.map((m) => m.id),
+    ['t2', 't1', 't3']
+  );
+  const movedByDrag = reorderTeamMembersById(movedDown, 't3', 't2');
+  assert.deepEqual(
+    movedByDrag.map((m) => m.id),
+    ['t3', 't2', 't1']
+  );
 });
 
 test('validateCredentialForm and createCredentialItem manage regulatory records', () => {

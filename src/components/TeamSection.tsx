@@ -52,9 +52,11 @@ export function TeamSection({ members, onSelectMember }: TeamSectionProps) {
                   </span>
                 </div>
 
-                <p className="mt-1.5 font-mono text-xs text-slate-700 tabular-nums">
-                  {member.licenseLabel}
-                </p>
+                {member.licenseLabel && (
+                  <p className="mt-1.5 font-mono text-xs text-slate-700 tabular-nums">
+                    {member.licenseLabel}
+                  </p>
+                )}
 
                 <p className="mt-2.5 text-sm leading-relaxed text-slate-600">{member.bio}</p>
               </div>

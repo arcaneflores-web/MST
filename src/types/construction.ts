@@ -45,10 +45,12 @@ export interface ProjectItem {
   deliverables: string[];
   outcomeMetric: string;
   schematic: VisualSchematicType;
+  images?: string[];
   featured?: boolean;
 }
 
 export interface ProjectFormInput {
+  code?: string;
   title: string;
   category: ProjectCategory;
   status: ProjectStatus;
@@ -62,16 +64,19 @@ export interface ProjectFormInput {
   schematic: VisualSchematicType;
   highlightsText: string;
   deliverablesText: string;
+  images: string[];
   featured?: boolean;
 }
 
 export interface ProjectValidationErrors {
+  code?: string;
   title?: string;
   location?: string;
   year?: string;
   floorArea?: string;
   duration?: string;
   summary?: string;
+  images?: string;
 }
 
 export interface ServiceItem {

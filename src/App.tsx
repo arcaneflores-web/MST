@@ -26,6 +26,9 @@ import {
   formatInquiryReference,
   getPathnameForPage,
   parseRouteFromPathname,
+  renameProjectTitle,
+  reorderTeamMembers,
+  reorderTeamMembersById,
   updateProjectStatus,
 } from './utils/inquiryLogic';
 import { Navbar } from './components/Navbar';
@@ -102,6 +105,7 @@ export default function App() {
 
   // Public modal state
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const [selectedProjectImageIndex, setSelectedProjectImageIndex] = useState(0);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
@@ -261,6 +265,18 @@ export default function App() {
     }
   };
 
+  const handleSelectProject = (project: ProjectItem, initialImageIndex = 0) => {
+    setSelectedProjectImageIndex(initialImageIndex);
+    setSelectedProject(project);
+  };
+
+  const handleRenameProject = (projectId: string, nextTitle: string) => {
+    setProjects((prev) => renameProjectTitle(prev, projectId, nextTitle));
+    setSelectedProject((prev) =>
+      prev && prev.id === projectId ? { ...prev, title: nextTitle.trim() } : prev
+    );
+  };
+
   const handleUpdateProjectStatus = (projectId: string, nextStatus: ProjectStatus) => {
     setProjects((prev) => updateProjectStatus(prev, projectId, nextStatus));
     setSelectedProject((prev) =>
@@ -334,6 +350,14 @@ export default function App() {
     }
   };
 
+  const handleMoveTeamMember = (fromIndex: number, direction: 'up' | 'down') => {
+    setTeamMembers((prev) => reorderTeamMembers(prev, fromIndex, direction));
+  };
+
+  const handleDragReorderTeamMembers = (draggedId: string, targetId: string) => {
+    setTeamMembers((prev) => reorderTeamMembersById(prev, draggedId, targetId));
+  };
+
   // Admin Credentials CRUD
   const handleOpenAddCredential = () => {
     setEditingCredential(null);
@@ -378,6 +402,7 @@ export default function App() {
           onNavigatePublic={(page) => navigateTo(page)}
           onOpenAddProject={handleOpenAddProject}
           onOpenEditProject={handleOpenEditProject}
+          onRenameProject={handleRenameProject}
           onUpdateProjectStatus={handleUpdateProjectStatus}
           onToggleProjectFeatured={handleToggleProjectFeatured}
           onDeleteProject={handleDeleteProject}
@@ -386,6 +411,8 @@ export default function App() {
           onDeleteInquiry={handleDeleteInquiry}
           onOpenAddTeamMember={handleOpenAddTeamMember}
           onOpenEditTeamMember={handleOpenEditTeamMember}
+          onMoveTeamMember={handleMoveTeamMember}
+          onReorderTeamMembers={handleDragReorderTeamMembers}
           onDeleteTeamMember={handleDeleteTeamMember}
           onOpenAddCredential={handleOpenAddCredential}
           onOpenEditCredential={handleOpenEditCredential}
@@ -446,7 +473,7 @@ export default function App() {
                   onNavigate={(page) => navigateTo(page)}
                   onRequestQuote={handleRequestQuote}
                   onSelectServiceForInquiry={handleSelectServiceForInquiry}
-                  onSelectProject={setSelectedProject}
+                  onSelectProject={handleSelectProject}
                 />
               )}
 
@@ -468,7 +495,7 @@ export default function App() {
                 <ProjectsPage
                   projects={projects}
                   onNavigate={(page) => navigateTo(page)}
-                  onSelectProject={setSelectedProject}
+                  onSelectProject={handleSelectProject}
                 />
               )}
 
@@ -510,6 +537,7 @@ export default function App() {
 
         <ProjectModal
           project={selectedProject}
+          initialImageIndex={selectedProjectImageIndex}
           onClose={() => setSelectedProject(null)}
           onRequestSimilar={handleRequestSimilarProject}
         />

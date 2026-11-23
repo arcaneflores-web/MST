@@ -164,12 +164,18 @@ export function HeroBlueprintCanvas() {
 export function ProjectSchematic({
   type,
   code,
+  fillContainer = false,
 }: {
   type: VisualSchematicType;
   code: string;
+  fillContainer?: boolean;
 }) {
   return (
-    <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900 border-b border-slate-200">
+    <div
+      className={`relative w-full overflow-hidden bg-slate-900 ${
+        fillContainer ? 'h-full' : 'aspect-video border-b border-slate-200'
+      }`}
+    >
       <svg
         className="pointer-events-none absolute inset-0 h-full w-full opacity-20"
         xmlns="http://www.w3.org/2000/svg"

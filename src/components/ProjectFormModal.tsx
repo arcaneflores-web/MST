@@ -1,5 +1,5 @@
-import { useEffect, useState, type FormEvent } from 'react';
-import { Save, X } from 'lucide-react';
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import { ImagePlus, Save, Trash2, Upload, X } from 'lucide-react';
 import type {
   ProjectCategory,
   ProjectFormInput,
@@ -8,7 +8,8 @@ import type {
   ProjectValidationErrors,
   VisualSchematicType,
 } from '../types/construction';
-import { validateProjectForm } from '../utils/inquiryLogic';
+import { processProjectPhotoUpload } from '../utils/imageUpload';
+import { MAX_PROJECT_IMAGES, validateProjectForm } from '../utils/inquiryLogic';
 
 interface ProjectFormModalProps {
   open: boolean;
@@ -18,6 +19,7 @@ interface ProjectFormModalProps {
 }
 
 const DEFAULT_PROJECT_FORM: ProjectFormInput = {
+  code: '',
   title: '',
   category: 'Commercial',
   status: 'Ongoing',
@@ -31,6 +33,7 @@ const DEFAULT_PROJECT_FORM: ProjectFormInput = {
   schematic: 'commercial-hub',
   highlightsText: '',
   deliverablesText: '',
+  images: [],
   featured: false,
 };
 
@@ -49,11 +52,16 @@ export function ProjectFormModal({
 }: ProjectFormModalProps) {
   const [formState, setFormState] = useState<ProjectFormInput>(DEFAULT_PROJECT_FORM);
   const [errors, setErrors] = useState<ProjectValidationErrors>({});
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [imageUploadMessage, setImageUploadMessage] = useState('');
+  const [imageUploadError, setImageUploadError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!open) return;
     if (editingProject) {
       setFormState({
+        code: editingProject.code,
         title: editingProject.title,
         category: editingProject.category,
         status: editingProject.status,
@@ -67,12 +75,19 @@ export function ProjectFormModal({
         schematic: editingProject.schematic,
         highlightsText: editingProject.engineeringHighlights.join('\n'),
         deliverablesText: editingProject.deliverables.join('\n'),
+        images: editingProject.images ? [...editingProject.images] : [],
         featured: Boolean(editingProject.featured),
       });
     } else {
       setFormState(DEFAULT_PROJECT_FORM);
     }
     setErrors({});
+    setIsUploadingImages(false);
+    setImageUploadMessage('');
+    setImageUploadError('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   }, [open, editingProject]);
 
   useEffect(() => {
@@ -86,7 +101,10 @@ export function ProjectFormModal({
 
   if (!open) return null;
 
-  const handleChange = (field: keyof ProjectFormInput, value: string | boolean) => {
+  const handleChange = (
+    field: keyof ProjectFormInput,
+    value: string | boolean | string[]
+  ) => {
     setFormState((prev) => {
       const next = { ...prev, [field]: value };
       if (field === 'category' && !editingProject && typeof value === 'string') {
@@ -101,6 +119,76 @@ export function ProjectFormModal({
         return next;
       });
     }
+  };
+
+  const handleProjectImagesChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files ?? []);
+    if (selectedFiles.length === 0) return;
+
+    setImageUploadError('');
+    setImageUploadMessage('');
+
+    const remainingSlots = MAX_PROJECT_IMAGES - formState.images.length;
+    if (remainingSlots <= 0) {
+      setImageUploadError(
+        `Maximum of ${MAX_PROJECT_IMAGES} images per project reached. Remove an existing photo before uploading another.`
+      );
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    const filesToProcess = selectedFiles.slice(0, remainingSlots);
+    const skippedCount = selectedFiles.length - filesToProcess.length;
+
+    setIsUploadingImages(true);
+    try {
+      const uploaded = await Promise.all(
+        filesToProcess.map((file) => processProjectPhotoUpload(file))
+      );
+
+      setFormState((prev) => {
+        const available = Math.max(0, MAX_PROJECT_IMAGES - prev.images.length);
+        const accepted = uploaded.slice(0, available);
+        return { ...prev, images: [...prev.images, ...accepted] };
+      });
+      setErrors((prev) => {
+        if (!prev.images) return prev;
+        const next = { ...prev };
+        delete next.images;
+        return next;
+      });
+      if (skippedCount > 0) {
+        setImageUploadMessage(
+          `Added ${uploaded.length} image${uploaded.length === 1 ? '' : 's'}. Skipped ${skippedCount} extra file${skippedCount === 1 ? '' : 's'} to stay within the ${MAX_PROJECT_IMAGES}-image limit.`
+        );
+      }
+    } catch (err) {
+      setImageUploadError(
+        err instanceof Error ? err.message : 'Unable to process one of the selected images.'
+      );
+    } finally {
+      setIsUploadingImages(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleRemoveImage = (indexToRemove: number) => {
+    setImageUploadError('');
+    setImageUploadMessage('');
+    handleChange(
+      'images',
+      formState.images.filter((_, index) => index !== indexToRemove)
+    );
+  };
+
+  const handleSetCoverImage = (indexToPromote: number) => {
+    if (indexToPromote <= 0 || indexToPromote >= formState.images.length) return;
+    const selected = formState.images[indexToPromote];
+    const reordered = [
+      selected,
+      ...formState.images.filter((_, index) => index !== indexToPromote),
+    ];
+    handleChange('images', reordered);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -132,14 +220,16 @@ export function ProjectFormModal({
         <div className="flex shrink-0 items-start justify-between gap-4 border-b border-slate-200 bg-white px-6 py-4">
           <div>
             <p className="text-xs font-medium text-blue-700">
-              Portfolio Manager · MST Construction OPC
+              {editingProject
+                ? `Portfolio Manager · ${editingProject.code}`
+                : 'Portfolio Manager · MST Construction OPC'}
             </p>
             <h2
               id="project-form-modal-title"
               className="mt-0.5 text-lg font-bold tracking-tight text-slate-950 sm:text-xl"
             >
               {editingProject
-                ? `Update Project (${editingProject.code})`
+                ? `Edit Project: ${editingProject.title}`
                 : 'Add New Construction Project'}
             </h2>
           </div>
@@ -167,12 +257,110 @@ export function ProjectFormModal({
           )}
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="sm:col-span-2">
+            <div className="sm:col-span-2 rounded-lg border border-slate-200 bg-slate-50/80 p-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <ImagePlus className="h-4 w-4 text-blue-700" aria-hidden="true" />
+                    <p className="text-xs font-bold text-slate-900">
+                      Project Site Photos ({formState.images.length} / {MAX_PROJECT_IMAGES})
+                    </p>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-600">
+                    Upload up to {MAX_PROJECT_IMAGES} photos showing completed or ongoing site
+                    progress. Photo #1 is used as the portfolio card cover.
+                  </p>
+                </div>
+
+                <div className="shrink-0">
+                  <input
+                    ref={fileInputRef}
+                    id="project-images-upload"
+                    type="file"
+                    multiple
+                    accept="image/png,image/jpeg,image/webp,image/gif"
+                    disabled={isUploadingImages || formState.images.length >= MAX_PROJECT_IMAGES}
+                    onChange={handleProjectImagesChange}
+                    aria-label="Upload project photos"
+                    className="sr-only"
+                  />
+                  <label
+                    htmlFor="project-images-upload"
+                    className={`inline-flex items-center gap-1.5 rounded-md border px-3.5 py-2 text-xs font-semibold transition-colors whitespace-nowrap ${
+                      formState.images.length >= MAX_PROJECT_IMAGES
+                        ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400'
+                        : 'cursor-pointer border-slate-300 bg-white text-slate-900 hover:border-blue-700 hover:text-blue-700'
+                    }`}
+                  >
+                    <Upload className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span>
+                      {isUploadingImages
+                        ? 'Processing Photos...'
+                        : formState.images.length >= MAX_PROJECT_IMAGES
+                          ? 'Maximum 10 Photos Reached'
+                          : 'Upload Project Photos'}
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              {imageUploadMessage && (
+                <p role="status" className="mt-2.5 text-xs font-medium text-blue-700">
+                  {imageUploadMessage}
+                </p>
+              )}
+
+              {(imageUploadError || errors.images) && (
+                <p role="alert" className="mt-2.5 text-xs font-medium text-red-700">
+                  {imageUploadError || errors.images}
+                </p>
+              )}
+
+              {formState.images.length > 0 && (
+                <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-5">
+                  {formState.images.map((imgSrc, index) => (
+                    <div
+                      key={`${index}-${imgSrc.slice(0, 32)}`}
+                      className="group relative overflow-hidden rounded-md border border-slate-200 bg-white"
+                    >
+                      <img
+                        src={imgSrc}
+                        alt={`Project upload ${index + 1}`}
+                        className="h-20 w-full object-cover"
+                      />
+                      <div className="flex items-center justify-between border-t border-slate-100 px-1.5 py-1 text-[10px]">
+                        {index === 0 ? (
+                          <span className="font-bold text-blue-700">Cover</span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleSetCoverImage(index)}
+                            className="font-semibold text-slate-600 hover:text-blue-700"
+                          >
+                            Set Cover
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                          aria-label={`Remove project photo ${index + 1}`}
+                          className="inline-flex h-5 w-5 items-center justify-center rounded text-slate-500 hover:bg-red-50 hover:text-red-700"
+                        >
+                          <Trash2 className="h-3 w-3" aria-hidden="true" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div>
               <label
                 htmlFor="proj-title"
                 className="block text-xs font-semibold text-slate-800"
               >
-                Project Title *
+                Project Name / Title *
               </label>
               <input
                 id="proj-title"
@@ -189,6 +377,30 @@ export function ProjectFormModal({
               />
               {errors.title && (
                 <p className="mt-1 text-xs font-medium text-red-700">{errors.title}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="proj-code"
+                className="block text-xs font-semibold text-slate-800"
+              >
+                Project Code <span className="font-normal text-slate-500">(optional on new)</span>
+              </label>
+              <input
+                id="proj-code"
+                type="text"
+                value={formState.code ?? ''}
+                onChange={(e) => handleChange('code', e.target.value)}
+                placeholder="Auto-generated (e.g., MST-COM-025)"
+                className={`mt-1.5 w-full rounded-md border px-3.5 py-2.5 font-mono text-sm uppercase text-slate-950 focus:outline-none ${
+                  errors.code
+                    ? 'border-red-500 bg-red-50/40'
+                    : 'border-slate-300 bg-white focus:border-blue-700'
+                }`}
+              />
+              {errors.code && (
+                <p className="mt-1 text-xs font-medium text-red-700">{errors.code}</p>
               )}
             </div>
 
@@ -445,6 +657,7 @@ export function ProjectFormModal({
               />
             </div>
 
+
             <div className="sm:col-span-2 pt-1">
               <label className="flex items-center gap-2.5 text-xs font-medium text-slate-800 cursor-pointer">
                 <input
@@ -470,7 +683,8 @@ export function ProjectFormModal({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-md bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-800"
+              disabled={isUploadingImages}
+              className="inline-flex items-center gap-2 rounded-md bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-60"
             >
               <Save className="h-4 w-4" aria-hidden="true" />
               <span>{editingProject ? 'Save Project Update' : 'Add Project to Portfolio'}</span>
