@@ -42,6 +42,14 @@ export function Navbar({ onRequestQuote }: NavbarProps) {
             <a
               key={item.href}
               href={item.href}
+              onClick={
+                item.href === '#inquiry'
+                  ? (e) => {
+                      e.preventDefault();
+                      onRequestQuote();
+                    }
+                  : undefined
+              }
               className="whitespace-nowrap shrink-0 py-1 text-slate-600 transition-colors duration-150 hover:text-slate-950 hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
             >
               {item.label}
@@ -82,7 +90,13 @@ export function Navbar({ onRequestQuote }: NavbarProps) {
               <a
                 key={item.href}
                 href={item.href}
-                onClick={handleMobileNavClick}
+                onClick={(e) => {
+                  handleMobileNavClick();
+                  if (item.href === '#inquiry') {
+                    e.preventDefault();
+                    onRequestQuote();
+                  }
+                }}
                 className="py-2 text-base font-medium text-slate-800 hover:text-blue-700"
               >
                 {item.label}

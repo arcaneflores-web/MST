@@ -16,6 +16,7 @@ import { CredentialsSection } from './components/CredentialsSection';
 import { TeamSection } from './components/TeamSection';
 import { InquirySection } from './components/InquirySection';
 import { InquiryLogModal, ProjectModal, TeamModal } from './components/Modals';
+import { InquiryModal } from './components/InquiryModal';
 import { Footer } from './components/Footer';
 
 const STORAGE_KEY = 'mst_construction_inquiries_v1';
@@ -34,6 +35,7 @@ function loadStoredInquiries(): SubmittedInquiry[] {
 export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+  const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [inquiryLogOpen, setInquiryLogOpen] = useState(false);
   const [preselectedServiceNote, setPreselectedServiceNote] = useState<string | null>(null);
   const [inquiries, setInquiries] = useState<SubmittedInquiry[]>(loadStoredInquiries);
@@ -54,17 +56,17 @@ export default function App() {
   };
 
   const handleRequestQuote = () => {
-    scrollToSection('inquiry');
+    setInquiryModalOpen(true);
   };
 
   const handleSelectServiceForInquiry = (serviceTitle: string) => {
     setPreselectedServiceNote(serviceTitle);
-    scrollToSection('inquiry');
+    setInquiryModalOpen(true);
   };
 
   const handleRequestSimilarProject = (projectTitle: string) => {
     setPreselectedServiceNote(`Similar build to ${projectTitle}`);
-    scrollToSection('inquiry');
+    setInquiryModalOpen(true);
   };
 
   const handleSubmitInquiry = (input: InquiryFormInput): SubmittedInquiry => {
@@ -109,14 +111,22 @@ export default function App() {
         <TeamSection onSelectMember={setSelectedMember} />
 
         <InquirySection
-          preselectedServiceNote={preselectedServiceNote}
           inquiries={inquiries}
-          onSubmitInquiry={handleSubmitInquiry}
+          onOpenInquiryDialog={handleRequestQuote}
           onOpenInquiryLog={() => setInquiryLogOpen(true)}
         />
       </main>
 
-      <Footer />
+      <Footer onOpenInquiry={handleRequestQuote} />
+
+      <InquiryModal
+        open={inquiryModalOpen}
+        preselectedServiceNote={preselectedServiceNote}
+        inquiryCount={inquiries.length}
+        onClose={() => setInquiryModalOpen(false)}
+        onSubmitInquiry={handleSubmitInquiry}
+        onOpenInquiryLog={() => setInquiryLogOpen(true)}
+      />
 
       <ProjectModal
         project={selectedProject}

@@ -1,7 +1,7 @@
 import { COMPANY_INFO } from '../data/companyData';
 import { BrandMark } from './ArchitecturalVisuals';
 
-export function Footer() {
+export function Footer({ onOpenInquiry }: { onOpenInquiry: () => void }) {
   return (
     <footer className="bg-slate-950 py-12 text-slate-300">
       <div className="mx-auto max-w-[1200px] px-6">
@@ -44,9 +44,13 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#inquiry" className="hover:text-white">
+                <button
+                  type="button"
+                  onClick={onOpenInquiry}
+                  className="hover:text-white text-left"
+                >
                   Request Quotation
-                </a>
+                </button>
               </li>
             </ul>
           </div>
