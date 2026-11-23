@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { AnimatePresence, motion, MotionConfig } from 'motion/react';
 import {
   CREDENTIALS as SEED_CREDENTIALS,
   INITIAL_INQUIRIES,
@@ -38,6 +39,7 @@ import {
   TeamPage,
 } from './components/PublicSubpages';
 import { InquiryModal } from './components/InquiryModal';
+import { ContactUsModal } from './components/ContactUsModal';
 import { ProjectModal, TeamModal } from './components/Modals';
 import { ProjectFormModal } from './components/ProjectFormModal';
 import { CredentialFormModal, TeamFormModal } from './components/AdminModals';
@@ -102,6 +104,7 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
   const [preselectedServiceNote, setPreselectedServiceNote] = useState<string | null>(
     null
   );
@@ -158,12 +161,12 @@ export default function App() {
   }, [credentials]);
 
   const navigateTo = (page: AppPage) => {
+    setContactModalOpen(false);
     const targetPath = getPathnameForPage(page);
     if (window.location.pathname !== targetPath) {
       window.history.pushState({ page }, '', targetPath);
     }
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
   // Public inquiry actions
@@ -399,84 +402,108 @@ export default function App() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
-      <Navbar
-        currentPage={currentPage}
-        onNavigate={(page) => navigateTo(page)}
-        onRequestQuote={handleRequestQuote}
-      />
+    <MotionConfig reducedMotion="user">
+      <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
+        <Navbar
+          currentPage={currentPage}
+          contactDialogOpen={contactModalOpen}
+          onNavigate={(page) => navigateTo(page)}
+          onOpenContactDialog={() => setContactModalOpen(true)}
+          onRequestQuote={handleRequestQuote}
+        />
 
-      <main className="flex-1">
-        {currentPage === 'home' && (
-          <HomePage
-            projects={projects}
-            onNavigate={(page) => navigateTo(page)}
-            onRequestQuote={handleRequestQuote}
-            onSelectServiceForInquiry={handleSelectServiceForInquiry}
-            onSelectProject={setSelectedProject}
-          />
-        )}
+        <main className="flex-1 overflow-x-clip">
+          <AnimatePresence
+            mode="wait"
+            initial={false}
+            onExitComplete={() => window.scrollTo({ top: 0, behavior: 'auto' })}
+          >
+            <motion.div
+              key={currentPage}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {currentPage === 'home' && (
+                <HomePage
+                  projects={projects}
+                  onNavigate={(page) => navigateTo(page)}
+                  onRequestQuote={handleRequestQuote}
+                  onSelectServiceForInquiry={handleSelectServiceForInquiry}
+                  onSelectProject={setSelectedProject}
+                />
+              )}
 
-        {currentPage === 'about' && (
-          <AboutUsPage
-            credentials={credentials}
-            onNavigate={(page) => navigateTo(page)}
-          />
-        )}
+              {currentPage === 'about' && (
+                <AboutUsPage
+                  credentials={credentials}
+                  onNavigate={(page) => navigateTo(page)}
+                />
+              )}
 
-        {currentPage === 'services' && (
-          <ServicesPage
-            onNavigate={(page) => navigateTo(page)}
-            onSelectServiceForInquiry={handleSelectServiceForInquiry}
-          />
-        )}
+              {currentPage === 'services' && (
+                <ServicesPage
+                  onNavigate={(page) => navigateTo(page)}
+                  onSelectServiceForInquiry={handleSelectServiceForInquiry}
+                />
+              )}
 
-        {currentPage === 'projects' && (
-          <ProjectsPage
-            projects={projects}
-            onNavigate={(page) => navigateTo(page)}
-            onSelectProject={setSelectedProject}
-          />
-        )}
+              {currentPage === 'projects' && (
+                <ProjectsPage
+                  projects={projects}
+                  onNavigate={(page) => navigateTo(page)}
+                  onSelectProject={setSelectedProject}
+                />
+              )}
 
-        {currentPage === 'team' && (
-          <TeamPage
-            members={teamMembers}
-            onNavigate={(page) => navigateTo(page)}
-            onSelectMember={setSelectedMember}
-          />
-        )}
+              {currentPage === 'team' && (
+                <TeamPage
+                  members={teamMembers}
+                  onNavigate={(page) => navigateTo(page)}
+                  onSelectMember={setSelectedMember}
+                />
+              )}
 
-        {currentPage === 'contact' && (
-          <ContactPage
-            onNavigate={(page) => navigateTo(page)}
-            onSubmitInquiry={handleSubmitInquiry}
-          />
-        )}
-      </main>
+              {currentPage === 'contact' && (
+                <ContactPage
+                  onNavigate={(page) => navigateTo(page)}
+                  onSubmitInquiry={handleSubmitInquiry}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </main>
 
-      <Footer
-        onNavigate={(page) => navigateTo(page)}
-        onOpenInquiry={handleRequestQuote}
-      />
+        <Footer
+          onNavigate={(page) => navigateTo(page)}
+          onOpenInquiry={handleRequestQuote}
+        />
 
-      <InquiryModal
-        open={inquiryModalOpen}
-        preselectedServiceNote={preselectedServiceNote}
-        onClose={() => setInquiryModalOpen(false)}
-        onSubmitInquiry={handleSubmitInquiry}
-      />
+        <ContactUsModal
+          open={contactModalOpen}
+          onClose={() => setContactModalOpen(false)}
+          onSubmitInquiry={handleSubmitInquiry}
+        />
 
-      <ProjectModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-        onRequestSimilar={handleRequestSimilarProject}
-      />
+        <InquiryModal
+          open={inquiryModalOpen}
+          preselectedServiceNote={preselectedServiceNote}
+          onClose={() => setInquiryModalOpen(false)}
+          onSubmitInquiry={handleSubmitInquiry}
+        />
 
-      <TeamModal
-        member={selectedMember}
-        onClose={() => setSelectedMember(null)}
-      />
-    </div>
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+          onRequestSimilar={handleRequestSimilarProject}
+        />
+
+        <TeamModal
+          member={selectedMember}
+          onClose={() => setSelectedMember(null)}
+        />
+      </div>
+    </MotionConfig>
   );
 }

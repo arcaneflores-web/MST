@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { X } from 'lucide-react';
 import type { ProjectItem, TeamMember } from '../types/construction';
 import { ProjectSchematic } from './ArchitecturalVisuals';
@@ -23,20 +24,28 @@ export function ProjectModal({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [project, onClose]);
 
-  if (!project) return null;
-
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="project-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
-      onClick={onClose}
-    >
-      <div
-        className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <AnimatePresence>
+      {project && (
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="project-modal-title"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18, ease: 'easeOut' }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 28, mass: 0.8 }}
+            className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
           <span className="font-mono text-xs font-medium text-slate-600">
             {project.code} · {project.status} {project.year}
@@ -139,8 +148,10 @@ export function ProjectModal({
             </button>
           </div>
         </div>
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -159,20 +170,28 @@ export function TeamModal({ member, onClose }: TeamModalProps) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [member, onClose]);
 
-  if (!member) return null;
-
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="team-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
-      onClick={onClose}
-    >
-      <div
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-slate-200 bg-white p-6 shadow-xl sm:p-8"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <AnimatePresence>
+      {member && (
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="team-modal-title"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18, ease: 'easeOut' }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 28, mass: 0.8 }}
+            className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-slate-200 bg-white p-6 shadow-xl sm:p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
             <div
@@ -247,7 +266,9 @@ export function TeamModal({ member, onClose }: TeamModalProps) {
             ))}
           </ul>
         </div>
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
