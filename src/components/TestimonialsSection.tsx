@@ -1,5 +1,7 @@
+import { motion } from 'motion/react';
 import { TESTIMONIALS } from '../data/companyData';
 import { SectionHeaderBar } from './SectionDivider';
+import { getScrollCardMotionProps } from './ScrollReveal';
 
 export function TestimonialsSection() {
   return (
@@ -12,13 +14,13 @@ export function TestimonialsSection() {
           sectionNumber="04"
           eyebrow="Client Feedback & Outcomes"
           title="Trusted by Commercial Developers & Facility Owners"
-          description="Verified project delivery feedback from commercial, logistics, and institutional clients in Pampanga."
         />
 
         <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
-          {TESTIMONIALS.map((item) => (
-            <figure
+          {TESTIMONIALS.map((item, idx) => (
+            <motion.figure
               key={item.id}
+              {...getScrollCardMotionProps(idx)}
               className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5"
             >
               <div>
@@ -37,7 +39,7 @@ export function TestimonialsSection() {
                   {item.outcomeSummary}
                 </p>
               </figcaption>
-            </figure>
+            </motion.figure>
           ))}
         </div>
       </div>

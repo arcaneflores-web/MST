@@ -1,6 +1,8 @@
 import { ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 import { ABOUT_MST, CONSTRUCTION_PROCESS } from '../data/companyData';
 import { SectionHeaderBar } from './SectionDivider';
+import { getScrollCardMotionProps, ScrollReveal } from './ScrollReveal';
 
 interface AboutProcessSectionProps {
   mode?: 'preview' | 'full';
@@ -37,7 +39,7 @@ export function AboutProcessSection({
           />
 
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-stretch">
-            <div className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 lg:col-span-6">
+            <ScrollReveal className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 lg:col-span-6">
               <div>
                 <h3 className="text-xs font-bold tracking-wider text-slate-900 uppercase">
                   Company Overview
@@ -65,9 +67,9 @@ export function AboutProcessSection({
                   </dd>
                 </div>
               </dl>
-            </div>
+            </ScrollReveal>
 
-            <div className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 lg:col-span-6">
+            <ScrollReveal delay={0.07} className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 lg:col-span-6">
               <div>
                 <h3 className="text-xs font-bold tracking-wider text-blue-700 uppercase">
                   Our Mission
@@ -85,7 +87,7 @@ export function AboutProcessSection({
                   {ABOUT_MST.vision}
                 </p>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -102,12 +104,11 @@ export function AboutProcessSection({
           sectionNumber="01"
           eyebrow={ABOUT_MST.eyebrow}
           title={ABOUT_MST.headline}
-          description={ABOUT_MST.overview}
         />
 
         {/* Part 1: Mission, Vision & 4 Differentiators */}
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12">
-          <div className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 lg:col-span-5">
+          <ScrollReveal className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 lg:col-span-5">
             <div className="space-y-5">
               <div>
                 <h3 className="text-xs font-bold tracking-wider text-blue-700 uppercase">
@@ -132,12 +133,13 @@ export function AboutProcessSection({
               Headquarters: 2nd Floor, JG Building, Dela Paz Norte, City of San Fernando,
               Pampanga
             </div>
-          </div>
+          </ScrollReveal>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-7">
             {ABOUT_MST.differentiators.map((item, idx) => (
-              <article
+              <motion.article
                 key={item.title}
+                {...getScrollCardMotionProps(idx, 0.055)}
                 className="rounded-xl border border-slate-200 bg-white p-5"
               >
                 <p className="font-mono text-xs font-semibold text-blue-700 tabular-nums">
@@ -145,7 +147,7 @@ export function AboutProcessSection({
                 </p>
                 <h3 className="mt-1.5 text-base font-bold text-slate-950">{item.title}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{item.detail}</p>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>
@@ -156,13 +158,13 @@ export function AboutProcessSection({
             sectionNumber="02"
             eyebrow="7-Step Construction Delivery Framework"
             title="From Initial Consultation to Project Turnover"
-            description="A disciplined, milestone-tracked workflow ensuring code compliance, budget control, and documented quality inspections."
           />
 
           <ol className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {CONSTRUCTION_PROCESS.map((item) => (
-              <li
+            {CONSTRUCTION_PROCESS.map((item, idx) => (
+              <motion.li
                 key={item.step}
+                {...getScrollCardMotionProps(idx % 4, 0.05)}
                 className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5"
               >
                 <div>
@@ -177,7 +179,7 @@ export function AboutProcessSection({
                 <p className="mt-3 border-t border-slate-100 pt-2.5 text-[11px] font-medium text-slate-700">
                   Output: {item.deliverable}
                 </p>
-              </li>
+              </motion.li>
             ))}
           </ol>
         </div>

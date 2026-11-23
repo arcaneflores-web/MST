@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'motion/react';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -17,6 +18,7 @@ import {
 } from '../utils/inquiryLogic';
 import { ProjectSchematic } from './ArchitecturalVisuals';
 import { SectionHeaderBar } from './SectionDivider';
+import { getScrollCardMotionProps, ScrollReveal } from './ScrollReveal';
 
 function ProjectCoverVisual({
   project,
@@ -511,7 +513,10 @@ export function PortfolioSection({
         />
 
         {/* Structured Filter & Search Divider Bar */}
-        <div className="mt-5 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-3.5 lg:flex-row lg:items-center lg:justify-between">
+        <ScrollReveal
+          yOffset={10}
+          className="mt-5 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-3.5 lg:flex-row lg:items-center lg:justify-between"
+        >
           <div className="flex flex-wrap items-center gap-3">
             <div
               role="group"
@@ -593,7 +598,7 @@ export function PortfolioSection({
               </button>
             )}
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Project Grid or Empty State */}
         {filteredProjects.length === 0 ? (
@@ -614,9 +619,10 @@ export function PortfolioSection({
           </div>
         ) : (
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredProjects.map((project) => (
-              <article
+            {filteredProjects.map((project, idx) => (
+              <motion.article
                 key={project.id}
+                {...getScrollCardMotionProps(idx % 3, 0.06)}
                 className="group flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-blue-600 hover:shadow-lg"
               >
                 <div>
@@ -685,7 +691,7 @@ export function PortfolioSection({
                     <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         )}

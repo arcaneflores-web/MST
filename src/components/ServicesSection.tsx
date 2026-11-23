@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { motion } from 'motion/react';
 import { ArrowRight, ArrowUpRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { SERVICES } from '../data/companyData';
 import type { ServiceItem } from '../types/construction';
 import { getFeaturedServices } from '../utils/inquiryLogic';
 import { SectionHeaderBar } from './SectionDivider';
+import { getScrollCardMotionProps } from './ScrollReveal';
 
 interface ServicesSectionProps {
   mode?: 'preview' | 'full';
@@ -51,9 +53,10 @@ export function ServicesSection({
           />
 
           <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
-            {displayedServices.map((service) => (
-              <article
+            {displayedServices.map((service, idx) => (
+              <motion.article
                 key={service.id}
+                {...getScrollCardMotionProps(idx % 2, 0.06)}
                 className="flex flex-col justify-between rounded-xl border border-slate-200 bg-slate-50/80 p-5 transition-colors duration-150 hover:border-slate-300"
               >
                 <div>
@@ -81,7 +84,7 @@ export function ServicesSection({
                     <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
                 </div>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>
@@ -99,18 +102,18 @@ export function ServicesSection({
           sectionNumber="01"
           eyebrow="Complete Service Offerings"
           title="Construction, Engineering, Architectural & Design-Build Scope"
-          description="Every engagement follows National Structural Code of the Philippines (NSCP) standards, itemized cost estimation, and direct PRC engineering oversight."
         />
 
         <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {displayedServices.map((service: ServiceItem) => {
+          {displayedServices.map((service: ServiceItem, idx) => {
             const isExpanded = expandedId === service.id;
             const primaryCapabilities = service.capabilities.slice(0, 3);
             const extraCapabilities = service.capabilities.slice(3);
 
             return (
-              <article
+              <motion.article
                 key={service.id}
+                {...getScrollCardMotionProps(idx % 3, 0.06)}
                 className="flex h-full flex-col justify-between rounded-xl border border-slate-200 bg-white p-6 transition-colors duration-150 hover:border-slate-300"
               >
                 <div className="flex flex-1 flex-col">
@@ -203,7 +206,7 @@ export function ServicesSection({
                     <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
                   </button>
                 </div>
-              </article>
+              </motion.article>
             );
           })}
         </div>

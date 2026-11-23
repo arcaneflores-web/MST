@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
+import { ScrollReveal } from './ScrollReveal';
 
 interface SectionHeaderBarProps {
   sectionNumber?: string;
   eyebrow: string;
   title: string;
-  description?: string;
   action?: ReactNode;
   dark?: boolean;
 }
@@ -13,12 +13,12 @@ export function SectionHeaderBar({
   sectionNumber,
   eyebrow,
   title,
-  description,
   action,
   dark = false,
 }: SectionHeaderBarProps) {
   return (
-    <div
+    <ScrollReveal
+      yOffset={12}
       className={`border-b pb-5 ${
         dark ? 'border-slate-800' : 'border-slate-200'
       }`}
@@ -38,10 +38,10 @@ export function SectionHeaderBar({
         />
       </div>
 
-      {/* Headline + right action / summary */}
+      {/* Headline + optional right action */}
       <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <h2
-          className={`max-w-2xl text-2xl font-bold tracking-tight sm:text-3xl ${
+          className={`max-w-3xl text-2xl font-bold tracking-tight sm:text-3xl ${
             dark ? 'text-white' : 'text-slate-950'
           }`}
           style={{ textWrap: 'balance' }}
@@ -49,18 +49,8 @@ export function SectionHeaderBar({
           {title}
         </h2>
 
-        {action ? (
-          <div className="shrink-0">{action}</div>
-        ) : description ? (
-          <p
-            className={`max-w-md text-sm leading-relaxed ${
-              dark ? 'text-slate-300' : 'text-slate-600'
-            }`}
-          >
-            {description}
-          </p>
-        ) : null}
+        {action ? <div className="shrink-0">{action}</div> : null}
       </div>
-    </div>
+    </ScrollReveal>
   );
 }

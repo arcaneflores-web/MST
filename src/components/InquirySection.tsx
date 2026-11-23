@@ -3,6 +3,7 @@ import { COMPANY_INFO } from '../data/companyData';
 import type { InquiryFormInput, SubmittedInquiry } from '../types/construction';
 import { InquiryForm } from './InquiryForm';
 import { SectionHeaderBar } from './SectionDivider';
+import { ScrollReveal } from './ScrollReveal';
 
 interface InquirySectionProps {
   onSubmitInquiry: (input: InquiryFormInput) => SubmittedInquiry;
@@ -19,12 +20,11 @@ export function InquirySection({ onSubmitInquiry }: InquirySectionProps) {
           sectionNumber="01"
           eyebrow="San Fernando Headquarters & Estimating Desk"
           title="Visit or Message Our Engineering Team"
-          description="Consult directly with our civil engineers and quantity surveyors at our San Fernando office, or submit your project inquiry below."
         />
 
         <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
           {/* Left Column: Complete Office Information & Google Maps Location */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6 lg:col-span-5">
+          <ScrollReveal className="rounded-xl border border-slate-200 bg-white p-6 lg:col-span-5">
             <h3 className="text-base font-bold text-slate-950">
               Headquarters &amp; Contact Directory
             </h3>
@@ -91,10 +91,10 @@ export function InquirySection({ onSubmitInquiry }: InquirySectionProps) {
                 <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
               </a>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: Live Project Inquiry Form */}
-          <div className="lg:col-span-7">
+          <ScrollReveal delay={0.07} className="lg:col-span-7">
             <div className="rounded-xl border border-slate-200 bg-white p-6">
               <div className="mb-5 border-b border-slate-200 pb-3.5">
                 <h3 className="text-lg font-bold tracking-tight text-slate-950">
@@ -111,7 +111,7 @@ export function InquirySection({ onSubmitInquiry }: InquirySectionProps) {
                 onSubmitInquiry={onSubmitInquiry}
               />
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

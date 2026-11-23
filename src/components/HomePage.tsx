@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 import { WHY_CHOOSE_MST } from '../data/companyData';
 import type { ProjectItem, PublicPage } from '../types/construction';
 import { HeroSection } from './HeroSection';
@@ -6,6 +7,7 @@ import { AboutProcessSection } from './AboutProcessSection';
 import { ServicesSection } from './ServicesSection';
 import { TestimonialsSection } from './TestimonialsSection';
 import { SectionHeaderBar } from './SectionDivider';
+import { getScrollCardMotionProps, ScrollReveal } from './ScrollReveal';
 
 interface HomePageProps {
   projects: ProjectItem[];
@@ -54,12 +56,15 @@ export function HomePage({
             sectionNumber="03"
             eyebrow="Why Choose MST?"
             title="Disciplined Engineering, Safety & Cost Control on Every Site"
-            description="Built around licensed technical supervision, documented quality testing, and transparent milestone execution."
           />
 
           <div className="mt-6 grid grid-cols-1 divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
-            {WHY_CHOOSE_MST.map((item) => (
-              <article key={item.pillar} className="p-5">
+            {WHY_CHOOSE_MST.map((item, idx) => (
+              <motion.article
+                key={item.pillar}
+                {...getScrollCardMotionProps(idx)}
+                className="p-5"
+              >
                 <p className="font-mono text-xs font-semibold text-blue-700">
                   {item.metric}
                 </p>
@@ -69,7 +74,7 @@ export function HomePage({
                 <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
                   {item.summary}
                 </p>
-              </article>
+              </motion.article>
             ))}
           </div>
         </div>
@@ -83,7 +88,7 @@ export function HomePage({
         id="home-cta"
         className="border-b border-slate-800 bg-slate-900 py-10 text-white lg:py-12"
       >
-        <div className="mx-auto flex max-w-[1200px] flex-col items-start justify-between gap-6 px-6 lg:flex-row lg:items-center">
+        <ScrollReveal className="mx-auto flex max-w-[1200px] flex-col items-start justify-between gap-6 px-6 lg:flex-row lg:items-center">
           <div className="max-w-2xl">
             <p className="font-mono text-xs font-semibold text-blue-400">
               05 · Start Your Build With Confidence
@@ -118,7 +123,7 @@ export function HomePage({
               Contact Office
             </button>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );

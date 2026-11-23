@@ -6,6 +6,7 @@ import {
   ChevronRight,
   Images,
 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { HERO_METRICS } from '../data/companyData';
 import type { ProjectItem } from '../types/construction';
 import {
@@ -13,6 +14,7 @@ import {
   getFeaturedProjects,
 } from '../utils/inquiryLogic';
 import { ProjectSchematic } from './ArchitecturalVisuals';
+import { getScrollCardMotionProps } from './ScrollReveal';
 
 interface HeroSectionProps {
   projects: ProjectItem[];
@@ -249,14 +251,18 @@ export function HeroSection({
 
         {/* Full-width 4-column KPI strip with crisp cell dividers */}
         <div className="mt-8 grid grid-cols-1 divide-y divide-slate-200 rounded-lg border border-slate-200 bg-slate-50/70 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
-          {HERO_METRICS.map((metric) => (
-            <div key={metric.label} className="px-5 py-4">
+          {HERO_METRICS.map((metric, idx) => (
+            <motion.div
+              key={metric.label}
+              {...getScrollCardMotionProps(idx, 0.05)}
+              className="px-5 py-4"
+            >
               <p className="font-mono text-xl font-bold tracking-tight text-slate-950 tabular-nums">
                 {metric.value}
               </p>
               <p className="mt-0.5 text-xs font-semibold text-slate-900">{metric.label}</p>
               <p className="mt-0.5 text-[11px] text-slate-500">{metric.detail}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

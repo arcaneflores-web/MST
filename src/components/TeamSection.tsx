@@ -1,7 +1,9 @@
+import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import type { TeamMember } from '../types/construction';
 import { SectionHeaderBar } from './SectionDivider';
 import { TeamAvatar } from './TeamAvatar';
+import { getScrollCardMotionProps } from './ScrollReveal';
 
 interface TeamSectionProps {
   members: TeamMember[];
@@ -19,13 +21,13 @@ export function TeamSection({ members, onSelectMember }: TeamSectionProps) {
           sectionNumber="01"
           eyebrow="Engineering Leadership & Technical Team"
           title="Licensed Professionals Overseeing Every Job Site"
-          description="Select any team profile to inspect PRC licensing credentials, educational background, and delivered projects."
         />
 
         <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {members.map((member) => (
-            <article
+          {members.map((member, idx) => (
+            <motion.article
               key={member.id}
+              {...getScrollCardMotionProps(idx % 3, 0.06)}
               className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 transition-colors duration-150 hover:border-slate-400"
             >
               <div>
@@ -71,7 +73,7 @@ export function TeamSection({ members, onSelectMember }: TeamSectionProps) {
                   <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                 </button>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>

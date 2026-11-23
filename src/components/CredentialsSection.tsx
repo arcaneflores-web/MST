@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { motion } from 'motion/react';
 import { Building2, Clock, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
 import type { CredentialItem } from '../types/construction';
 import { SectionHeaderBar } from './SectionDivider';
+import { getScrollCardMotionProps, ScrollReveal } from './ScrollReveal';
 
 interface CredentialsSectionProps {
   credentials: CredentialItem[];
@@ -21,13 +23,12 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
           sectionNumber="03"
           eyebrow="Verified Corporate Presence & Accreditation"
           title="Built on Accountability in San Fernando, Pampanga"
-          description="Every quotation, structural plan, and progress billing is backed by verified Philippine regulatory compliance."
           dark
         />
 
         <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
           {/* Left: Real Office Signage Photo & Verified Pampanga Office */}
-          <div className="lg:col-span-5">
+          <ScrollReveal className="lg:col-span-5">
             <figure className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
               {!imageError ? (
                 <img
@@ -94,13 +95,14 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
                 Get Directions to San Fernando Office
               </a>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right: Credentials & Compliance Pillars */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-7">
-            {credentials.map((cred) => (
-              <article
+            {credentials.map((cred, idx) => (
+              <motion.article
                 key={cred.id}
+                {...getScrollCardMotionProps(idx % 2, 0.06)}
                 className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900 p-5"
               >
                 <div>
@@ -123,10 +125,13 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
                     {cred.documentReference}
                   </p>
                 )}
-              </article>
+              </motion.article>
             ))}
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 sm:col-span-2">
+            <ScrollReveal
+              delay={0.08}
+              className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 sm:col-span-2"
+            >
               <h3 className="text-sm font-bold text-white">
                 Transparent Billing &amp; Site Inspection Protocol
               </h3>
@@ -135,7 +140,7 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
                 schedule tracking, third-party concrete cylinder &amp; rebar tensile testing
                 records, and weekly photo progress reports for project owners.
               </p>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </div>

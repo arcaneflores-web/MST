@@ -3,6 +3,7 @@ import { COMPANY_INFO } from '../data/companyData';
 import type { AppPage, PublicPage } from '../types/construction';
 import { getPathnameForPage } from '../utils/inquiryLogic';
 import { BrandMark } from './ArchitecturalVisuals';
+import { ScrollReveal } from './ScrollReveal';
 
 interface FooterProps {
   onNavigate: (page: AppPage) => void;
@@ -21,7 +22,7 @@ const FOOTER_PAGES: Array<{ page: PublicPage; label: string }> = [
 export function Footer({ onNavigate, onOpenInquiry }: FooterProps) {
   return (
     <footer className="bg-slate-950 py-9 text-slate-300">
-      <div className="mx-auto max-w-[1200px] px-6">
+      <ScrollReveal yOffset={14} className="mx-auto max-w-[1200px] px-6">
         <div className="grid grid-cols-1 gap-8 border-b border-slate-800 pb-8 md:grid-cols-12">
           <div className="md:col-span-4">
             <a
@@ -122,7 +123,7 @@ export function Footer({ onNavigate, onOpenInquiry }: FooterProps) {
             <span>Admin Portal</span>
           </a>
         </div>
-      </div>
+      </ScrollReveal>
     </footer>
   );
 }

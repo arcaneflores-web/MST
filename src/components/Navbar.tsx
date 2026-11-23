@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react';
 import type { PublicPage } from '../types/construction';
 import { getPathnameForPage } from '../utils/inquiryLogic';
 import { BrandMark } from './ArchitecturalVisuals';
+import { ScrollProgressBar } from './ScrollReveal';
 
 interface NavbarProps {
   currentPage: PublicPage;
@@ -163,6 +164,7 @@ export function Navbar({
           </motion.nav>
         )}
       </AnimatePresence>
+      <ScrollProgressBar />
     </header>
   );
 }
