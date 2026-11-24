@@ -100,7 +100,7 @@ export const ABOUT_MST = {
   eyebrow: 'About MST Construction OPC',
   headline: 'Engineering-Led Construction Built on Clear Accountability',
   overview:
-    'Headquartered in Dela Paz Norte, City of San Fernando, Pampanga, MST Construction OPC is a SEC-registered One Person Corporation delivering commercial buildings, industrial warehouses, custom residences, and civil infrastructure across Central Luzon.',
+    'MST Construction OPC is a SEC-registered One Person Corporation delivering commercial buildings, industrial warehouses, custom residences, and civil infrastructure across Pampanga and Central Luzon.',
   mission:
     'To execute structurally sound, cost-transparent, and code-compliant engineering works that safeguard client capital and stand resilient through decades of service.',
   vision:

@@ -15,14 +15,10 @@ export function InquirySection({ onSubmitInquiry }: InquirySectionProps) {
       id="inquiry"
       className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
-        <SectionHeaderBar
-          sectionNumber="01"
-          eyebrow="San Fernando Headquarters & Estimating Desk"
-          title="Visit or Message Our Engineering Team"
-        />
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-10 lg:px-10 lg:py-12">
+        <SectionHeaderBar title="Visit or Message Our Engineering Team" />
 
-        <div className="mt-7 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-stretch lg:gap-10">
+        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-stretch lg:gap-10">
           {/* Left Column: Complete Office Information & Google Maps Location */}
           <ScrollReveal className="flex flex-col justify-between rounded-2xl border border-black/[0.08] bg-white p-7 lg:col-span-5 lg:p-9">
             <div>
@@ -77,17 +73,13 @@ export function InquirySection({ onSubmitInquiry }: InquirySectionProps) {
 
             <div className="mt-8 border-t border-black/[0.06] pt-6">
               <p className="text-xs font-bold tracking-wider text-slate-950/88 uppercase">
-                Google Maps Location
-              </p>
-              <p className="mt-1.5 text-sm leading-relaxed text-slate-950/68">
-                2nd Floor, JG Building, Dela Paz Norte (along McArthur Highway corridor),
-                City of San Fernando, Pampanga 2000.
+                Google Maps Directions
               </p>
               <a
                 href={COMPANY_INFO.mapsDirectionsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-flex items-center gap-2 rounded-md border border-black/[0.12] bg-slate-100/70 px-4 py-2.5 text-xs font-semibold text-slate-950/92 transition-colors duration-150 hover:border-blue-700 hover:text-blue-700 sm:text-sm"
+                className="mt-3 inline-flex items-center gap-2 rounded-md border border-black/[0.12] bg-slate-100/70 px-4 py-2.5 text-xs font-semibold text-slate-950/92 transition-colors duration-150 hover:border-blue-700 hover:text-blue-700 sm:text-sm"
               >
                 <span>Open in Google Maps</span>
                 <ArrowUpRight className="h-4 w-4" aria-hidden="true" />

@@ -9,10 +9,10 @@ export function TestimonialsSection() {
       id="testimonials"
       className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-white"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-10 lg:px-10 lg:py-12">
         <SectionHeaderBar title="Trusted by Commercial Developers & Facility Owners" />
 
-        <div className="mt-7 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
           {TESTIMONIALS.map((item, idx) => (
             <motion.figure
               key={item.id}

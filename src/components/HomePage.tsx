@@ -1,4 +1,4 @@
-import { ArrowRight, Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowRight, Clock, Mail, Phone } from 'lucide-react';
 import { motion } from 'motion/react';
 import { COMPANY_INFO, WHY_CHOOSE_MST } from '../data/companyData';
 import type { ProjectItem, PublicPage } from '../types/construction';
@@ -54,10 +54,10 @@ export function HomePage({
         id="why-choose-mst"
         className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
       >
-        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
+        <div className="mx-auto w-full max-w-[1440px] px-6 py-10 lg:px-10 lg:py-12">
           <SectionHeaderBar title="Disciplined Engineering, Safety & Cost Control on Every Site" />
 
-          <div className="mt-7 grid grid-cols-1 divide-y divide-black/[0.08] overflow-hidden rounded-2xl border border-black/[0.08] bg-white sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+          <div className="mt-6 grid grid-cols-1 divide-y divide-black/[0.08] overflow-hidden rounded-2xl border border-black/[0.08] bg-white sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
             {WHY_CHOOSE_MST.map((item, idx) => (
               <motion.article
                 key={item.pillar}
@@ -65,13 +65,10 @@ export function HomePage({
                 className="flex flex-col justify-between p-6 lg:p-7"
               >
                 <div>
-                  <span className="font-mono text-xs font-semibold tracking-wide text-blue-700">
-                    0{idx + 1} · {item.metric}
-                  </span>
-                  <h3 className="mt-3 text-xl font-bold tracking-tight text-slate-950/95 lg:text-[1.35rem]">
+                  <h3 className="text-xl font-bold tracking-tight text-slate-950/95 lg:text-[1.35rem]">
                     {item.pillar}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-slate-950/68 lg:text-base lg:leading-relaxed">
+                  <p className="mt-2.5 text-sm leading-relaxed text-slate-950/68 lg:text-base lg:leading-relaxed">
                     {item.summary}
                   </p>
                 </div>
@@ -93,7 +90,7 @@ export function HomePage({
         id="home-cta"
         className="scroll-mt-[4.25rem] border-b border-white/[0.12] bg-slate-900 text-white/95"
       >
-        <ScrollReveal className="mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-8 px-6 py-12 lg:grid-cols-12 lg:gap-12 lg:px-10 lg:py-14">
+        <ScrollReveal className="mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-8 px-6 py-10 lg:grid-cols-12 lg:gap-12 lg:px-10 lg:py-12">
           <div className="lg:col-span-7">
             <h2
               className="text-3xl font-bold tracking-tight text-white/95 sm:text-5xl lg:leading-[1.08]"
@@ -127,22 +124,16 @@ export function HomePage({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-white/[0.12] bg-white/[0.04] p-7 lg:col-span-5 lg:p-9">
-            <p className="font-mono text-xs font-semibold tracking-wider text-blue-400 uppercase">
+          <div className="rounded-2xl border border-white/[0.12] bg-white/[0.04] p-7 lg:col-span-5 lg:p-8">
+            <h3 className="text-xl font-bold text-white/95">
               Direct Engineering &amp; Estimating Desk
-            </p>
-            <h3 className="mt-2.5 text-xl font-bold text-white/95">
-              San Fernando, Pampanga Headquarters
             </h3>
+            <p className="mt-2 text-sm leading-relaxed text-white/68">
+              Speak directly with our civil engineers for BOQ estimates, plan reviews, and
+              ocular site scheduling across Pampanga &amp; Central Luzon.
+            </p>
 
             <dl className="mt-6 space-y-4 border-t border-white/[0.12] pt-6 text-sm lg:text-base">
-              <div className="flex items-start gap-3.5">
-                <MapPin className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
-                <div>
-                  <dt className="sr-only">Address</dt>
-                  <dd className="text-white/88">{COMPANY_INFO.fullAddress}</dd>
-                </div>
-              </div>
               <div className="flex items-start gap-3.5">
                 <Phone className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
                 <div>

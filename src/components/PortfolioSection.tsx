@@ -305,10 +305,8 @@ export function PortfolioSection({
         id="featured-projects"
         className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
       >
-        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
+        <div className="mx-auto w-full max-w-[1440px] px-6 py-10 lg:px-10 lg:py-12">
           <SectionHeaderBar
-            sectionNumber="03"
-            eyebrow={`Selected Works · ${featuredProjects.length} Featured`}
             title="Featured Completed & Ongoing Projects"
             action={
               onViewAllProjects ? (
@@ -504,10 +502,8 @@ export function PortfolioSection({
       id="projects"
       className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-10 lg:px-10 lg:py-12">
         <SectionHeaderBar
-          sectionNumber="01"
-          eyebrow="Engineering & Construction Portfolio"
           title="Completed Developments & Active Site Works"
           action={
             <p className="font-mono text-xs font-medium text-slate-950/68 tabular-nums sm:text-sm">

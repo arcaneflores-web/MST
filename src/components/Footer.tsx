@@ -107,8 +107,7 @@ export function Footer({ onNavigate, onOpenInquiry }: FooterProps) {
 
         <div className="mt-8 flex flex-col gap-3 text-xs text-white/48 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {COMPANY_INFO.legalName}. City of San Fernando,
-            Pampanga 2000, Philippines.
+            © {new Date().getFullYear()} {COMPANY_INFO.legalName}. All rights reserved.
           </p>
 
           <a

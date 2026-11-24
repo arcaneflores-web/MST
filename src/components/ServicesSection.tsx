@@ -31,10 +31,10 @@ export function ServicesSection({
         id="featured-services"
         className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-white"
       >
-        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
+        <div className="mx-auto w-full max-w-[1440px] px-6 py-10 lg:px-10 lg:py-12">
           <SectionHeaderBar title="Featured Engineering & Construction Services" />
 
-          <div className="mt-7 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
             {displayedServices.map((service, idx) => (
               <motion.article
                 key={service.id}
@@ -42,14 +42,9 @@ export function ServicesSection({
                 className="flex flex-col justify-between rounded-2xl border border-black/[0.08] bg-slate-100/60 p-6 transition-colors duration-150 hover:border-black/[0.16] lg:p-7"
               >
                 <div>
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h3 className="text-xl font-bold tracking-tight text-slate-950/95 lg:text-2xl">
-                      <span className="mr-2 font-mono text-sm font-semibold text-blue-700 tabular-nums lg:text-base">
-                        {service.index}
-                      </span>{' '}
-                      {service.title}
-                    </h3>
-                  </div>
+                  <h3 className="text-xl font-bold tracking-tight text-slate-950/95 lg:text-2xl">
+                    {service.title}
+                  </h3>
                   <p className="mt-3 text-sm leading-relaxed text-slate-950/68 lg:text-base lg:leading-relaxed">
                     {service.description}
                   </p>
@@ -93,14 +88,10 @@ export function ServicesSection({
       id="services"
       className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
-        <SectionHeaderBar
-          sectionNumber="01"
-          eyebrow="Complete Service Offerings"
-          title="Construction, Engineering, Architectural & Design-Build Scope"
-        />
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-10 lg:px-10 lg:py-12">
+        <SectionHeaderBar title="Construction, Engineering, Architectural & Design-Build Scope" />
 
-        <div className="mt-7 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {displayedServices.map((service: ServiceItem, idx) => {
             const isExpanded = expandedId === service.id;
             const primaryCapabilities = service.capabilities.slice(0, 3);
@@ -110,27 +101,22 @@ export function ServicesSection({
               <motion.article
                 key={service.id}
                 {...getScrollCardMotionProps(idx % 3, 0.06)}
-                className="flex h-full flex-col justify-between rounded-2xl border border-black/[0.08] bg-white p-7 transition-colors duration-150 hover:border-black/[0.16] lg:p-8"
+                className="flex h-full flex-col justify-between rounded-2xl border border-black/[0.08] bg-white p-6 transition-colors duration-150 hover:border-black/[0.16] lg:p-7"
               >
                 <div className="flex flex-1 flex-col">
-                  <div className="flex items-center justify-between gap-3 border-b border-black/[0.06] pb-3.5">
-                    <span className="whitespace-nowrap shrink-0 font-mono text-xs font-bold tracking-wider text-blue-700 tabular-nums">
-                      SERVICE {service.index.replace('.', '')}
-                    </span>
-                    <span className="min-w-0 truncate font-mono text-xs font-medium text-slate-950/54">
-                      {service.typicalTimeline}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-4 min-h-[3.5rem] line-clamp-2 text-xl font-bold leading-snug tracking-tight text-slate-950/95">
+                  <h3 className="min-h-[3.25rem] line-clamp-2 text-xl font-bold leading-snug tracking-tight text-slate-950/95">
                     {service.title}
                   </h3>
 
-                  <p className="mt-2 min-h-[2.75rem] line-clamp-2 text-sm font-semibold leading-relaxed text-slate-950/76">
+                  <p className="mt-1.5 font-mono text-xs font-medium text-blue-700">
+                    {service.typicalTimeline}
+                  </p>
+
+                  <p className="mt-2.5 min-h-[2.75rem] line-clamp-2 text-sm font-semibold leading-relaxed text-slate-950/76">
                     {service.subtitle}
                   </p>
 
-                  <p className="mt-3 min-h-[4.75rem] line-clamp-3 text-sm leading-relaxed text-slate-950/68 lg:text-base">
+                  <p className="mt-2.5 min-h-[4.5rem] line-clamp-3 text-sm leading-relaxed text-slate-950/68">
                     {service.description}
                   </p>
 

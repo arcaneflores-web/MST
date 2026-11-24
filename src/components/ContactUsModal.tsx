@@ -147,17 +147,13 @@ export function ContactUsModal({
 
                 <div className="mt-5 border-t border-slate-200 pt-4">
                   <p className="text-[11px] font-bold tracking-wider text-slate-900 uppercase">
-                    Google Maps Location
-                  </p>
-                  <p className="mt-1 text-xs leading-relaxed text-slate-600">
-                    2nd Floor, JG Building, Dela Paz Norte (along McArthur Highway corridor),
-                    City of San Fernando, Pampanga 2000.
+                    Google Maps Directions
                   </p>
                   <a
                     href={COMPANY_INFO.mapsDirectionsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-900 transition-colors duration-150 hover:border-blue-700 hover:text-blue-700"
+                    className="mt-2.5 inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3.5 py-2 text-xs font-semibold text-slate-900 transition-colors duration-150 hover:border-blue-700 hover:text-blue-700"
                   >
                     <span>Open in Google Maps</span>
                     <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />

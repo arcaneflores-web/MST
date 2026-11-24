@@ -16,14 +16,10 @@ export function TeamSection({ members, onSelectMember }: TeamSectionProps) {
       id="team"
       className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
-        <SectionHeaderBar
-          sectionNumber="01"
-          eyebrow="Engineering Leadership & Technical Team"
-          title="Licensed Professionals Overseeing Every Job Site"
-        />
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-10 lg:px-10 lg:py-12">
+        <SectionHeaderBar title="Licensed Professionals Overseeing Every Job Site" />
 
-        <div className="mt-7 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {members.map((member, idx) => (
             <motion.article
               key={member.id}
