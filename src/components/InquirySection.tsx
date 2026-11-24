@@ -13,16 +13,16 @@ export function InquirySection({ onSubmitInquiry }: InquirySectionProps) {
   return (
     <section
       id="inquiry"
-      className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-slate-100/80 lg:min-h-[calc(100svh-8.75rem)]"
+      className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
         <SectionHeaderBar
           sectionNumber="01"
           eyebrow="San Fernando Headquarters & Estimating Desk"
           title="Visit or Message Our Engineering Team"
         />
 
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-stretch lg:gap-10">
+        <div className="mt-7 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-stretch lg:gap-10">
           {/* Left Column: Complete Office Information & Google Maps Location */}
           <ScrollReveal className="flex flex-col justify-between rounded-2xl border border-black/[0.08] bg-white p-7 lg:col-span-5 lg:p-9">
             <div>

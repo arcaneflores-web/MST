@@ -303,9 +303,9 @@ export function PortfolioSection({
     return (
       <section
         id="featured-projects"
-        className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-slate-100/80 lg:min-h-[calc(100svh-4.25rem)]"
+        className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
       >
-        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
+        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
           <SectionHeaderBar
             sectionNumber="03"
             eyebrow={`Selected Works · ${featuredProjects.length} Featured`}
@@ -502,9 +502,9 @@ export function PortfolioSection({
   return (
     <section
       id="projects"
-      className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-slate-100/80 lg:min-h-[calc(100svh-8.75rem)]"
+      className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
         <SectionHeaderBar
           sectionNumber="01"
           eyebrow="Engineering & Construction Portfolio"

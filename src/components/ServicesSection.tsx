@@ -29,17 +29,17 @@ export function ServicesSection({
     return (
       <section
         id="featured-services"
-        className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-white lg:min-h-[calc(100svh-4.25rem)]"
+        className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-white"
       >
-        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
+        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
           <SectionHeaderBar title="Featured Engineering & Construction Services" />
 
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
+          <div className="mt-7 grid grid-cols-1 gap-6 md:grid-cols-2">
             {displayedServices.map((service, idx) => (
               <motion.article
                 key={service.id}
                 {...getScrollCardMotionProps(idx % 2, 0.06)}
-                className="flex flex-col justify-between rounded-2xl border border-black/[0.08] bg-slate-100/60 p-7 transition-colors duration-150 hover:border-black/[0.16] lg:p-8"
+                className="flex flex-col justify-between rounded-2xl border border-black/[0.08] bg-slate-100/60 p-6 transition-colors duration-150 hover:border-black/[0.16] lg:p-7"
               >
                 <div>
                   <div className="flex items-baseline justify-between gap-4">
@@ -91,16 +91,16 @@ export function ServicesSection({
   return (
     <section
       id="services"
-      className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-slate-100/80 lg:min-h-[calc(100svh-8.75rem)]"
+      className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
         <SectionHeaderBar
           sectionNumber="01"
           eyebrow="Complete Service Offerings"
           title="Construction, Engineering, Architectural & Design-Build Scope"
         />
 
-        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-7">
+        <div className="mt-7 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {displayedServices.map((service: ServiceItem, idx) => {
             const isExpanded = expandedId === service.id;
             const primaryCapabilities = service.capabilities.slice(0, 3);

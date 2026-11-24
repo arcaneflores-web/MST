@@ -16,9 +16,9 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
   return (
     <section
       id="credentials"
-      className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-white/[0.12] bg-slate-950 text-white/95 lg:min-h-[calc(100svh-4.25rem)]"
+      className="scroll-mt-[4.25rem] border-b border-white/[0.12] bg-slate-950 text-white/95"
     >
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
         <SectionHeaderBar
           sectionNumber="03"
           eyebrow="Verified Corporate Presence & Accreditation"
@@ -26,7 +26,7 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
           dark
         />
 
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start lg:gap-10">
+        <div className="mt-7 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start lg:gap-10">
           {/* Left: Real Office Signage Photo & Verified Pampanga Office */}
           <ScrollReveal className="lg:col-span-5">
             <figure className="overflow-hidden rounded-2xl border border-white/[0.12] bg-slate-800/70">

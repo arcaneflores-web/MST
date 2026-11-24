@@ -52,31 +52,31 @@ export function HomePage({
       {/* 4. Why Choose MST? */}
       <section
         id="why-choose-mst"
-        className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-slate-100/80 lg:min-h-[calc(100svh-4.25rem)]"
+        className="scroll-mt-[4.25rem] border-b border-black/[0.08] bg-slate-100/80"
       >
-        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
+        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-14">
           <SectionHeaderBar title="Disciplined Engineering, Safety & Cost Control on Every Site" />
 
-          <div className="mt-8 grid grid-cols-1 divide-y divide-black/[0.08] overflow-hidden rounded-2xl border border-black/[0.08] bg-white sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+          <div className="mt-7 grid grid-cols-1 divide-y divide-black/[0.08] overflow-hidden rounded-2xl border border-black/[0.08] bg-white sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
             {WHY_CHOOSE_MST.map((item, idx) => (
               <motion.article
                 key={item.pillar}
                 {...getScrollCardMotionProps(idx)}
-                className="flex flex-col justify-between p-7 lg:min-h-[380px] lg:p-9"
+                className="flex flex-col justify-between p-6 lg:p-7"
               >
                 <div>
                   <span className="font-mono text-xs font-semibold tracking-wide text-blue-700">
                     0{idx + 1} · {item.metric}
                   </span>
-                  <h3 className="mt-4 text-xl font-bold tracking-tight text-slate-950/95 lg:text-2xl">
+                  <h3 className="mt-3 text-xl font-bold tracking-tight text-slate-950/95 lg:text-[1.35rem]">
                     {item.pillar}
                   </h3>
-                  <p className="mt-4 text-sm leading-relaxed text-slate-950/68 lg:text-base lg:leading-relaxed">
+                  <p className="mt-3 text-sm leading-relaxed text-slate-950/68 lg:text-base lg:leading-relaxed">
                     {item.summary}
                   </p>
                 </div>
 
-                <p className="mt-8 border-t border-black/[0.06] pt-4 text-xs font-medium leading-relaxed text-slate-950/54 lg:text-sm">
+                <p className="mt-6 border-t border-black/[0.06] pt-4 text-xs font-medium leading-relaxed text-slate-950/54 lg:text-sm">
                   {PILLAR_STANDARDS[idx]}
                 </p>
               </motion.article>
@@ -91,9 +91,9 @@ export function HomePage({
       {/* 6. Call to Action */}
       <section
         id="home-cta"
-        className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-white/[0.12] bg-slate-900 text-white/95 lg:min-h-[calc(100svh-4.25rem)]"
+        className="scroll-mt-[4.25rem] border-b border-white/[0.12] bg-slate-900 text-white/95"
       >
-        <ScrollReveal className="mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-10 px-6 py-14 lg:grid-cols-12 lg:gap-12 lg:px-10 lg:py-20">
+        <ScrollReveal className="mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-8 px-6 py-12 lg:grid-cols-12 lg:gap-12 lg:px-10 lg:py-14">
           <div className="lg:col-span-7">
             <h2
               className="text-3xl font-bold tracking-tight text-white/95 sm:text-5xl lg:leading-[1.08]"

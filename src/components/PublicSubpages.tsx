@@ -25,7 +25,7 @@ function PageHeader({
   onNavigateHome,
 }: PageHeaderProps) {
   return (
-    <div className="border-b-2 border-blue-700 bg-slate-900 py-3.5 text-white/95 lg:py-4">
+    <div className="border-b border-white/[0.12] bg-slate-900 py-3.5 text-white/95 lg:py-4">
       <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-2 px-6 lg:px-10">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 text-[11px] text-white/60">

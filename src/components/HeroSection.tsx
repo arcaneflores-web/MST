@@ -54,9 +54,9 @@ export function HeroSection({
 
   return (
     <section id="top" className="border-b border-black/[0.08] bg-white">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col justify-between px-6 py-8 lg:min-h-[calc(100svh-4.25rem)] lg:px-10 lg:py-10">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col justify-center gap-8 px-6 py-10 lg:min-h-[calc(100svh-4.25rem)] lg:gap-10 lg:px-10 lg:py-12">
         {/* 2-Column Hero Split: Concise Intro Left + Large Fixed 16:9 Featured Photo Showcase Right */}
-        <div className="my-auto grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
           <div className="flex flex-col justify-center lg:col-span-5">
             <h1
               className="font-bold tracking-tight text-slate-950/95 leading-[1.06]"
@@ -201,7 +201,7 @@ export function HeroSection({
         </div>
 
         {/* Full-width 4-column KPI strip with crisp cell dividers */}
-        <div className="mt-8 grid grid-cols-1 divide-y divide-black/[0.08] rounded-lg border border-black/[0.08] bg-slate-100/80 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+        <div className="grid grid-cols-1 divide-y divide-black/[0.08] rounded-lg border border-black/[0.08] bg-slate-100/80 sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
           {HERO_METRICS.map((metric, idx) => (
             <motion.div
               key={metric.label}

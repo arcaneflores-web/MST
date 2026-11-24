@@ -21,7 +21,7 @@ const FOOTER_PAGES: Array<{ page: PublicPage; label: string }> = [
 
 export function Footer({ onNavigate, onOpenInquiry }: FooterProps) {
   return (
-    <footer className="bg-slate-950 py-12 text-white/70 lg:py-16">
+    <footer className="bg-slate-950 py-12 text-white/70 lg:py-14">
       <ScrollReveal yOffset={14} className="mx-auto max-w-[1440px] px-6 lg:px-10">
         <div className="grid grid-cols-1 gap-8 border-b border-white/[0.12] pb-10 md:grid-cols-12 lg:gap-12">
           <div className="md:col-span-4">
