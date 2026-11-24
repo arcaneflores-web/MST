@@ -56,30 +56,30 @@ export function HeroSection({
 
   return (
     <section id="top" className="border-b-2 border-slate-200 bg-white">
-      <div className="mx-auto max-w-[1200px] px-6 py-8 lg:py-10">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col justify-between px-6 py-8 lg:min-h-[calc(100svh-4.25rem)] lg:px-10 lg:py-10">
         {/* 2-Column Hero Split: Concise Intro Left + Large Fixed 16:9 Featured Photo Showcase Right */}
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
+        <div className="my-auto grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
           <div className="flex flex-col justify-center lg:col-span-5">
             <h1
-              className="font-bold tracking-tight text-slate-950 leading-[1.08]"
+              className="font-bold tracking-tight text-slate-950 leading-[1.06]"
               style={{
-                fontSize: 'clamp(2.05rem, 3.4vw, 3.1rem)',
+                fontSize: 'clamp(2.25rem, 3.8vw, 3.6rem)',
                 textWrap: 'balance',
               }}
             >
               Building Excellence. Creating Lasting Foundations.
             </h1>
 
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 lg:text-lg">
               Delivering construction and engineering solutions through thoughtful planning,
               technical expertise, and quality execution across Pampanga and Central Luzon.
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-slate-100 pt-5">
+            <div className="mt-7 flex flex-wrap items-center gap-4 border-t border-slate-100 pt-6">
               <button
                 type="button"
                 onClick={onExploreProjects}
-                className="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-blue-700 hover:border-blue-700 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                className="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition-colors duration-150 hover:bg-blue-700 hover:border-blue-700 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
               >
                 <span>Explore Completed Works</span>
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
