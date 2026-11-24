@@ -37,7 +37,7 @@ export function InquiryModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18, ease: 'easeOut' }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4 backdrop-blur-md"
           onClick={onClose}
         >
           <motion.div
@@ -45,10 +45,10 @@ export function InquiryModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 10 }}
             transition={{ type: 'spring', stiffness: 380, damping: 28, mass: 0.8 }}
-            className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl"
+            className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-black/[0.08] bg-white shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-slate-200 bg-white px-6 py-4">
+            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-black/[0.08] bg-white/85 px-6 py-4 backdrop-blur-xl">
               <div>
                 <p className="text-xs font-medium text-blue-700">
                   MST Construction OPC · Estimating Desk

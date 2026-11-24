@@ -3,7 +3,7 @@ import { ScrollReveal } from './ScrollReveal';
 
 interface SectionHeaderBarProps {
   sectionNumber?: string;
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   action?: ReactNode;
   dark?: boolean;
@@ -16,33 +16,41 @@ export function SectionHeaderBar({
   action,
   dark = false,
 }: SectionHeaderBarProps) {
+  const hasEyebrow = Boolean(eyebrow);
+
   return (
     <ScrollReveal
       yOffset={12}
-      className={`border-b pb-5 ${
-        dark ? 'border-slate-800' : 'border-slate-200'
+      className={`border-b ${hasEyebrow ? 'pb-6' : 'pb-5'} ${
+        dark ? 'border-white/[0.12]' : 'border-black/[0.08]'
       }`}
     >
       {/* Top structural rule separator */}
-      <div className="flex items-center gap-3">
-        <span
-          className={`font-mono text-xs font-semibold tabular-nums whitespace-nowrap shrink-0 ${
-            dark ? 'text-blue-400' : 'text-blue-700'
-          }`}
-        >
-          {sectionNumber ? `${sectionNumber} · ${eyebrow}` : eyebrow}
-        </span>
-        <div
-          className={`h-px flex-1 ${dark ? 'bg-slate-800' : 'bg-slate-200'}`}
-          aria-hidden="true"
-        />
-      </div>
+      {hasEyebrow && (
+        <div className="flex items-center gap-3">
+          <span
+            className={`font-mono text-xs font-semibold tracking-wide tabular-nums whitespace-nowrap shrink-0 sm:text-sm ${
+              dark ? 'text-blue-400' : 'text-blue-700'
+            }`}
+          >
+            {sectionNumber ? `${sectionNumber} · ${eyebrow}` : eyebrow}
+          </span>
+          <div
+            className={`h-px flex-1 ${dark ? 'bg-white/[0.12]' : 'bg-black/[0.08]'}`}
+            aria-hidden="true"
+          />
+        </div>
+      )}
 
       {/* Headline + optional right action */}
-      <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <div
+        className={`${
+          hasEyebrow ? 'mt-3.5 ' : ''
+        }flex flex-col gap-4 md:flex-row md:items-end md:justify-between`}
+      >
         <h2
-          className={`max-w-3xl text-2xl font-bold tracking-tight sm:text-3xl ${
-            dark ? 'text-white' : 'text-slate-950'
+          className={`max-w-4xl text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.5rem] lg:leading-[1.12] ${
+            dark ? 'text-white/95' : 'text-slate-950/95'
           }`}
           style={{ textWrap: 'balance' }}
         >

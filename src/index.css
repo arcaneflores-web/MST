@@ -1,20 +1,56 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Apple HIG neutral carbon & translucent surface palette */
+  --color-slate-50: #fbfbfd;
+  --color-slate-100: #f5f5f7;
+  --color-slate-200: #e5e5ea;
+  --color-slate-300: #d1d1d6;
+  --color-slate-400: #86868b;
+  --color-slate-500: #6e6e73;
+  --color-slate-600: #515154;
+  --color-slate-700: #3a3a3c;
+  --color-slate-800: #2c2c2e;
+  --color-slate-900: #1d1d1f;
+  --color-slate-950: #1d1d1f;
+
+  /* Apple system blue & dark-mode blue accent */
+  --color-blue-400: #2997ff;
+  --color-blue-500: #0a84ff;
+  --color-blue-600: #0077ed;
+  --color-blue-700: #0071e3;
+  --color-blue-800: #005bb5;
 }
 
 @layer base {
   html {
     font-family: var(--font-sans);
-    color: #0f172a;
-    background-color: #f8fafc;
+    color: rgba(29, 29, 31, 0.92);
+    background-color: #fbfbfd;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    letter-spacing: -0.011em;
   }
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
+  }
+
+  h1 {
+    letter-spacing: -0.026em;
+  }
+
+  h2 {
+    letter-spacing: -0.021em;
+  }
+
+  h3, h4 {
+    letter-spacing: -0.015em;
   }
 }
 

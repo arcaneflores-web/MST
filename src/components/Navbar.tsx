@@ -44,8 +44,8 @@ export function Navbar({
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-6 px-6 py-3.5 lg:gap-8">
+    <header className="sticky top-0 z-40 border-b border-black/[0.08] bg-white/80 backdrop-blur-xl backdrop-saturate-150">
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-6 px-6 py-3.5 lg:gap-8 lg:px-10">
         {/* Zone 1: Single-line Brand Wordmark */}
         <a
           href={getPathnameForPage('home')}
@@ -53,7 +53,7 @@ export function Navbar({
             e.preventDefault();
             handleNavClick('home');
           }}
-          className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-900 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
+          className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-slate-950/95 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
         >
           <BrandMark className="h-7 w-7 shrink-0" />
           <span>MST Construction OPC</span>
@@ -62,7 +62,7 @@ export function Navbar({
         {/* Zone 2: Clean single-line public page links with sliding indicator */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden md:flex items-center gap-5 lg:gap-7 text-sm font-medium text-slate-600"
+          className="hidden md:flex items-center gap-5 lg:gap-7 text-sm font-medium text-slate-950/70"
         >
           {NAV_ITEMS.map((item) => {
             const isActive = activeNavPage === item.page;
@@ -78,7 +78,7 @@ export function Navbar({
                 className={`relative whitespace-nowrap shrink-0 py-1.5 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700 ${
                   isActive
                     ? 'font-semibold text-blue-700'
-                    : 'text-slate-600 hover:text-slate-950'
+                    : 'text-slate-950/70 hover:text-slate-950'
                 }`}
               >
                 <span>{item.label}</span>

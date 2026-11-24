@@ -48,7 +48,7 @@ export function ProjectModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18, ease: 'easeOut' }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4 backdrop-blur-md"
           onClick={onClose}
         >
           <motion.div
@@ -56,10 +56,10 @@ export function ProjectModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', stiffness: 380, damping: 28, mass: 0.8 }}
-            className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl"
+            className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl border border-black/[0.08] bg-white shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-black/[0.08] bg-white/85 px-6 py-4 backdrop-blur-xl">
           <span className="font-mono text-xs font-medium text-slate-600">
             {project.code} · {project.status} {project.year}
           </span>
@@ -265,7 +265,7 @@ export function TeamModal({ member, onClose }: TeamModalProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18, ease: 'easeOut' }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4 backdrop-blur-md"
           onClick={onClose}
         >
           <motion.div
@@ -273,7 +273,7 @@ export function TeamModal({ member, onClose }: TeamModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', stiffness: 380, damping: 28, mass: 0.8 }}
-            className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-slate-200 bg-white p-6 shadow-xl sm:p-8"
+            className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-black/[0.08] bg-white p-6 shadow-2xl sm:p-8"
             onClick={(e) => e.stopPropagation()}
           >
         <div className="flex items-start justify-between gap-4">

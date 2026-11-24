@@ -25,14 +25,14 @@ function PageHeader({
   onNavigateHome,
 }: PageHeaderProps) {
   return (
-    <div className="border-b-2 border-blue-700 bg-slate-900 py-3.5 text-white lg:py-4">
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-2 px-6">
+    <div className="border-b-2 border-blue-700 bg-slate-900 py-3.5 text-white/95 lg:py-4">
+      <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-2 px-6 lg:px-10">
         <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2 text-[11px] text-slate-300">
+          <div className="flex items-center gap-2 text-[11px] text-white/60">
             <button
               type="button"
               onClick={onNavigateHome}
-              className="font-medium hover:text-white hover:underline"
+              className="font-medium hover:text-white/95 hover:underline"
             >
               Home
             </button>
@@ -41,7 +41,7 @@ function PageHeader({
           </div>
 
           <h1
-            className="text-lg font-bold tracking-tight text-white sm:text-xl"
+            className="text-lg font-bold tracking-tight text-white/95 sm:text-xl"
             style={{ textWrap: 'balance' }}
           >
             {title}

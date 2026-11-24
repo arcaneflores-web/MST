@@ -16,9 +16,9 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
   return (
     <section
       id="credentials"
-      className="scroll-mt-16 border-b border-slate-800 bg-slate-950 py-10 text-slate-100 lg:py-12"
+      className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-white/[0.12] bg-slate-950 text-white/95 lg:min-h-[calc(100svh-4.25rem)]"
     >
-      <div className="mx-auto max-w-[1200px] px-6">
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
         <SectionHeaderBar
           sectionNumber="03"
           eyebrow="Verified Corporate Presence & Accreditation"
@@ -26,10 +26,10 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
           dark
         />
 
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
+        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start lg:gap-10">
           {/* Left: Real Office Signage Photo & Verified Pampanga Office */}
           <ScrollReveal className="lg:col-span-5">
-            <figure className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
+            <figure className="overflow-hidden rounded-2xl border border-white/[0.12] bg-slate-800/70">
               {!imageError ? (
                 <img
                   src={COMPANY_INFO.officePhotoPath}
@@ -39,58 +39,58 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
                   className="aspect-[4/3] w-full object-cover"
                 />
               ) : (
-                <div className="flex aspect-[4/3] w-full flex-col items-center justify-center bg-slate-900 p-6 text-center">
+                <div className="flex aspect-[4/3] w-full flex-col items-center justify-center bg-slate-800/70 p-8 text-center">
                   <Building2 className="h-10 w-10 text-blue-400" aria-hidden="true" />
-                  <p className="mt-3 text-sm font-semibold text-white">
+                  <p className="mt-3 text-base font-semibold text-white/95">
                     {COMPANY_INFO.legalName}
                   </p>
-                  <p className="mt-1 text-xs text-slate-400">{COMPANY_INFO.fullAddress}</p>
+                  <p className="mt-1 text-sm text-white/56">{COMPANY_INFO.fullAddress}</p>
                 </div>
               )}
-              <figcaption className="border-t border-slate-800 px-4 py-2.5 text-xs text-slate-300">
+              <figcaption className="border-t border-white/[0.12] px-5 py-3 text-xs text-white/68 lg:text-sm">
                 Headquarters Signage — 2nd Floor, JG Building, Dela Paz Norte, San Fernando
               </figcaption>
             </figure>
 
-            <dl className="mt-5 space-y-2.5 border-t border-slate-800 pt-5 text-sm">
+            <dl className="mt-6 space-y-3 border-t border-white/[0.12] pt-6 text-sm lg:text-base">
               <div className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
+                <MapPin className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
                 <div>
                   <dt className="sr-only">Office Address</dt>
-                  <dd className="text-slate-200">{COMPANY_INFO.fullAddress}</dd>
+                  <dd className="text-white/88">{COMPANY_INFO.fullAddress}</dd>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
+                <Phone className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
                 <div>
                   <dt className="sr-only">Telephone Numbers</dt>
-                  <dd className="font-mono text-slate-200 tabular-nums">
+                  <dd className="font-mono text-white/88 tabular-nums">
                     {COMPANY_INFO.mobilePhone} · {COMPANY_INFO.landlinePhone}
                   </dd>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
+                <Mail className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
                 <div>
                   <dt className="sr-only">Email Address</dt>
-                  <dd className="font-mono text-slate-200">{COMPANY_INFO.email}</dd>
+                  <dd className="font-mono text-white/88">{COMPANY_INFO.email}</dd>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Clock className="mt-0.5 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
+                <Clock className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
                 <div>
                   <dt className="sr-only">Office Hours</dt>
-                  <dd className="text-slate-300">{COMPANY_INFO.officeHours}</dd>
+                  <dd className="text-white/68">{COMPANY_INFO.officeHours}</dd>
                 </div>
               </div>
             </dl>
 
-            <div className="mt-4">
+            <div className="mt-5">
               <a
                 href={COMPANY_INFO.mapsDirectionsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-blue-400 underline underline-offset-4 hover:text-blue-300"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-400 underline underline-offset-4 hover:text-blue-400/80"
               >
                 Get Directions to San Fernando Office
               </a>
@@ -98,30 +98,30 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
           </ScrollReveal>
 
           {/* Right: Credentials & Compliance Pillars */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-7">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:col-span-7 lg:gap-6">
             {credentials.map((cred, idx) => (
               <motion.article
                 key={cred.id}
                 {...getScrollCardMotionProps(idx % 2, 0.06)}
-                className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900 p-5"
+                className="flex flex-col justify-between rounded-2xl border border-white/[0.12] bg-slate-800/65 p-6 lg:p-7"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-mono text-xs font-medium text-blue-400">
                       {cred.code}
                     </span>
-                    <ShieldCheck className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                    <ShieldCheck className="h-4 w-4 text-white/40" aria-hidden="true" />
                   </div>
-                  <h3 className="mt-2.5 text-base font-bold text-white">{cred.title}</h3>
-                  <p className="mt-1 text-xs text-slate-400">
+                  <h3 className="mt-3 text-lg font-bold text-white/95">{cred.title}</h3>
+                  <p className="mt-1 text-xs text-white/56 lg:text-sm">
                     {cred.issuingBody} · {cred.classification}
                   </p>
-                  <p className="mt-2.5 text-sm leading-relaxed text-slate-300">
+                  <p className="mt-3 text-sm leading-relaxed text-white/68">
                     {cred.description}
                   </p>
                 </div>
                 {cred.documentReference && (
-                  <p className="mt-3.5 border-t border-slate-800 pt-2.5 font-mono text-[11px] text-slate-400">
+                  <p className="mt-4 border-t border-white/[0.12] pt-3 font-mono text-xs text-white/56">
                     {cred.documentReference}
                   </p>
                 )}
@@ -130,12 +130,12 @@ export function CredentialsSection({ credentials }: CredentialsSectionProps) {
 
             <ScrollReveal
               delay={0.08}
-              className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 sm:col-span-2"
+              className="rounded-2xl border border-white/[0.12] bg-slate-800/45 p-6 sm:col-span-2 lg:p-7"
             >
-              <h3 className="text-sm font-bold text-white">
+              <h3 className="text-base font-bold text-white/95">
                 Transparent Billing &amp; Site Inspection Protocol
               </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-slate-300">
+              <p className="mt-2 text-sm leading-relaxed text-white/68 lg:text-base">
                 Every contracted build includes a signed Bill of Quantities (BOQ), S-curve
                 schedule tracking, third-party concrete cylinder &amp; rebar tensile testing
                 records, and weekly photo progress reports for project owners.

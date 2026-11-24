@@ -148,7 +148,7 @@ function ProjectCard({
       {...getScrollCardMotionProps(index % 3, 0.06)}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-blue-600 hover:shadow-lg"
+      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-black/[0.08] bg-white transition-all duration-200 hover:-translate-y-1 hover:border-blue-600 hover:shadow-lg"
     >
       <div>
         <ProjectCoverVisual
@@ -157,13 +157,13 @@ function ProjectCard({
           onChangePhotoIndex={setActivePhotoIndex}
         />
 
-        <div className="p-5">
-          <h3 className="min-h-[3rem] line-clamp-2 text-base font-bold leading-snug tracking-tight text-slate-950 transition-colors duration-200 group-hover:text-blue-700 sm:text-lg">
+        <div className="p-6 lg:p-7">
+          <h3 className="min-h-[3.25rem] line-clamp-2 text-lg font-bold leading-snug tracking-tight text-slate-950/95 transition-colors duration-200 group-hover:text-blue-700 lg:text-xl">
             {project.title}
           </h3>
 
-          <div className="mt-1.5 flex items-center gap-x-2 truncate text-xs text-slate-500">
-            <span className="shrink-0 font-semibold text-slate-700">
+          <div className="mt-2 flex items-center gap-x-2 truncate text-xs text-slate-950/54 sm:text-sm">
+            <span className="shrink-0 font-semibold text-slate-950/76">
               {project.category}
             </span>
             <span aria-hidden="true" className="shrink-0">
@@ -173,7 +173,7 @@ function ProjectCard({
               className={`shrink-0 ${
                 project.status === 'Ongoing'
                   ? 'font-semibold text-blue-700'
-                  : 'font-medium text-slate-600'
+                  : 'font-medium text-slate-950/64'
               }`}
             >
               {project.status} {project.year}
@@ -184,24 +184,24 @@ function ProjectCard({
             <span className="truncate">{project.location}</span>
           </div>
 
-          <p className="mt-2.5 min-h-[4.25rem] line-clamp-3 text-sm leading-relaxed text-slate-600">
+          <p className="mt-3 min-h-[4.5rem] line-clamp-3 text-sm leading-relaxed text-slate-950/68 lg:text-base">
             {project.summary}
           </p>
         </div>
       </div>
 
-      <div className="border-t border-slate-100 px-5 py-3.5">
-        <div className="flex items-center justify-between gap-2 text-xs text-slate-600">
+      <div className="border-t border-black/[0.06] px-6 py-4 lg:px-7">
+        <div className="flex items-center justify-between gap-2 text-xs text-slate-950/64 sm:text-sm">
           <span className="truncate font-mono tabular-nums">
-            Area: <strong className="text-slate-900">{project.floorArea}</strong>
+            Area: <strong className="text-slate-950/92">{project.floorArea}</strong>
           </span>
           <span className="shrink-0 font-mono tabular-nums">
-            Schedule: <strong className="text-slate-900">{project.duration}</strong>
+            Schedule: <strong className="text-slate-950/92">{project.duration}</strong>
           </span>
         </div>
 
         {showOutcomeMetric && (
-          <p className="mt-2 truncate text-xs font-medium text-slate-800">
+          <p className="mt-2.5 truncate text-xs font-medium text-slate-950/80 sm:text-sm">
             {project.outcomeMetric}
           </p>
         )}
@@ -211,9 +211,9 @@ function ProjectCard({
         type="button"
         onClick={() => onSelectProject(project, safePhotoIndex)}
         aria-label={`View project ${project.title}`}
-        className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center rounded-xl bg-slate-950/45 opacity-0 backdrop-blur-[1px] transition-opacity duration-200 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600"
+        className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center rounded-2xl bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity duration-200 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600"
       >
-        <span className="inline-flex scale-95 items-center gap-1.5 rounded-md bg-white/95 px-4 py-2 text-xs font-semibold text-slate-950 shadow-md transition-transform duration-200 group-hover:scale-100 group-focus-visible:scale-100">
+        <span className="inline-flex scale-95 items-center gap-1.5 rounded-md bg-white/90 px-4 py-2 text-xs font-semibold text-slate-950/95 shadow-lg backdrop-blur-md transition-transform duration-200 group-hover:scale-100 group-focus-visible:scale-100">
           <Eye className="h-3.5 w-3.5 text-blue-700" aria-hidden="true" />
           <span>View Project</span>
         </span>
@@ -303,9 +303,9 @@ export function PortfolioSection({
     return (
       <section
         id="featured-projects"
-        className="border-b-2 border-slate-200 bg-slate-100/70 py-10 lg:py-12"
+        className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-slate-100/80 lg:min-h-[calc(100svh-4.25rem)]"
       >
-        <div className="mx-auto max-w-[1200px] px-6">
+        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
           <SectionHeaderBar
             sectionNumber="03"
             eyebrow={`Selected Works · ${featuredProjects.length} Featured`}
@@ -502,15 +502,15 @@ export function PortfolioSection({
   return (
     <section
       id="projects"
-      className="scroll-mt-16 border-b-2 border-slate-200 bg-slate-100/70 py-10 lg:py-12"
+      className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-slate-100/80 lg:min-h-[calc(100svh-8.75rem)]"
     >
-      <div className="mx-auto max-w-[1200px] px-6">
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
         <SectionHeaderBar
           sectionNumber="01"
           eyebrow="Engineering & Construction Portfolio"
           title="Completed Developments & Active Site Works"
           action={
-            <p className="font-mono text-xs font-medium text-slate-600 tabular-nums">
+            <p className="font-mono text-xs font-medium text-slate-950/68 tabular-nums sm:text-sm">
               Showing {filteredProjects.length} of {projects.length} documented projects
             </p>
           }
@@ -519,7 +519,7 @@ export function PortfolioSection({
         {/* Structured Filter & Search Divider Bar */}
         <ScrollReveal
           yOffset={10}
-          className="mt-5 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-3.5 lg:flex-row lg:items-center lg:justify-between"
+          className="mt-7 flex flex-col gap-3 rounded-2xl border border-black/[0.08] bg-white p-4 lg:flex-row lg:items-center lg:justify-between"
         >
           <div className="flex flex-wrap items-center gap-3">
             <div
@@ -537,8 +537,8 @@ export function PortfolioSection({
                     aria-pressed={active}
                     className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-blue-700 ${
                       active
-                        ? 'bg-white text-slate-950 shadow-xs'
-                        : 'text-slate-600 hover:text-slate-950'
+                        ? 'bg-white text-slate-950/95 shadow-xs'
+                        : 'text-slate-950/68 hover:text-slate-950/95'
                     }`}
                   >
                     {category}
@@ -547,7 +547,7 @@ export function PortfolioSection({
               })}
             </div>
 
-            <div className="hidden h-6 w-px bg-slate-200 sm:block" aria-hidden="true" />
+            <div className="hidden h-6 w-px bg-black/[0.08] sm:block" aria-hidden="true" />
 
             <div
               role="group"
@@ -564,8 +564,8 @@ export function PortfolioSection({
                     aria-pressed={active}
                     className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors duration-150 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-blue-700 ${
                       active
-                        ? 'bg-slate-900 text-white'
-                        : 'text-slate-600 hover:text-slate-950'
+                        ? 'bg-slate-900 text-white/95'
+                        : 'text-slate-950/68 hover:text-slate-950/95'
                     }`}
                   >
                     {status === 'All' ? 'All Statuses' : status}
@@ -580,7 +580,7 @@ export function PortfolioSection({
               Search projects by name, location, or sector
             </label>
             <Search
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-950/42"
               aria-hidden="true"
             />
             <input
@@ -589,14 +589,14 @@ export function PortfolioSection({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search location or project..."
-              className="w-full rounded-md border border-slate-200 bg-slate-50 py-2 pl-9 pr-8 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-700 focus:bg-white focus:outline-none"
+              className="w-full rounded-md border border-black/[0.1] bg-slate-100/60 py-2 pl-9 pr-8 text-sm text-slate-950/95 placeholder:text-slate-950/42 focus:border-blue-700 focus:bg-white focus:outline-none"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
                 aria-label="Clear project search"
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-950/42 hover:text-slate-950/75"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -606,23 +606,23 @@ export function PortfolioSection({
 
         {/* Project Grid or Empty State */}
         {filteredProjects.length === 0 ? (
-          <div className="mt-6 rounded-xl border border-slate-200 bg-white p-10 text-center">
-            <h3 className="text-lg font-bold text-slate-900">
+          <div className="mt-6 rounded-xl border border-black/[0.08] bg-white p-10 text-center">
+            <h3 className="text-lg font-bold text-slate-950/95">
               No projects match your current filter
             </h3>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-slate-950/68">
               Try clearing your search query or switching sector and status filters.
             </p>
             <button
               type="button"
               onClick={resetFilters}
-              className="mt-4 inline-flex items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-100"
+              className="mt-4 inline-flex items-center rounded-md border border-black/[0.12] bg-white px-4 py-2 text-sm font-semibold text-slate-950/88 hover:bg-slate-100"
             >
               Reset Project Filters
             </button>
           </div>
         ) : (
-          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-7">
             {filteredProjects.map((project, idx) => (
               <ProjectCard
                 key={project.id}

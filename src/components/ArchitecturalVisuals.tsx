@@ -165,10 +165,12 @@ export function ProjectSchematic({
   type,
   code,
   fillContainer = false,
+  showCodeLabel = true,
 }: {
   type: VisualSchematicType;
   code: string;
   fillContainer?: boolean;
+  showCodeLabel?: boolean;
 }) {
   return (
     <div
@@ -271,9 +273,11 @@ export function ProjectSchematic({
       </div>
 
       {/* Monospace blueprint code in corner */}
-      <span className="absolute bottom-3 left-4 font-mono text-[11px] text-slate-300 tracking-wide">
-        {code}
-      </span>
+      {showCodeLabel && (
+        <span className="absolute bottom-3 left-4 font-mono text-[11px] text-slate-300 tracking-wide">
+          {code}
+        </span>
+      )}
     </div>
   );
 }

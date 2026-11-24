@@ -7,35 +7,33 @@ export function TestimonialsSection() {
   return (
     <section
       id="testimonials"
-      className="scroll-mt-16 border-b-2 border-slate-200 bg-white py-10 lg:py-12"
+      className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-white lg:min-h-[calc(100svh-4.25rem)]"
     >
-      <div className="mx-auto max-w-[1200px] px-6">
-        <SectionHeaderBar
-          sectionNumber="04"
-          eyebrow="Client Feedback & Outcomes"
-          title="Trusted by Commercial Developers & Facility Owners"
-        />
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
+        <SectionHeaderBar title="Trusted by Commercial Developers & Facility Owners" />
 
-        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
           {TESTIMONIALS.map((item, idx) => (
             <motion.figure
               key={item.id}
               {...getScrollCardMotionProps(idx)}
-              className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5"
+              className="flex flex-col justify-between rounded-2xl border border-black/[0.08] bg-slate-100/50 p-7 lg:min-h-[420px] lg:p-9"
             >
               <div>
-                <p className="text-xs font-semibold text-blue-700">{item.projectTitle}</p>
-                <blockquote className="mt-2.5 text-sm leading-relaxed text-slate-700">
+                <p className="text-xs font-semibold tracking-wide text-blue-700 lg:text-sm">
+                  {item.projectTitle}
+                </p>
+                <blockquote className="mt-4 text-base leading-relaxed text-slate-950/78 lg:text-lg lg:leading-relaxed">
                   “{item.quote}”
                 </blockquote>
               </div>
 
-              <figcaption className="mt-4 border-t border-slate-100 pt-3.5">
-                <p className="text-sm font-bold text-slate-950">{item.clientName}</p>
-                <p className="mt-0.5 text-xs text-slate-600">
+              <figcaption className="mt-8 border-t border-black/[0.06] pt-5">
+                <p className="text-base font-bold text-slate-950/95">{item.clientName}</p>
+                <p className="mt-1 text-xs text-slate-950/54 lg:text-sm">
                   {item.role} · {item.organization}
                 </p>
-                <p className="mt-1.5 font-mono text-[11px] font-medium text-slate-700">
+                <p className="mt-3 font-mono text-xs font-semibold text-blue-700">
                   {item.outcomeSummary}
                 </p>
               </figcaption>

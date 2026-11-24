@@ -1,6 +1,6 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { motion } from 'motion/react';
-import { WHY_CHOOSE_MST } from '../data/companyData';
+import { COMPANY_INFO, WHY_CHOOSE_MST } from '../data/companyData';
 import type { ProjectItem, PublicPage } from '../types/construction';
 import { HeroSection } from './HeroSection';
 import { AboutProcessSection } from './AboutProcessSection';
@@ -16,6 +16,13 @@ interface HomePageProps {
   onSelectServiceForInquiry: (serviceTitle: string) => void;
   onSelectProject: (project: ProjectItem, initialImageIndex?: number) => void;
 }
+
+const PILLAR_STANDARDS = [
+  'Signed & sealed civil, structural & architectural plans',
+  'Third-party lab cylinder breaks & mill certificates',
+  'Dedicated DOLE COSH Safety Officers on site daily',
+  'Weekly S-curve progress tracking & photo audit logs',
+];
 
 export function HomePage({
   projects,
@@ -45,30 +52,32 @@ export function HomePage({
       {/* 4. Why Choose MST? */}
       <section
         id="why-choose-mst"
-        className="border-b-2 border-slate-200 bg-slate-100/70 py-10 lg:py-12"
+        className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-black/[0.08] bg-slate-100/80 lg:min-h-[calc(100svh-4.25rem)]"
       >
-        <div className="mx-auto max-w-[1200px] px-6">
-          <SectionHeaderBar
-            sectionNumber="03"
-            eyebrow="Why Choose MST?"
-            title="Disciplined Engineering, Safety & Cost Control on Every Site"
-          />
+        <div className="mx-auto w-full max-w-[1440px] px-6 py-12 lg:px-10 lg:py-16">
+          <SectionHeaderBar title="Disciplined Engineering, Safety & Cost Control on Every Site" />
 
-          <div className="mt-6 grid grid-cols-1 divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+          <div className="mt-8 grid grid-cols-1 divide-y divide-black/[0.08] overflow-hidden rounded-2xl border border-black/[0.08] bg-white sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
             {WHY_CHOOSE_MST.map((item, idx) => (
               <motion.article
                 key={item.pillar}
                 {...getScrollCardMotionProps(idx)}
-                className="p-5"
+                className="flex flex-col justify-between p-7 lg:min-h-[380px] lg:p-9"
               >
-                <p className="font-mono text-xs font-semibold text-blue-700">
-                  {item.metric}
-                </p>
-                <h3 className="mt-2 text-base font-bold text-slate-950">
-                  {item.pillar}
-                </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
-                  {item.summary}
+                <div>
+                  <span className="font-mono text-xs font-semibold tracking-wide text-blue-700">
+                    0{idx + 1} · {item.metric}
+                  </span>
+                  <h3 className="mt-4 text-xl font-bold tracking-tight text-slate-950/95 lg:text-2xl">
+                    {item.pillar}
+                  </h3>
+                  <p className="mt-4 text-sm leading-relaxed text-slate-950/68 lg:text-base lg:leading-relaxed">
+                    {item.summary}
+                  </p>
+                </div>
+
+                <p className="mt-8 border-t border-black/[0.06] pt-4 text-xs font-medium leading-relaxed text-slate-950/54 lg:text-sm">
+                  {PILLAR_STANDARDS[idx]}
                 </p>
               </motion.article>
             ))}
@@ -82,42 +91,82 @@ export function HomePage({
       {/* 6. Call to Action */}
       <section
         id="home-cta"
-        className="border-b border-slate-800 bg-slate-900 py-10 text-white lg:py-12"
+        className="scroll-mt-[4.25rem] flex flex-col justify-center border-b border-white/[0.12] bg-slate-900 text-white/95 lg:min-h-[calc(100svh-4.25rem)]"
       >
-        <ScrollReveal className="mx-auto flex max-w-[1200px] flex-col items-start justify-between gap-6 px-6 lg:flex-row lg:items-center">
-          <div className="max-w-2xl">
-            <p className="font-mono text-xs font-semibold text-blue-400">
-              05 · Start Your Build With Confidence
-            </p>
+        <ScrollReveal className="mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-10 px-6 py-14 lg:grid-cols-12 lg:gap-12 lg:px-10 lg:py-20">
+          <div className="lg:col-span-7">
             <h2
-              className="mt-1.5 text-2xl font-bold tracking-tight text-white sm:text-3xl"
+              className="text-3xl font-bold tracking-tight text-white/95 sm:text-5xl lg:leading-[1.08]"
               style={{ textWrap: 'balance' }}
             >
-              Have a Project in Mind?
+              Have a Project in Mind? Let’s Engineer It Right from Day One.
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-slate-300">
-              Request an itemized construction estimate or schedule an ocular site
-              inspection with our San Fernando engineering desk within 48 business hours.
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/68 lg:text-lg">
+              Request an itemized Bill of Quantities (BOQ) construction estimate or
+              schedule an on-site ocular inspection with our San Fernando engineering desk
+              within 48 business hours.
             </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <button
+                type="button"
+                onClick={onRequestQuote}
+                className="inline-flex items-center gap-2.5 rounded-md bg-blue-600 px-7 py-3.5 text-base font-semibold text-white transition-colors duration-150 hover:bg-blue-500 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+              >
+                <span>Request a Quote</span>
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onNavigate('contact')}
+                className="inline-flex items-center rounded-md border border-white/[0.2] px-7 py-3.5 text-base font-semibold text-white/90 transition-colors duration-150 hover:border-white/[0.35] hover:bg-white/[0.08] whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-blue-400"
+              >
+                Contact Office
+              </button>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={onRequestQuote}
-              className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-blue-500 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
-            >
-              <span>Request a Quote</span>
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </button>
+          <div className="rounded-2xl border border-white/[0.12] bg-white/[0.04] p-7 lg:col-span-5 lg:p-9">
+            <p className="font-mono text-xs font-semibold tracking-wider text-blue-400 uppercase">
+              Direct Engineering &amp; Estimating Desk
+            </p>
+            <h3 className="mt-2.5 text-xl font-bold text-white/95">
+              San Fernando, Pampanga Headquarters
+            </h3>
 
-            <button
-              type="button"
-              onClick={() => onNavigate('contact')}
-              className="inline-flex items-center rounded-md border border-slate-600 px-5 py-2.5 text-sm font-semibold text-slate-100 transition-colors duration-150 hover:border-slate-400 hover:bg-slate-800 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-blue-400"
-            >
-              Contact Office
-            </button>
+            <dl className="mt-6 space-y-4 border-t border-white/[0.12] pt-6 text-sm lg:text-base">
+              <div className="flex items-start gap-3.5">
+                <MapPin className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
+                <div>
+                  <dt className="sr-only">Address</dt>
+                  <dd className="text-white/88">{COMPANY_INFO.fullAddress}</dd>
+                </div>
+              </div>
+              <div className="flex items-start gap-3.5">
+                <Phone className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
+                <div>
+                  <dt className="sr-only">Phone</dt>
+                  <dd className="font-mono text-white/88 tabular-nums">
+                    {COMPANY_INFO.mobilePhone} · {COMPANY_INFO.landlinePhone}
+                  </dd>
+                </div>
+              </div>
+              <div className="flex items-start gap-3.5">
+                <Mail className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
+                <div>
+                  <dt className="sr-only">Email</dt>
+                  <dd className="font-mono text-white/88">{COMPANY_INFO.email}</dd>
+                </div>
+              </div>
+              <div className="flex items-start gap-3.5">
+                <Clock className="mt-1 h-4 w-4 shrink-0 text-blue-400" aria-hidden="true" />
+                <div>
+                  <dt className="sr-only">Hours</dt>
+                  <dd className="text-white/68">{COMPANY_INFO.officeHours}</dd>
+                </div>
+              </div>
+            </dl>
           </div>
         </ScrollReveal>
       </section>

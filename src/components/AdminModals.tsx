@@ -136,21 +136,21 @@ export function TeamFormModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="team-form-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4 backdrop-blur-md"
       onClick={onClose}
     >
       <div
-        className="flex max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl"
+        className="flex max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-black/[0.08] bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-slate-200 bg-white px-6 py-4">
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-black/[0.08] bg-white/85 px-6 py-4 backdrop-blur-xl">
           <div>
             <p className="text-xs font-medium text-blue-700">
               Team Directory · Admin Portal
             </p>
             <h2
               id="team-form-modal-title"
-              className="mt-0.5 text-lg font-bold tracking-tight text-slate-950 sm:text-xl"
+              className="mt-0.5 text-lg font-bold tracking-tight text-slate-950/95 sm:text-xl"
             >
               {editingMember ? `Edit Profile: ${editingMember.name}` : 'Add Team Member'}
             </h2>
@@ -504,21 +504,21 @@ export function CredentialFormModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="credential-form-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4 backdrop-blur-md"
       onClick={onClose}
     >
       <div
-        className="flex max-h-[88vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl"
+        className="flex max-h-[88vh] w-full max-w-xl flex-col overflow-hidden rounded-xl border border-black/[0.08] bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-slate-200 bg-white px-6 py-4">
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-black/[0.08] bg-white/85 px-6 py-4 backdrop-blur-xl">
           <div>
             <p className="text-xs font-medium text-blue-700">
               Credentials &amp; Documents · Admin Portal
             </p>
             <h2
               id="credential-form-modal-title"
-              className="mt-0.5 text-lg font-bold tracking-tight text-slate-950 sm:text-xl"
+              className="mt-0.5 text-lg font-bold tracking-tight text-slate-950/95 sm:text-xl"
             >
               {editingCredential
                 ? `Update Credential (${editingCredential.code})`

@@ -36,7 +36,7 @@ export function ContactUsModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18, ease: 'easeOut' }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4 backdrop-blur-md"
           onClick={onClose}
         >
           <motion.div
@@ -44,11 +44,11 @@ export function ContactUsModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 10 }}
             transition={{ type: 'spring', stiffness: 380, damping: 28, mass: 0.8 }}
-            className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl"
+            className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-black/[0.08] bg-white shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Dialog Header */}
-            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-slate-200 bg-slate-900 px-6 py-4 text-white">
+            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/[0.12] bg-slate-950 px-6 py-4 text-white/95">
               <div>
                 <p className="font-mono text-xs font-medium text-blue-400">
                   MST Construction OPC · San Fernando Headquarters
