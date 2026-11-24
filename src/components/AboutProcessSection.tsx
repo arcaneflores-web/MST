@@ -1,4 +1,3 @@
-import { ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ABOUT_MST, CONSTRUCTION_PROCESS } from '../data/companyData';
 import { SectionHeaderBar } from './SectionDivider';
@@ -6,12 +5,10 @@ import { getScrollCardMotionProps, ScrollReveal } from './ScrollReveal';
 
 interface AboutProcessSectionProps {
   mode?: 'preview' | 'full';
-  onViewFullAbout?: () => void;
 }
 
 export function AboutProcessSection({
   mode = 'full',
-  onViewFullAbout,
 }: AboutProcessSectionProps) {
   if (mode === 'preview') {
     return (
@@ -24,18 +21,6 @@ export function AboutProcessSection({
             sectionNumber="01"
             eyebrow={ABOUT_MST.eyebrow}
             title={ABOUT_MST.headline}
-            action={
-              onViewFullAbout ? (
-                <button
-                  type="button"
-                  onClick={onViewFullAbout}
-                  className="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-slate-900 transition-colors duration-150 hover:border-blue-700 hover:text-blue-700 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-blue-700"
-                >
-                  <span>Company Background &amp; Credentials</span>
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </button>
-              ) : undefined
-            }
           />
 
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-stretch">

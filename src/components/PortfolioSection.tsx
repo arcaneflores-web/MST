@@ -22,86 +22,44 @@ import { getScrollCardMotionProps, ScrollReveal } from './ScrollReveal';
 
 function ProjectCoverVisual({
   project,
-  onOpenDetails,
-  autoCycleMs,
+  activePhotoIndex,
+  onChangePhotoIndex,
 }: {
   project: ProjectItem;
-  onOpenDetails: (imageIndex: number) => void;
-  autoCycleMs?: number;
+  activePhotoIndex: number;
+  onChangePhotoIndex: (index: number) => void;
 }) {
-  const [activePhotoIndex, setActivePhotoIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const images = project.images ?? [];
   const photoCount = images.length;
   const safePhotoIndex =
     photoCount > 0 ? Math.min(activePhotoIndex, photoCount - 1) : 0;
   const activeUrl = images[safePhotoIndex];
 
-  useEffect(() => {
-    if (!autoCycleMs || photoCount <= 1 || isPaused) return;
-    const timer = window.setInterval(() => {
-      setActivePhotoIndex((prev) => (prev + 1) % photoCount);
-    }, autoCycleMs);
-    return () => window.clearInterval(timer);
-  }, [autoCycleMs, photoCount, isPaused]);
-
   if (!activeUrl) {
     return (
-      <div className="relative overflow-hidden border-b border-slate-200">
-        <button
-          type="button"
-          onClick={() => onOpenDetails(0)}
-          aria-label={`View technical specifications for ${project.title}`}
-          className="block w-full text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600"
-        >
-          <div className="transition-transform duration-300 group-hover:scale-[1.03]">
-            <ProjectSchematic type={project.schematic} code={project.code} />
-          </div>
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/35 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
-            <span className="inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-2 text-xs font-semibold text-slate-950 shadow-md">
-              <Eye className="h-3.5 w-3.5 text-blue-700" aria-hidden="true" />
-              <span>View Project Details</span>
-            </span>
-          </div>
-        </button>
+      <div className="relative aspect-video w-full overflow-hidden border-b border-slate-200">
+        <div className="h-full w-full transition-transform duration-300 group-hover:scale-[1.03]">
+          <ProjectSchematic type={project.schematic} code={project.code} fillContainer />
+        </div>
       </div>
     );
   }
 
   return (
-    <div
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      className="relative aspect-video w-full overflow-hidden border-b border-slate-200 bg-slate-900"
-    >
-      <button
-        type="button"
-        onClick={() => onOpenDetails(safePhotoIndex)}
-        aria-label={`View details and ${photoCount} photos for ${project.title}`}
-        className="block h-full w-full text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-500"
-      >
-        <img
-          src={activeUrl}
-          alt={`${project.title} site photo ${safePhotoIndex + 1} of ${photoCount}`}
-          className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.04]"
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/20 to-slate-950/25 opacity-70 transition-opacity duration-200 group-hover:opacity-100" />
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
-          <span className="inline-flex items-center gap-1.5 rounded-md bg-white/95 px-3.5 py-2 text-xs font-semibold text-slate-950 shadow-md">
-            <Eye className="h-3.5 w-3.5 text-blue-700" aria-hidden="true" />
-            <span>
-              View Details &amp; {photoCount} {photoCount === 1 ? 'Photo' : 'Photos'}
-            </span>
-          </span>
-        </div>
-      </button>
+    <div className="relative aspect-video w-full overflow-hidden border-b border-slate-200 bg-slate-900">
+      <img
+        src={activeUrl}
+        alt={`${project.title} site photo ${safePhotoIndex + 1} of ${photoCount}`}
+        className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.04]"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/20 to-slate-950/25 opacity-70 transition-opacity duration-200 group-hover:opacity-100" />
 
       {photoCount > 1 && (
         <>
           {/* Quick photo scrub bars on hover */}
           <div
             aria-label={`Preview photos for ${project.title}`}
-            className="absolute inset-x-3 top-2.5 z-10 flex gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
+            className="absolute inset-x-3 top-2.5 z-20 flex gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
           >
             {images.map((_, idx) => {
               const isCurrent = idx === safePhotoIndex;
@@ -109,8 +67,8 @@ function ProjectCoverVisual({
                 <button
                   key={idx}
                   type="button"
-                  onMouseEnter={() => setActivePhotoIndex(idx)}
-                  onClick={() => setActivePhotoIndex(idx)}
+                  onMouseEnter={() => onChangePhotoIndex(idx)}
+                  onClick={() => onChangePhotoIndex(idx)}
                   aria-label={`Preview photo ${idx + 1} of ${photoCount} for ${project.title}`}
                   aria-pressed={isCurrent}
                   className={`h-1.5 flex-1 rounded-sm transition-colors ${
@@ -124,19 +82,19 @@ function ProjectCoverVisual({
           <button
             type="button"
             onClick={() =>
-              setActivePhotoIndex((prev) => (prev === 0 ? photoCount - 1 : prev - 1))
+              onChangePhotoIndex(safePhotoIndex === 0 ? photoCount - 1 : safePhotoIndex - 1)
             }
             aria-label={`Previous preview photo for ${project.title}`}
-            className="absolute top-1/2 left-2.5 z-10 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-slate-950/75 text-white opacity-0 transition-all duration-150 hover:bg-blue-700 group-hover:opacity-100 focus-visible:opacity-100"
+            className="absolute top-1/2 left-2.5 z-20 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-slate-950/75 text-white opacity-0 transition-all duration-150 hover:bg-blue-700 group-hover:opacity-100 focus-visible:opacity-100"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           </button>
 
           <button
             type="button"
-            onClick={() => setActivePhotoIndex((prev) => (prev + 1) % photoCount)}
+            onClick={() => onChangePhotoIndex((safePhotoIndex + 1) % photoCount)}
             aria-label={`Next preview photo for ${project.title}`}
-            className="absolute top-1/2 right-2.5 z-10 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-slate-950/75 text-white opacity-0 transition-all duration-150 hover:bg-blue-700 group-hover:opacity-100 focus-visible:opacity-100"
+            className="absolute top-1/2 right-2.5 z-20 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md border border-white/20 bg-slate-950/75 text-white opacity-0 transition-all duration-150 hover:bg-blue-700 group-hover:opacity-100 focus-visible:opacity-100"
           >
             <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </button>
@@ -155,6 +113,112 @@ function ProjectCoverVisual({
         </span>
       </div>
     </div>
+  );
+}
+
+function ProjectCard({
+  project,
+  index,
+  autoCycleMs,
+  showOutcomeMetric = true,
+  onSelectProject,
+}: {
+  project: ProjectItem;
+  index: number;
+  autoCycleMs?: number;
+  showOutcomeMetric?: boolean;
+  onSelectProject: (project: ProjectItem, initialImageIndex?: number) => void;
+}) {
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const photoCount = project.images?.length ?? 0;
+  const safePhotoIndex =
+    photoCount > 0 ? Math.min(activePhotoIndex, photoCount - 1) : 0;
+
+  useEffect(() => {
+    if (!autoCycleMs || photoCount <= 1 || isPaused) return;
+    const timer = window.setInterval(() => {
+      setActivePhotoIndex((prev) => (prev + 1) % photoCount);
+    }, autoCycleMs);
+    return () => window.clearInterval(timer);
+  }, [autoCycleMs, photoCount, isPaused]);
+
+  return (
+    <motion.article
+      {...getScrollCardMotionProps(index % 3, 0.06)}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-blue-600 hover:shadow-lg"
+    >
+      <div>
+        <ProjectCoverVisual
+          project={project}
+          activePhotoIndex={safePhotoIndex}
+          onChangePhotoIndex={setActivePhotoIndex}
+        />
+
+        <div className="p-5">
+          <h3 className="min-h-[3rem] line-clamp-2 text-base font-bold leading-snug tracking-tight text-slate-950 transition-colors duration-200 group-hover:text-blue-700 sm:text-lg">
+            {project.title}
+          </h3>
+
+          <div className="mt-1.5 flex items-center gap-x-2 truncate text-xs text-slate-500">
+            <span className="shrink-0 font-semibold text-slate-700">
+              {project.category}
+            </span>
+            <span aria-hidden="true" className="shrink-0">
+              ·
+            </span>
+            <span
+              className={`shrink-0 ${
+                project.status === 'Ongoing'
+                  ? 'font-semibold text-blue-700'
+                  : 'font-medium text-slate-600'
+              }`}
+            >
+              {project.status} {project.year}
+            </span>
+            <span aria-hidden="true" className="shrink-0">
+              ·
+            </span>
+            <span className="truncate">{project.location}</span>
+          </div>
+
+          <p className="mt-2.5 min-h-[4.25rem] line-clamp-3 text-sm leading-relaxed text-slate-600">
+            {project.summary}
+          </p>
+        </div>
+      </div>
+
+      <div className="border-t border-slate-100 px-5 py-3.5">
+        <div className="flex items-center justify-between gap-2 text-xs text-slate-600">
+          <span className="truncate font-mono tabular-nums">
+            Area: <strong className="text-slate-900">{project.floorArea}</strong>
+          </span>
+          <span className="shrink-0 font-mono tabular-nums">
+            Schedule: <strong className="text-slate-900">{project.duration}</strong>
+          </span>
+        </div>
+
+        {showOutcomeMetric && (
+          <p className="mt-2 truncate text-xs font-medium text-slate-800">
+            {project.outcomeMetric}
+          </p>
+        )}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => onSelectProject(project, safePhotoIndex)}
+        aria-label={`View project ${project.title}`}
+        className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center rounded-xl bg-slate-950/45 opacity-0 backdrop-blur-[1px] transition-opacity duration-200 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600"
+      >
+        <span className="inline-flex scale-95 items-center gap-1.5 rounded-md bg-white/95 px-4 py-2 text-xs font-semibold text-slate-950 shadow-md transition-transform duration-200 group-hover:scale-100 group-focus-visible:scale-100">
+          <Eye className="h-3.5 w-3.5 text-blue-700" aria-hidden="true" />
+          <span>View Project</span>
+        </span>
+      </button>
+    </motion.article>
   );
 }
 
@@ -419,75 +483,15 @@ export function PortfolioSection({
           )}
 
           <div className={`mt-6 grid gap-6 ${featuredGridClass}`}>
-            {featuredProjects.map((project) => (
-              <article
+            {featuredProjects.map((project, idx) => (
+              <ProjectCard
                 key={project.id}
-                className="group flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-blue-600 hover:shadow-lg"
-              >
-                <div>
-                  <ProjectCoverVisual
-                    project={project}
-                    autoCycleMs={3500}
-                    onOpenDetails={(imageIdx) => onSelectProject(project, imageIdx)}
-                  />
-
-                  <div className="p-5">
-                    <h3 className="min-h-[3rem] text-base font-bold leading-snug tracking-tight text-slate-950 sm:text-lg line-clamp-2">
-                      <button
-                        type="button"
-                        onClick={() => onSelectProject(project, 0)}
-                        className="text-left transition-colors group-hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-700"
-                      >
-                        {project.title}
-                      </button>
-                    </h3>
-
-                    <div className="mt-1.5 flex items-center gap-x-2 truncate text-xs text-slate-500">
-                      <span className="font-semibold text-slate-700 shrink-0">{project.category}</span>
-                      <span aria-hidden="true" className="shrink-0">·</span>
-                      <span
-                        className={`shrink-0 ${
-                          project.status === 'Ongoing'
-                            ? 'font-semibold text-blue-700'
-                            : 'font-medium text-slate-600'
-                        }`}
-                      >
-                        {project.status} {project.year}
-                      </span>
-                      <span aria-hidden="true" className="shrink-0">·</span>
-                      <span className="truncate">{project.location}</span>
-                    </div>
-
-                    <p className="mt-2.5 min-h-[4.25rem] line-clamp-3 text-sm leading-relaxed text-slate-600">
-                      {project.summary}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="border-t border-slate-100 px-5 py-3.5">
-                  <div className="mb-2.5 flex items-center justify-between text-xs text-slate-600">
-                    <span className="font-mono tabular-nums">
-                      Area: <strong className="text-slate-900">{project.floorArea}</strong>
-                    </span>
-                    <span className="font-mono tabular-nums">
-                      Duration: <strong className="text-slate-900">{project.duration}</strong>
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => onSelectProject(project, 0)}
-                    className="inline-flex w-full items-center justify-between rounded-md border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-900 transition-colors duration-150 group-hover:border-blue-700 group-hover:bg-blue-700 group-hover:text-white hover:border-blue-800 hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-blue-700"
-                  >
-                    <span>
-                      {project.images && project.images.length > 0
-                        ? `View Details & Photos (${project.images.length})`
-                        : 'Inspect Technical Specifications'}
-                    </span>
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                  </button>
-                </div>
-              </article>
+                project={project}
+                index={idx}
+                autoCycleMs={3500}
+                showOutcomeMetric={false}
+                onSelectProject={onSelectProject}
+              />
             ))}
           </div>
         </div>
@@ -620,78 +624,13 @@ export function PortfolioSection({
         ) : (
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredProjects.map((project, idx) => (
-              <motion.article
+              <ProjectCard
                 key={project.id}
-                {...getScrollCardMotionProps(idx % 3, 0.06)}
-                className="group flex flex-col justify-between overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:-translate-y-1 hover:border-blue-600 hover:shadow-lg"
-              >
-                <div>
-                  <ProjectCoverVisual
-                    project={project}
-                    onOpenDetails={(imageIdx) => onSelectProject(project, imageIdx)}
-                  />
-
-                  <div className="p-5">
-                    <h3 className="min-h-[3rem] text-base font-bold leading-snug tracking-tight text-slate-950 sm:text-lg line-clamp-2">
-                      <button
-                        type="button"
-                        onClick={() => onSelectProject(project, 0)}
-                        className="text-left transition-colors group-hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-700"
-                      >
-                        {project.title}
-                      </button>
-                    </h3>
-
-                    <div className="mt-1.5 flex items-center gap-x-2 truncate text-xs text-slate-500">
-                      <span className="font-semibold text-slate-700 shrink-0">{project.category}</span>
-                      <span aria-hidden="true" className="shrink-0">·</span>
-                      <span
-                        className={`shrink-0 ${
-                          project.status === 'Ongoing'
-                            ? 'font-semibold text-blue-700'
-                            : 'font-medium text-slate-600'
-                        }`}
-                      >
-                        {project.status} {project.year}
-                      </span>
-                      <span aria-hidden="true" className="shrink-0">·</span>
-                      <span className="truncate">{project.location}</span>
-                    </div>
-
-                    <p className="mt-2.5 min-h-[4.25rem] line-clamp-3 text-sm leading-relaxed text-slate-600">
-                      {project.summary}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="border-t border-slate-100 px-5 py-3.5">
-                  <div className="flex items-center justify-between gap-2 text-xs text-slate-600">
-                    <span className="truncate font-mono tabular-nums">
-                      Area: <strong className="text-slate-900">{project.floorArea}</strong>
-                    </span>
-                    <span className="shrink-0 font-mono tabular-nums">
-                      Schedule: <strong className="text-slate-900">{project.duration}</strong>
-                    </span>
-                  </div>
-
-                  <p className="mt-2 truncate text-xs font-medium text-slate-800">
-                    {project.outcomeMetric}
-                  </p>
-
-                  <button
-                    type="button"
-                    onClick={() => onSelectProject(project, 0)}
-                    className="mt-3.5 inline-flex w-full items-center justify-between rounded-md border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-900 transition-colors duration-150 group-hover:border-blue-700 group-hover:bg-blue-700 group-hover:text-white hover:border-blue-800 hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-blue-700"
-                  >
-                    <span>
-                      {project.images && project.images.length > 0
-                        ? `View Details & Photos (${project.images.length})`
-                        : 'Inspect Technical Specifications'}
-                    </span>
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                  </button>
-                </div>
-              </motion.article>
+                project={project}
+                index={idx}
+                showOutcomeMetric
+                onSelectProject={onSelectProject}
+              />
             ))}
           </div>
         )}

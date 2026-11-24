@@ -34,16 +34,12 @@ export function HomePage({
       />
 
       {/* 2. About MST (Brief Preview) */}
-      <AboutProcessSection
-        mode="preview"
-        onViewFullAbout={() => onNavigate('about')}
-      />
+      <AboutProcessSection mode="preview" />
 
       {/* 3. Featured Services (4 main services) */}
       <ServicesSection
         mode="preview"
         onSelectServiceForInquiry={onSelectServiceForInquiry}
-        onViewAllServices={() => onNavigate('services')}
       />
 
       {/* 4. Why Choose MST? */}

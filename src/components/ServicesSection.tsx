@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, ArrowUpRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { SERVICES } from '../data/companyData';
 import type { ServiceItem } from '../types/construction';
 import { getFeaturedServices } from '../utils/inquiryLogic';
@@ -10,13 +10,11 @@ import { getScrollCardMotionProps } from './ScrollReveal';
 interface ServicesSectionProps {
   mode?: 'preview' | 'full';
   onSelectServiceForInquiry: (serviceTitle: string) => void;
-  onViewAllServices?: () => void;
 }
 
 export function ServicesSection({
   mode = 'full',
   onSelectServiceForInquiry,
-  onViewAllServices,
 }: ServicesSectionProps) {
   const [expandedId, setExpandedId] = useState<string>('');
 
@@ -38,18 +36,6 @@ export function ServicesSection({
             sectionNumber="02"
             eyebrow="Core Capabilities"
             title="Featured Engineering & Construction Services"
-            action={
-              onViewAllServices ? (
-                <button
-                  type="button"
-                  onClick={onViewAllServices}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-900 transition-colors hover:border-blue-700 hover:text-blue-700 whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-blue-700"
-                >
-                  <span>View All 6 Services</span>
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </button>
-              ) : undefined
-            }
           />
 
           <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
