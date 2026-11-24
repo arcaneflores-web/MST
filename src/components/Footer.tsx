@@ -1,3 +1,4 @@
+
 import { ArrowUpRight, Lock } from 'lucide-react';
 import { COMPANY_INFO } from '../data/companyData';
 import type { AppPage, PublicPage } from '../types/construction';
@@ -36,6 +37,7 @@ export function Footer({ onNavigate, onOpenInquiry }: FooterProps) {
               <BrandMark className="h-6 w-6 shrink-0" />
               <span>{COMPANY_INFO.legalName}</span>
             </a>
+
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/60">
               Engineering, architectural design-build, and general contracting serving
               commercial, industrial, residential, and civil infrastructure clients across
